@@ -15,7 +15,7 @@ object DataRepo {
             )
         .build()
 
-    private val _Parcel = Retrofit.Builder()
+    private val _parcel = Retrofit.Builder()
         .baseUrl(_url)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
