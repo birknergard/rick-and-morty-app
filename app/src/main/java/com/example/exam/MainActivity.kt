@@ -40,10 +40,18 @@ class MainActivity : ComponentActivity() {
 
                 val nav = rememberNavController()
                 NavHost(startDestination = Screen01, navController = nav){
-                    composable<Screen01> {  }
-                    composable<Screen02> {  }
-                    composable<Screen03> {  }
-                    composable<Screen04> {  }
+                    composable<Screen01> {
+
+                    }
+                    composable<Screen02> {
+
+                    }
+                    composable<Screen03> {
+
+                    }
+                    composable<Screen04> {
+
+                    }
                 }
 
             }
