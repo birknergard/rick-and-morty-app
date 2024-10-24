@@ -12,8 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.exam.screens.Screen01
 import com.example.exam.ui.theme.ExamTheme
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Screen01
+
+@Serializable
+object Screen02
+
+@Serializable
+object Screen03
+
+@Serializable
+object Screen04
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +39,11 @@ class MainActivity : ComponentActivity() {
             ExamTheme {
 
                 val nav = rememberNavController()
-                NavHost(startDestination = "", navController = nav){
-
+                NavHost(startDestination = Screen01, navController = nav){
+                    composable<Screen01> {  }
+                    composable<Screen02> {  }
+                    composable<Screen03> {  }
+                    composable<Screen04> {  }
                 }
 
             }
