@@ -5,8 +5,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object DataRepo {
-    private val _url = "https.//rickandmortyapi.com/api"
+object RetrofitInstance {
+    private const val _URL = "https.//rickandmortyapi.com/api"
     private val _httpClient = OkHttpClient
         .Builder()
         .addInterceptor(
@@ -15,8 +15,10 @@ object DataRepo {
             )
         .build()
 
-    private val _parcel = Retrofit.Builder()
-        .baseUrl(_url)
+    private val _retrofit = Retrofit.Builder()
+        .baseUrl(_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    private val _rickAndMortyApiService = _retrofit.create(APIService::class.java)
 }
