@@ -20,5 +20,5 @@ object RetrofitInstance {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val _rickAndMortyApiService = _retrofit.create(APIService::class.java)
+    private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
 }
