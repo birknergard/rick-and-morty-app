@@ -2,15 +2,16 @@ package com.example.exam
 
 import com.example.exam.dataClasses.ApiData
 import com.example.exam.dataClasses.ApiResponse
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface RickAndMortyApiService {
     @GET("/character")
-    fun getCharacters() : ApiResponse<ApiData.CharacterList>
+    suspend fun getAllCharacters() : Response<ApiResponse<ApiData.CharacterList>>
 
     @GET("/episode")
-    fun getEpisodes() : ApiResponse<ApiData.EpisodeList>
+    suspend fun getAllEpisodes() : Response<ApiResponse<ApiData.EpisodeList>>
 
     @GET("/location")
-    fun getLocations() : ApiResponse<ApiData.LocationList>
+    suspend fun getAllLocations() : Response<ApiResponse<ApiData.LocationList>>
 }
