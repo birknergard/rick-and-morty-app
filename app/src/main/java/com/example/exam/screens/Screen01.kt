@@ -1,4 +1,8 @@
 package com.example.exam.screens
 
-class Screen01 {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun Screen01(){
+
 }
