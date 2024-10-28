@@ -27,13 +27,12 @@ object Repository {
     private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
 
     suspend fun getAllCharactersFromApi() : ApiResponse<ApiData.CharacterList>?{
-       val response = _rickAndMortyApiService.getAllCharacters()
+        val response = _rickAndMortyApiService.getAllCharacters()
 
-       return if(response.isSuccessful && response.body() != null){
-           response.body()
-       } else {
-
-       }
-
+        if(response.isSuccessful){
+            return response.body()
+        } else {
+            return null
+        }
     }
 }
