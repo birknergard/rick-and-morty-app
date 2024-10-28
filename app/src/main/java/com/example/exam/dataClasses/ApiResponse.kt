@@ -1,6 +1,6 @@
 package com.example.exam.dataClasses
 
-// Generic response class
+// Generic response class for parsing HTTP response
 data class ApiResponse<T : ApiData>(
     val info : Info,
     val result : T

@@ -52,7 +52,7 @@ class RickAndMortyApi {
             )
         } else {
             response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
+                Info(0, 0, null, null),
                 ApiData.LocationList(emptyList())
             )
         }
@@ -63,12 +63,12 @@ class RickAndMortyApi {
 
         return if(response.isSuccessful){
             response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
+                Info(0, 0, null, null),
                 ApiData.EpisodeList(emptyList())
             )
         } else {
             response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
+                Info(0, 0, null, null),
                 ApiData.EpisodeList(emptyList())
             )
         }
