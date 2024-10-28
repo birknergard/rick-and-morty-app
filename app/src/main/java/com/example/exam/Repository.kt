@@ -1,38 +1,29 @@
 package com.example.exam
 
+import android.util.Log
 import com.example.exam.dataClasses.ApiData
-import com.example.exam.dataClasses.ApiResponse
-import com.example.exam.dataClasses.Character
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 object Repository {
+    val apiService = RickAndMortyApi()
+    lateinit var characters : ApiData.CharacterList
+    lateinit var locations : ApiData.LocationList
+    lateinit var episodes : ApiData.EpisodeList
 
-    private const val _URL = "https.//rickandmortyapi.com/api"
-    private val _httpClient = OkHttpClient
-        .Builder()
-        .addInterceptor(
-            HttpLoggingInterceptor()
-                .setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
-        .build()
+    suspend fun loadCharactersFromApi(){
+        val response = apiService.getAllCharactersFromApi()
+        Log.e("GET /character", response.info.toString())
+        characters = response.result
+    }
 
-    private val _retrofit = Retrofit.Builder()
-        .baseUrl(_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    suspend fun loadLocationsFromApi(){
+        val response = apiService.getAllLocationsFromApi()
+        Log.e("GET /location", response.info.toString())
+        locations = response.result
+    }
 
-    private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
-
-    suspend fun getAllCharactersFromApi() : ApiResponse<ApiData.CharacterList>?{
-        val response = _rickAndMortyApiService.getAllCharacters()
-
-        if(response.isSuccessful){
-            return response.body()
-        } else {
-            return null
-        }
+    suspend fun loadEpisodesFromApi(){
+        val response = apiService.getAllEpisodesFromApi()
+        Log.e("GET /episodes", response.info.toString())
+        episodes = response.result
     }
 }

@@ -2,9 +2,13 @@ package com.example.exam.dataClasses
 
 // Generic response class
 data class ApiResponse<T : ApiData>(
-    val info : Info?,
-    val result : T?
-)
+    val info : Info,
+    val result : T
+){
+    fun getCount() : Int{
+        return info.count
+    }
+}
 
 // Data class which adaps to which type of result we get.
 sealed class ApiData  {
