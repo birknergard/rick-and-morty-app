@@ -41,36 +41,4 @@ class RickAndMortyApi {
             )
         }
     }
-
-    suspend fun getAllLocationsFromApi() : ApiResponse<ApiData.LocationList>{
-        val response = _rickAndMortyApiService.getAllLocations()
-
-        return if(response.isSuccessful){
-            response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
-                ApiData.LocationList(emptyList())
-            )
-        } else {
-            response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
-                ApiData.LocationList(emptyList())
-            )
-        }
-    }
-
-    suspend fun getAllEpisodesFromApi() : ApiResponse<ApiData.EpisodeList>{
-        val response = _rickAndMortyApiService.getAllEpisodes()
-
-        return if(response.isSuccessful){
-            response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
-                ApiData.EpisodeList(emptyList())
-            )
-        } else {
-            response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
-                ApiData.EpisodeList(emptyList())
-            )
-        }
-    }
 }
