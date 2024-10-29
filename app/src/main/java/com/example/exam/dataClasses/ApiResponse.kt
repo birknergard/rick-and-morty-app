@@ -12,7 +12,11 @@ data class ApiResponse<T : ApiData>(
 
 // Data class which adaps to which type of result we get.
 sealed class ApiData  {
-    data class CharacterList(val value : List<Character>) : ApiData()
+    data class CharacterList(val value : List<Character>) : ApiData() {
+        fun get() : List<Character>{
+            return this.value
+        }
+    }
     data class EpisodeList(val value : List<Episode>) : ApiData()
     data class LocationList(val value : List<Location>) : ApiData()
 }

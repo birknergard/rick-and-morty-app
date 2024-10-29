@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.exam.screens.Screen01
 import com.example.exam.ui.theme.ExamTheme
+import com.example.exam.viewModels.Screen01ViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -38,10 +39,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ExamTheme {
 
+                val vm = Screen01ViewModel()
+
                 val nav = rememberNavController()
                 NavHost(startDestination = Screen01, navController = nav){
                     composable<Screen01> {
-
+                        Screen01(vm)
                     }
                     composable<Screen02> {
 
