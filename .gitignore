@@ -1,11 +1,79 @@
-.gradle/
+# Android Studio & IntelliJ IDEA
 .idea/
-
-app/build.gradle.kts
-app/build/
-app/proguard-rules.pro
-gradle.properties
-gradlew
-gradlew.bat
+*.iml
+*.hprof
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
 local.properties
-settings.gradle.kts
+
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle-wrapper.jar
+gradle-app.setting
+.gradle/caches/
+.gradle/gradle-app.setting
+.gradle/wrapper/dists/
+
+# Kotlin
+*.kotlin_module
+*.log
+*.kts
+
+# Android specific
+app/build/
+**/app/build/
+**/app/release/
+**/app/debug/
+app/release/
+app/debug/
+intermediates/
+generated/
+output.json
+
+# Signing
+.signing/
+*.jks
+*.keystore
+key.properties
+
+# JetBrains
+.idea/
+.idea/modules.xml
+.idea/*.iml
+.idea/modules/
+.idea/.idea
+.idea/vcs.xml
+.idea/libraries
+.idea/assetWizardSettings.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/sqlDataSources.xml
+.idea/taskTriggers.xml
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Local unit test/Android Test outputs
+**/output/
+
+# NDK & CMake files
+obj/
+cmake-build-debug/
+.externalNativeBuild/
+
+# Virtual Machine files
+*.swp
+*.swo
+*~.nfs
+.vscode/
+
+# lint
+lint/
+
