@@ -1,79 +1,36 @@
-# Android Studio & IntelliJ IDEA
-.idea/
-*.iml
-*.hprof
-.gradle/
-build/
-captures/
-.externalNativeBuild/
-.cxx/
-local.properties
-
-# Gradle
+# Gradle files
 .gradle/
 build/
 **/build/
-!gradle-wrapper.jar
-gradle-app.setting
-.gradle/caches/
-.gradle/gradle-app.setting
-.gradle/wrapper/dists/
+!gradle/wrapper/gradle-wrapper.jar
 
-# Kotlin
-*.kotlin_module
-*.log
-*.kts
+# Local configuration file (SDK location, etc.)
+local.properties
 
-# Android specific
-app/build/
-**/app/build/
-**/app/release/
-**/app/debug/
-app/release/
-app/debug/
-intermediates/
-generated/
-output.json
-
-# Signing
-.signing/
-*.jks
-*.keystore
-key.properties
-
-# JetBrains
+# Android Studio specific files
 .idea/
-.idea/modules.xml
-.idea/*.iml
-.idea/modules/
-.idea/.idea
-.idea/vcs.xml
-.idea/libraries
-.idea/assetWizardSettings.xml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/dictionaries
-.idea/sqlDataSources.xml
-.idea/taskTriggers.xml
+*.iml
 
-# OS Specific
+# Miscellaneous files
+*.apk
+*.ap_
+*.jar
+*.war
+*.ear
+*.class
+*.hprof
+
+# macOS specific files
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows specific files
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Local unit test/Android Test outputs
-**/output/
-
-# NDK & CMake files
-obj/
-cmake-build-debug/
+# Other generated files
+/captures/
 .externalNativeBuild/
-
-# Virtual Machine files
-*.swp
-*.swo
-*~.nfs
-.vscode/
-
-# lint
-lint/
-
+outputs/
