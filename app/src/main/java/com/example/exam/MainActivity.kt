@@ -38,8 +38,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ExamTheme {
-
-                val vm = Screen01ViewModel()
+                val repo = Repository
+                val vm = Screen01ViewModel(repo)
 
                 val nav = rememberNavController()
                 NavHost(startDestination = Screen01, navController = nav){

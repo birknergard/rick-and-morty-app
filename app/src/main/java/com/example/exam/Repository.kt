@@ -2,16 +2,14 @@ package com.example.exam
 
 import android.util.Log
 import com.example.exam.dataClasses.ApiData
+import com.example.exam.dataClasses.Character
 
 object Repository {
-    val apiService = RickAndMortyApi()
-    var characters = ApiData.CharacterList(emptyList())
 
-    suspend fun loadCharactersFromApi(page : Int){
-        val response = apiService.getAllCharactersFromApi(page)
-
-        Log.e("GET /character", response.info.toString())
-        characters = response.result
+    suspend fun loadCharactersFromApi(page : Int) : List<Character>{
+        val response = RetrofitInstance().getAllCharactersFromApi(page)
+        //response.result.forEach { char -> println(char.name) }
+        return response.result
     }
 
 }

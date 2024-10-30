@@ -9,22 +9,34 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import com.example.exam.dataClasses.Character
 import com.example.exam.viewModels.Screen01ViewModel
 
 //@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Screen01(viewModel: Screen01ViewModel){
-    val vm = viewModel
-    LazyColumn {
-        items(vm.getCharList(2)){ character: Character ->
-            Item(character)
-        }
+fun Screen01(vm: Screen01ViewModel){
+    // Setup
+    vm.updateCharacterList(1)
+
+    val characters = vm.characterList.collectAsState()
+
+    // Start of UI
+    LazyColumn (
+        modifier = Modifier
+            .fillMaxWidth()
+    ){
+        //items(characters.value){ character ->
+        //    Item(character)
+        //}
     }
 }
+
 @Composable
 fun Item(item : Character){
    Row(
@@ -32,6 +44,10 @@ fun Item(item : Character){
            .fillMaxWidth()
            .background(color = Color.White),
    ){
-       Text(text = item.name)
+       Text(
+           text = item.name,
+           fontSize = 25.sp,
+           textAlign = TextAlign.Center
+       )
    }
 }

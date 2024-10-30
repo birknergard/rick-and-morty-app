@@ -9,18 +9,12 @@ import com.example.exam.dataClasses.Character
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class Screen01ViewModel : ViewModel(){
+class Screen01ViewModel(val repo: Repository) : ViewModel(){
 
-    private val _characterList = MutableStateFlow(Repository.characters.value)
-
-    fun getCharList(page : Int) : List<Character>{
-    //    Log.e("Character from API", _characterList.value.get(1).name)
-        return _characterList.value
-    }
-
+    val characterList = MutableStateFlow(listOf(Character(), Character()))
     fun updateCharacterList(page : Int){
         viewModelScope.launch {
-            Repository.loadCharactersFromApi(page)
+            characterList.value = repo.loadCharactersFromApi(page)
         }
     }
 }

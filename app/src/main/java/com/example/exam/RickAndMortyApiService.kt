@@ -8,5 +8,5 @@ import retrofit2.http.Query
 
 interface RickAndMortyApiService {
     @GET("api/character/")
-    suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse<ApiData.CharacterList>>
+    suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse>
 }
