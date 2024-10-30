@@ -1,6 +1,8 @@
 package com.example.exam
 
+import com.example.exam.dataClasses.ApiData
 import com.example.exam.dataClasses.ApiResponse
+import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.Info
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,12 +33,13 @@ class RetrofitInstance{
         return if(response.isSuccessful){
             response.body() ?: ApiResponse(
                 Info(0, 0, "none", "none"),
-                emptyList()
+                listOf(Character())
             )
+
         } else {
             ApiResponse(
                 Info(0, 0, "none", "none"),
-                emptyList()
+                listOf(Character())
             )
         }
     }

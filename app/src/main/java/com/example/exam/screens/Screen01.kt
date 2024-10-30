@@ -22,7 +22,7 @@ import com.example.exam.viewModels.Screen01ViewModel
 @Composable
 fun Screen01(vm: Screen01ViewModel){
     // Setup
-    vm.updateCharacterList(1)
+    vm.updateCharacterList(2)
 
     val characters = vm.characterList.collectAsState()
 
@@ -31,9 +31,9 @@ fun Screen01(vm: Screen01ViewModel){
         modifier = Modifier
             .fillMaxWidth()
     ){
-        //items(characters.value){ character ->
-        //    Item(character)
-        //}
+        items(characters.value){ character ->
+            Item(character)
+        }
     }
 }
 
