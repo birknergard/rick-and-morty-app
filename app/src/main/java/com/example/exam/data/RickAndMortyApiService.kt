@@ -1,4 +1,4 @@
-package com.example.exam
+package com.example.exam.data
 
 import com.example.exam.dataClasses.ApiResponse
 import retrofit2.Response
