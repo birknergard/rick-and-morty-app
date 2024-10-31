@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.Repository
-import com.example.exam.dataClasses.ApiData
 import com.example.exam.dataClasses.Character
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
