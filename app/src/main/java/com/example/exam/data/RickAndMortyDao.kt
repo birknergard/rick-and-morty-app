@@ -13,6 +13,9 @@ interface RickAndMortyDao {
     @Query("SELECT * FROM Character")
     suspend fun getCharacters() : List<Character>
 
+    @Query("SELECT id FROM Character")
+    suspend fun getAllIds() : List<Int>?
+
     @Query("SELECT * FROM Character WHERE :characterId = id")
     suspend fun getCharacterById(characterId : Int) : Character?
 

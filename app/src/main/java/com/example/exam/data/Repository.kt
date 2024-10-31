@@ -32,6 +32,17 @@ object Repository {
     suspend fun getCharacterByID(id : Int) : Character? {
         return _appDatabase.rickAndMortyDao().getCharacterById(id)
     }
+    suspend fun getUniqueID() : Int {
+        val listOfIntegers = _appDatabase.rickAndMortyDao().getAllIds()
+
+        // checks all ids in list for the highest one. If there is no ids (database is empty)
+        // it returns 1, elsewhise it returns the highest number incremented by one.
+        if (listOfIntegers == null){
+            return 1
+        } else {
+            return listOfIntegers.max() + 1
+        }
+    }
 
     // API
     suspend fun loadCharactersFromApi(page : Int) : List<Character>{

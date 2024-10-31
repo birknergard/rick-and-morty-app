@@ -2,8 +2,8 @@ package com.example.exam.dataClasses
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.Serializable
 
 @Entity
 data class Character(
@@ -48,4 +48,8 @@ data class Character(
         @SerializedName("location_url")
         val url: String = ""
     )
+
+    suspend fun uploadToDB(){
+        Repository.insertCharacterIntoDB(this)
+    }
 }
