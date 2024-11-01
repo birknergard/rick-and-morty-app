@@ -1,5 +1,6 @@
 package com.example.exam.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
@@ -9,12 +10,13 @@ import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
     val createdCharacter = MutableStateFlow<Character?>(null)
+    var uniqueId = MutableStateFlow(0)
 
-    fun getUniqueID() : Int{
+    fun createUniqueID(){
         viewModelScope.launch {
-            val id = Repository.getUniqueID()
+            uniqueId.value = Repository.getUniqueID()
         }
-        return id
+        Log.d("ViewModel 3", "Unique ID created.")
     }
 
     fun uploadCharacterToDB(){
