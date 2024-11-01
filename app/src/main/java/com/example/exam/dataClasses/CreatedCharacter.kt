@@ -1,6 +1,7 @@
 package com.example.exam.dataClasses
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.exam.data.Repository
@@ -18,7 +19,7 @@ data class CreatedCharacter(
    val gender: String? = null,
 
    @SerializedName("origin")
-   val origin: Location? = Location(),
+   val originId: Int? = null,
 
    @SerializedName("species")
    val species: String? = null,

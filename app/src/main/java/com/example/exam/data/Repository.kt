@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
 
 object Repository {
@@ -17,20 +18,20 @@ object Repository {
         ).build()
     }
 
-    suspend fun insertCharacterIntoDB(character: Character){
+    suspend fun insertCharacterIntoDB(character: CreatedCharacter){
         Log.e("DATABASE", "Inserting $character into database...")
         _appDatabase.rickAndMortyDao().insertCharacter(character)
     }
-    suspend fun insertCharactersIntoDB(characters : List<Character>){
+    suspend fun insertCharactersIntoDB(characters : List<CreatedCharacter>){
         Log.e("DATABASE", "Inserting multiple characters into database...")
         _appDatabase.rickAndMortyDao().insertCharacters(characters)
     }
 
-    suspend fun getCharactersFromDB() : List<Character>{
+    suspend fun getCharactersFromDB() : List<CreatedCharacter>{
         return _appDatabase.rickAndMortyDao().getCharacters()
     }
 
-    suspend fun getCharacterByID(id : Int) : Character? {
+    suspend fun getCharacterByID(id : Int) : CreatedCharacter? {
         return _appDatabase.rickAndMortyDao().getCharacterById(id)
     }
     suspend fun getUniqueID() : Int {

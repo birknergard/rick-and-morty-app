@@ -1,11 +1,5 @@
 package com.example.exam.dataClasses
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import com.example.exam.data.Repository
-import com.google.gson.annotations.SerializedName
-
 data class Character(
     val created: String? = null,
 
