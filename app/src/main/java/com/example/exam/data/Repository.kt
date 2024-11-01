@@ -51,7 +51,7 @@ object Repository {
         return response.result
     }
 
-    suspend fun getLocationsShort() : List<Location>{
+    suspend fun getSimpleLocationsFromApi() : List<Location>{
         val parsedList = mutableListOf(Location())
         for(i in 1 .. 7){
             val response = RetrofitInstance().getAllLocationsFromApi(i)
@@ -66,4 +66,13 @@ object Repository {
         return parsedList
     }
 
+    suspend fun insertCondensedLocationsFromApiIntoDB() : Boolean{
+        if(_appDatabase.rickAndMortyDao().getLocationsFromDB().isEmpty()){
+            val locations = getSimpleLocationsFromApi()
+            _appDatabase.rickAndMortyDao().insertLocationList(locations)
+            return true
+        } else {
+            return false
+        }
+    }
 }

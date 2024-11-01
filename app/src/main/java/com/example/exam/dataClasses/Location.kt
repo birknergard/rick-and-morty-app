@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class Location(
     @PrimaryKey
     val id : Int? = null,
-    @SerializedName("location")
+    @SerializedName("name")
     val name : String? = null,
     @SerializedName("url")
     val url : String? = null

@@ -1,10 +1,12 @@
 package com.example.exam.viewModels
 
+import android.icu.util.Calendar
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.Location
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -25,7 +27,23 @@ class Screen03ViewModel : ViewModel() {
         }
     }
 
-    fun setCharacterAttributes(){
+    fun setCharacterAttributes(
+        gender : String,
+        origin : Location,
+        name : String,
+        species : String,
+        type : String
+    ){
+       createdCharacter.value = Character(
+           created = "${Calendar.getInstance().time}",
+           name = name,
+           gender = gender,
+           origin = Location(
+              TODO()
+           ),
+           species = species,
+           type = type,
+       )
 
     }
 
