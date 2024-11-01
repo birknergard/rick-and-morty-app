@@ -7,7 +7,10 @@ import androidx.room.PrimaryKey
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(foreignKeys = [ForeignKey(
+    entity = Location::class,
+
+)])
 data class CreatedCharacter(
    @PrimaryKey
    val id : Int? = null,

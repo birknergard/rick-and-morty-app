@@ -12,6 +12,5 @@ data class Location(
     val name : String? = null,
     @SerializedName("url")
     val url : String? = null
-) {
+)
 
-}
