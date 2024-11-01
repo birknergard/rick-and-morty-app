@@ -8,46 +8,35 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Character(
     @SerializedName("created")
-    val created: String = "",
+    val created: String? = null,
 
-    val episode: List<String> = emptyList(),
+    val episode: List<String>? = null,
 
     @SerializedName("gender")
-    val gender: String = "",
+    val gender: String? = null,
 
     @PrimaryKey
-    val id: Int = 0,
+    val id: Int? = null,
 
-    val image: String = "",
-    val location: Location = Location(),
+    val image: String? = null,
+    val location: Location? = Location(),
 
     // This
     @SerializedName("name")
-    val name: String = "",
+    val name: String? = null,
 
     @SerializedName("origin")
-    val origin: Origin = Origin(),
+    val origin: Location? = Location(),
 
     @SerializedName("species")
-    val species: String = "",
+    val species: String? = null,
 
-    val status: String = "",
+    val status: String? = null,
 
     @SerializedName("type")
-    val type: String = "",
-    val url: String = ""
+    val type: String? = null,
+    val url: String? = null
 ) {
-    data class Location(
-        val name: String = "",
-        val url: String = ""
-    )
-
-    data class Origin(
-        @SerializedName("location_name")
-        val name: String = "",
-        @SerializedName("location_url")
-        val url: String = ""
-    )
 
     suspend fun uploadToDB(){
         Repository.insertCharacterIntoDB(this)

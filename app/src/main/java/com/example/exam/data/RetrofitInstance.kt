@@ -3,6 +3,7 @@ package com.example.exam.data
 import com.example.exam.dataClasses.ApiResponse
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.Info
+import com.example.exam.dataClasses.LocationFull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,7 +27,7 @@ class RetrofitInstance{
 
     private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
 
-    suspend fun getAllCharactersFromApi(page : Int) : ApiResponse {
+    suspend fun getAllCharactersFromApi(page : Int) : ApiResponse<List<Character>> {
         val response = _rickAndMortyApiService.getAllCharacters(page)
 
         return if(response.isSuccessful){
@@ -39,6 +40,21 @@ class RetrofitInstance{
             ApiResponse(
                 Info(0, 0, "none", "none"),
                 listOf(Character())
+            )
+        }
+    }
+    suspend fun getAllLocationsFromApi(page : Int) : ApiResponse<List<LocationFull>>{
+        val response = _rickAndMortyApiService.getAllLocations(page)
+
+        return if(response.isSuccessful){
+            response.body() ?: ApiResponse(
+                Info(0,0,"none","none"),
+                listOf(LocationFull())
+            )
+        } else {
+            ApiResponse(
+                Info(0,0,"none","none"),
+                listOf(LocationFull())
             )
         }
     }

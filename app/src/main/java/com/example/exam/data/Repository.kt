@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.Location
 
 object Repository {
     // Database
@@ -36,7 +37,7 @@ object Repository {
         val listOfIntegers = _appDatabase.rickAndMortyDao().getAllIds()
 
         // checks all ids in list for the highest one. If there is no ids (database is empty)
-        // it returns 1, elsewhise it returns the highest number incremented by one.
+        // it returns 1, otherwise it returns the highest number incremented by one.
         if (listOfIntegers == null){
             return 1
         } else {
@@ -48,6 +49,21 @@ object Repository {
     suspend fun loadCharactersFromApi(page : Int) : List<Character>{
         val response = RetrofitInstance().getAllCharactersFromApi(page)
         return response.result
+    }
+
+    suspend fun getLocationsShort() : List<Location>{
+        val parsedList = mutableListOf(Location())
+        for(i in 1 .. 7){
+            val response = RetrofitInstance().getAllLocationsFromApi(i)
+            for(k in 1 .. 20){
+                parsedList.add(Location(
+                    response.result.get(i).id,
+                    response.result.get(i).name,
+                    response.result.get(i).url
+                ))
+            }
+        }
+        return parsedList
     }
 
 }

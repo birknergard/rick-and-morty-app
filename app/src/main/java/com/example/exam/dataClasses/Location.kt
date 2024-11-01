@@ -1,11 +1,17 @@
 package com.example.exam.dataClasses
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+@Entity
 data class Location(
-    val created: String,
-    val dimension: String,
-    val id: Int,
-    val name: String,
-    val residents: List<String>,
-    val type: String,
-    val url: String
-)
+    @PrimaryKey
+    val id : Int? = null,
+    @SerializedName("location")
+    val name : String? = null,
+    @SerializedName("url")
+    val url : String? = null
+) {
+
+}
