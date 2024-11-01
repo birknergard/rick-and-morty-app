@@ -35,13 +35,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ExamTheme {
-                val repo = Repository
-                val vm = Screen01ViewModel(repo)
-
                 val nav = rememberNavController()
                 NavHost(startDestination = Screen01, navController = nav){
                     composable<Screen01> {
-                        Screen01(vm)
+                        Screen01(Screen01ViewModel())
                     }
                     composable<Screen02> {
 

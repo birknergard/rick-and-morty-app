@@ -34,7 +34,9 @@ class Screen03ViewModel : ViewModel() {
         species : String,
         type : String
     ){
+       createUniqueID()
        createdCharacter.value = Character(
+           id = uniqueId.value,
            created = "${Calendar.getInstance().time}",
            name = name,
            gender = gender,

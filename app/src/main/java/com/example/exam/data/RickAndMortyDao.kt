@@ -11,13 +11,13 @@ import com.example.exam.dataClasses.Location
 
 @Dao
 interface RickAndMortyDao {
-    @Query("SELECT * FROM Character")
+    @Query("SELECT * FROM CreatedCharacter")
     suspend fun getCharacters() : List<Character>
 
-    @Query("SELECT id FROM Character")
+    @Query("SELECT id FROM CreatedCharacter")
     suspend fun getAllIds() : List<Int>?
 
-    @Query("SELECT * FROM Character WHERE :characterId = id")
+    @Query("SELECT * FROM CreatedCharacter WHERE :characterId = id")
     suspend fun getCharacterById(characterId : Int) : Character?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
