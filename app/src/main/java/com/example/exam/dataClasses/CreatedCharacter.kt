@@ -9,7 +9,9 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(foreignKeys = [ForeignKey(
     entity = Location::class,
-
+    parentColumns = ["id"],
+    childColumns = ["originId"],
+    onDelete = ForeignKey.CASCADE
 )])
 data class CreatedCharacter(
    @PrimaryKey
@@ -21,7 +23,7 @@ data class CreatedCharacter(
    @SerializedName("gender")
    val gender: String? = null,
 
-   @SerializedName("origin")
+   @SerializedName("originId")
    val originId: Int? = null,
 
    @SerializedName("species")

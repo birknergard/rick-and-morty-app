@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
-    val createdCharacter = MutableStateFlow<Character?>(null)
+    val createdCharacter = MutableStateFlow<CreatedCharacter?>(null)
     var uniqueId = MutableStateFlow(0)
 
     fun createUniqueID(){
@@ -32,17 +33,16 @@ class Screen03ViewModel : ViewModel() {
         origin : Location,
         name : String,
         species : String,
-        type : String
+        type : String,
+        locationId : Int
     ){
        createUniqueID()
-       createdCharacter.value = Character(
+       createdCharacter.value = CreatedCharacter(
            id = uniqueId.value,
            created = "${Calendar.getInstance().time}",
            name = name,
            gender = gender,
-           origin = Location(
-              TODO()
-           ),
+           originId = locationId,
            species = species,
            type = type,
        )

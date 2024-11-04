@@ -19,7 +19,7 @@ import com.example.exam.viewModels.Screen01ViewModel
 @Composable
 fun Screen01(vm: Screen01ViewModel){
     // Setup
-    vm.updateCharacterList(2)
+    vm.updateCharacterList(1)
 
     val characters = vm.characterList.collectAsState()
 
@@ -41,10 +41,12 @@ fun Item(item : Character){
            .fillMaxWidth()
            .background(color = Color.White),
    ){
-       Text(
-           text = item.name,
-           fontSize = 25.sp,
-           textAlign = TextAlign.Center
-       )
+       item.name?.let {
+           Text(
+               text = it,
+               fontSize = 25.sp,
+               textAlign = TextAlign.Center
+           )
+       }
    }
 }
