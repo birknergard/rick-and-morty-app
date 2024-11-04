@@ -37,7 +37,9 @@ fun Screen03(viewModel: Screen03ViewModel){
         )
 
         TODO(
-           "Input for origin, type, species and gender respectively."
+           "Input for origin, type, species and gender respectively." +
+                   " type and species are freeform, while gender and location are restricted." +
+                   "Location maybe not. idno."
         )
     }
 }
