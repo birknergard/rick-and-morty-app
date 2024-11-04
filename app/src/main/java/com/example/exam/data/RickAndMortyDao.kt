@@ -12,21 +12,23 @@ import com.example.exam.dataClasses.Location
 
 @Dao
 interface RickAndMortyDao {
+    // For created character db
     @Query("SELECT * FROM CreatedCharacter")
-    suspend fun getCharacters() : List<CreatedCharacter>
+    suspend fun getCreatedCharacters() : List<CreatedCharacter>
 
     @Query("SELECT id FROM CreatedCharacter")
     suspend fun getAllIds() : List<Int>?
 
     @Query("SELECT * FROM CreatedCharacter WHERE :characterId = id")
-    suspend fun getCharacterById(characterId : Int) : CreatedCharacter?
+    suspend fun getCreatedCharacterById(characterId : Int) : CreatedCharacter?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacter(character : CreatedCharacter)
+    suspend fun insertCreatedCharacter(character : CreatedCharacter)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacters(characters: List<CreatedCharacter>)
+    suspend fun insertCreatedCharacters(characters: List<CreatedCharacter>)
 
+    // For location db
     @Query("SELECT * FROM Location")
     suspend fun getLocationsFromDB() : List<Location>
 
@@ -35,9 +37,19 @@ interface RickAndMortyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocationList(list : List<Location>)
+
+    // For Character db (from api)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCharacter()
+
+    @Query("SELECT DISTINCT species  FROM Character")
+    suspend fun getListOfSpecies(): List<String>
+
+    @Query("SELECT DISTINCT type FROM Character")
+    suspend fun getListOfTypes(): List<String>
 }
 
-@Database(entities = [CreatedCharacter::class, Location::class], version = 1, exportSchema = false)
+@Database(entities = [CreatedCharacter::class, Location::class, Character::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase(){
     abstract fun rickAndMortyDao() : RickAndMortyDao
 }

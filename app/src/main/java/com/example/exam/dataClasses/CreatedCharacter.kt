@@ -18,7 +18,7 @@ data class CreatedCharacter(
    val id : Int? = null,
 
    @SerializedName("name")
-   val name: String? = null,
+   var name: String? = null,
 
    @SerializedName("gender")
    val gender: String? = null,
@@ -29,8 +29,8 @@ data class CreatedCharacter(
    @SerializedName("species")
    val species: String? = null,
 
-   @SerializedName("type")
-   val type: String? = null,
+   @SerializedName("description")
+   val description: String? = null,
 
     @SerializedName("created")
     val created: String? = null,

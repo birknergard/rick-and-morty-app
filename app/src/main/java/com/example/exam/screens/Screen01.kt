@@ -19,7 +19,9 @@ import com.example.exam.viewModels.Screen01ViewModel
 @Composable
 fun Screen01(vm: Screen01ViewModel){
     // Setup
-    vm.updateCharacterList(1)
+    val page = vm.page.collectAsState()
+
+    vm.updateCharacterList(page.value)
 
     val characters = vm.characterList.collectAsState()
 

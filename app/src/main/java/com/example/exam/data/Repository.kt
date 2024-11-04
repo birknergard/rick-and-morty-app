@@ -20,19 +20,19 @@ object Repository {
 
     suspend fun insertCharacterIntoDB(character: CreatedCharacter){
         Log.e("DATABASE", "Inserting $character into database...")
-        _appDatabase.rickAndMortyDao().insertCharacter(character)
+        _appDatabase.rickAndMortyDao().insertCreatedCharacter(character)
     }
     suspend fun insertCharactersIntoDB(characters : List<CreatedCharacter>){
         Log.e("DATABASE", "Inserting multiple characters into database...")
-        _appDatabase.rickAndMortyDao().insertCharacters(characters)
+        _appDatabase.rickAndMortyDao().insertCreatedCharacters(characters)
     }
 
     suspend fun getCharactersFromDB() : List<CreatedCharacter>{
-        return _appDatabase.rickAndMortyDao().getCharacters()
+        return _appDatabase.rickAndMortyDao().getCreatedCharacters()
     }
 
     suspend fun getCharacterByID(id : Int) : CreatedCharacter? {
-        return _appDatabase.rickAndMortyDao().getCharacterById(id)
+        return _appDatabase.rickAndMortyDao().getCreatedCharacterById(id)
     }
     suspend fun getUniqueID() : Int {
         val listOfIntegers = _appDatabase.rickAndMortyDao().getAllIds()
@@ -53,14 +53,16 @@ object Repository {
     }
 
     suspend fun getSimpleLocationsFromApi() : List<Location>{
+        var response = RetrofitInstance().getAllLocationsFromApi(1)
         val parsedList = mutableListOf(Location())
+
         for(i in 1 .. 7){
-            val response = RetrofitInstance().getAllLocationsFromApi(i)
-            for(k in 1 .. 20){
+            response = RetrofitInstance().getAllLocationsFromApi(i)
+            for(k in 0 .. 19){
                 parsedList.add(Location(
-                    response.result.get(i).id,
-                    response.result.get(i).name,
-                    response.result.get(i).url
+                    response.result.get(k).id,
+                    response.result.get(k).name,
+                    response.result.get(k).url
                 ))
             }
         }

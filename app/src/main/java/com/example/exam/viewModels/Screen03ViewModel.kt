@@ -12,8 +12,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
-    val createdCharacter = MutableStateFlow<CreatedCharacter?>(null)
+    val createdCharacter = MutableStateFlow(CreatedCharacter(
+        name = "",
+        id = null,
+        gender = null,
+        originId = null,
+        species = null,
+        description = "",
+        created = null
+    ))
     var uniqueId = MutableStateFlow(0)
+
+    val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
+    val speciesOptions = listOf("Human", "Alien")
 
     fun createUniqueID(){
         viewModelScope.launch {
@@ -30,10 +41,9 @@ class Screen03ViewModel : ViewModel() {
 
     fun setCharacterAttributes(
         gender : String,
-        origin : Location,
         name : String,
         species : String,
-        type : String,
+        description : String,
         locationId : Int
     ){
        createUniqueID()
@@ -44,7 +54,7 @@ class Screen03ViewModel : ViewModel() {
            gender = gender,
            originId = locationId,
            species = species,
-           type = type,
+           description = description,
        )
 
     }

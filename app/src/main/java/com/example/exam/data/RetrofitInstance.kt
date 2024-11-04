@@ -1,5 +1,6 @@
 package com.example.exam.data
 
+import android.util.Log
 import com.example.exam.dataClasses.ApiResponse
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.Info
@@ -8,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.UnknownHostException
 
 class RetrofitInstance{
     private val _url = "https://rickandmortyapi.com/"
@@ -28,31 +30,47 @@ class RetrofitInstance{
     private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
 
     suspend fun getAllCharactersFromApi(page : Int) : ApiResponse<List<Character>> {
-        val response = _rickAndMortyApiService.getAllCharacters(page)
+        try {
+            val response = _rickAndMortyApiService.getAllCharacters(page)
+            return if(response.isSuccessful){
+                response.body() ?: ApiResponse(
+                    Info(0, 0, "none", "none"),
+                    listOf(Character())
+                )
 
-        return if(response.isSuccessful){
-            response.body() ?: ApiResponse(
-                Info(0, 0, "none", "none"),
-                listOf(Character())
-            )
+            } else {
+                ApiResponse(
+                    Info(0, 0, "none", "none"),
+                    listOf(Character())
+                )
+            }
 
-        } else {
-            ApiResponse(
+        } catch (e : UnknownHostException){
+            Log.e("API","Could not establish connection to API.")
+            return ApiResponse(
                 Info(0, 0, "none", "none"),
                 listOf(Character())
             )
         }
     }
     suspend fun getAllLocationsFromApi(page : Int) : ApiResponse<List<LocationFull>>{
-        val response = _rickAndMortyApiService.getAllLocations(page)
+        try {
+            val response = _rickAndMortyApiService.getAllLocations(page)
 
-        return if(response.isSuccessful){
-            response.body() ?: ApiResponse(
-                Info(0,0,"none","none"),
-                listOf(LocationFull())
-            )
-        } else {
-            ApiResponse(
+            return if(response.isSuccessful){
+                response.body() ?: ApiResponse(
+                    Info(0,0,"none","none"),
+                    listOf(LocationFull())
+                )
+            } else {
+                ApiResponse(
+                    Info(0,0,"none","none"),
+                    listOf(LocationFull())
+                )
+            }
+        } catch (e : UnknownHostException){
+            Log.e("API","Could not establish connection to API.")
+            return ApiResponse(
                 Info(0,0,"none","none"),
                 listOf(LocationFull())
             )
