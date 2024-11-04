@@ -37,19 +37,9 @@ interface RickAndMortyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocationList(list : List<Location>)
-
-    // For Character db (from api)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacter()
-
-    @Query("SELECT DISTINCT species  FROM Character")
-    suspend fun getListOfSpecies(): List<String>
-
-    @Query("SELECT DISTINCT type FROM Character")
-    suspend fun getListOfTypes(): List<String>
 }
 
-@Database(entities = [CreatedCharacter::class, Location::class, Character::class], version = 1, exportSchema = false)
+@Database(entities = [CreatedCharacter::class, Location::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase(){
     abstract fun rickAndMortyDao() : RickAndMortyDao
 }

@@ -10,6 +10,7 @@ import com.example.exam.dataClasses.Location
 object Repository {
     // Database
     private lateinit var _appDatabase: AppDatabase
+
     fun initDB(context : Context){
         _appDatabase = Room.databaseBuilder(
             context = context,
@@ -22,6 +23,7 @@ object Repository {
         Log.e("DATABASE", "Inserting $character into database...")
         _appDatabase.rickAndMortyDao().insertCreatedCharacter(character)
     }
+
     suspend fun insertCharactersIntoDB(characters : List<CreatedCharacter>){
         Log.e("DATABASE", "Inserting multiple characters into database...")
         _appDatabase.rickAndMortyDao().insertCreatedCharacters(characters)
@@ -53,11 +55,10 @@ object Repository {
     }
 
     suspend fun getSimpleLocationsFromApi() : List<Location>{
-        var response = RetrofitInstance().getAllLocationsFromApi(1)
         val parsedList = mutableListOf(Location())
 
         for(i in 1 .. 7){
-            response = RetrofitInstance().getAllLocationsFromApi(i)
+            val response = RetrofitInstance().getAllLocationsFromApi(i)
             for(k in 0 .. 19){
                 parsedList.add(Location(
                     response.result.get(k).id,

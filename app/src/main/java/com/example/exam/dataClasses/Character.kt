@@ -1,8 +1,8 @@
 package com.example.exam.dataClasses
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity
 data class Character(
     val created: String? = null,
 
