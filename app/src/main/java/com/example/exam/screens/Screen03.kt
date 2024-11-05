@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen03ViewModel
 
 //@Preview(showBackground = true, showSystemUi = true)
@@ -35,9 +36,11 @@ fun Screen03(viewModel: Screen03ViewModel){
     val createdCharacter = viewModel.createdCharacter.collectAsState()
 
     Column (modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 30.dp),
-        verticalArrangement = Arrangement.Center,
+        .fillMaxSize()
+        .padding(vertical = 10.dp)
+        .padding(top = 60.dp)
+        ,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(text = "Create your own character", fontSize = 25.sp)
@@ -52,9 +55,11 @@ fun Screen03(viewModel: Screen03ViewModel){
             options = viewModel.genderOptions,
             selection = viewModel.getSelectionToggleList(),
             createdCharacter = createdCharacter.value
-        )
 
+        )
+        NavBar()
     }
+
 }
 
 @Composable
