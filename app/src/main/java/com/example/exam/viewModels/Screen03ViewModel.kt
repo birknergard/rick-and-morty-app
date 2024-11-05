@@ -2,13 +2,15 @@ package com.example.exam.viewModels
 
 import android.icu.util.Calendar
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
-import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
@@ -24,6 +26,12 @@ class Screen03ViewModel : ViewModel() {
     var uniqueId = MutableStateFlow(0)
 
     val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
+
+    private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
+    fun getSelectionToggleList() : SnapshotStateList<Boolean>{
+        return _genderSelectionToggle.asStateFlow().value
+    }
+
     val speciesOptions = listOf("Human", "Alien")
 
     fun createUniqueID(){

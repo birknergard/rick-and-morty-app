@@ -1,6 +1,8 @@
 package com.example.exam.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,21 +13,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.viewModels.Screen03ViewModel
 
 //@Preview(showBackground = true, showSystemUi = true)
@@ -41,55 +41,70 @@ fun Screen03(viewModel: Screen03ViewModel){
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(text = "Create your own character", fontSize = 25.sp)
-        TextField(
+        OutlinedTextField(
             value = createdCharacter.value.name!!,
             onValueChange = { createdCharacter.value.name = it
             },
             label = { Text("Enter a name") }
         )
 
-        GenderSelectionGrid(viewModel.genderOptions)
+        GenderSelectionGrid(
+            options = viewModel.genderOptions,
+            selection = viewModel.getSelectionToggleList(),
+            createdCharacter = createdCharacter.value
+        )
 
     }
 }
 
 @Composable
-fun GenderSelectionGrid(options: List<String>){
+fun GenderSelectionGrid(
+    options: List<String>,
+    selection: SnapshotStateList<Boolean>,
+    createdCharacter: CreatedCharacter
+){
+
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 120.dp),
+        horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+        verticalArrangement = Arrangement.SpaceEvenly,
+        columns = GridCells.FixedSize(120.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 40.dp)
+            .padding(horizontal = 30.dp)
     ) {
         items(options){ option ->
-            SelectButton(option)
+            SelectButton(option, selection, options.indexOf(option), createdCharacter)
         }
 
     }
 }
 
 @Composable
-fun SelectButton(text : String){
+fun SelectButton(
+    text : String,
+    isToggled : MutableList<Boolean>,
+    thisItem : Int,
+    character: CreatedCharacter
+){
     Surface(onClick = {
-
-    }) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.Black)
-                .padding(vertical = 1.dp, horizontal = 1.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White)
-                .padding(horizontal = 10.dp, vertical = 10.dp)
-            ,
-            contentAlignment = Alignment.Center,
-
-        ){
-            Text(
-                text = text,
-            )
+        isToggled[thisItem] = !isToggled[thisItem] // Inverses the boolean  on click
+        isToggled.indices.forEach { i -> if(i != thisItem) isToggled[i] = false } // Sets all other booleans to false, so you cant toggle more than one field
+        character.gender = text.lowercase()
+        Log.i("CreatedCharacter", character.gender.toString())
         }
+    ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(if (!isToggled[thisItem]) Color.White else Color.Gray)
+                    .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
+                    .padding(vertical = 5.dp)
+                ,
+                contentAlignment = Alignment.Center,
+            ){
+                Text(text = text, color = if(!isToggled[thisItem]) Color.Black else Color.White)
+            }
     }
 }
 

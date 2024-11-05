@@ -21,7 +21,7 @@ data class CreatedCharacter(
    var name: String? = null,
 
    @SerializedName("gender")
-   val gender: String? = null,
+   var gender: String? = null,
 
    @SerializedName("originId")
    val originId: Int? = null,
