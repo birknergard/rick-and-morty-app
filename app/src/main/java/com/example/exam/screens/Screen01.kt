@@ -38,8 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
+
 import com.example.exam.dataClasses.Character
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen01ViewModel
@@ -106,7 +105,6 @@ fun Item(character : Character){
        verticalAlignment = Alignment.CenterVertically,
        horizontalArrangement = Arrangement.SpaceBetween
    ){
-
        AsyncImage(
            modifier = Modifier.size(150.dp),
            model = character.image!!,
