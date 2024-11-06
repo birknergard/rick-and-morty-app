@@ -8,9 +8,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RickAndMortyApiService {
-    @GET("/api/character/")
+    @GET("api/character/")
     suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse<List<Character>>>
 
-    @GET("/api/location/")
+    @GET("api/location/")
     suspend fun getAllLocations(@Query("page") page : Int) : Response<ApiResponse<List<LocationFull>>>
 }

@@ -6,8 +6,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,24 +28,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.room.util.TableInfo
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen03ViewModel
 
-//@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun Screen03(viewModel: Screen03ViewModel){
 
     val createdCharacter = viewModel.createdCharacter.collectAsState()
 
-    Column (modifier = Modifier
-        .fillMaxSize()
-        .padding(vertical = 10.dp)
-        .padding(top = 60.dp)
-        ,
-        verticalArrangement = Arrangement.SpaceBetween,
+    // Column is set to 750 dp to fill out the template.
+    // Could not be done automatically by any means.
+    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Column(
+        modifier = Modifier
+            .background(Color.White).height(750.dp),
+        verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Text(text = "Create your own character", fontSize = 25.sp)
         OutlinedTextField(
             value = createdCharacter.value.name!!,
@@ -57,9 +62,7 @@ fun Screen03(viewModel: Screen03ViewModel){
             createdCharacter = createdCharacter.value
 
         )
-        NavBar()
     }
-
 }
 
 @Composable

@@ -29,29 +29,33 @@ class RetrofitInstance{
 
     private val _rickAndMortyApiService = _retrofit.create(RickAndMortyApiService::class.java)
 
-    suspend fun getAllCharactersFromApi(page : Int) : ApiResponse<List<Character>> {
+    suspend fun getAllCharactersFromApi(page : Int) : Pair<List<Character>, Boolean> {
         try {
             val response = _rickAndMortyApiService.getAllCharacters(page)
-            return if(response.isSuccessful){
-                response.body() ?: ApiResponse(
-                    Info(0, 0, "none", "none"),
-                    listOf(Character())
-                )
 
+            val output : Pair<List<Character>, Boolean>
+
+            if(response.isSuccessful){
+                output = Pair(
+                    first = response.body()!!.result,
+                    second = true
+                )
             } else {
-                ApiResponse(
-                    Info(0, 0, "none", "none"),
-                    listOf(Character())
+                output = Pair(
+                    first = emptyList(),
+                    second = false
                 )
             }
+            return output
 
         } catch (e : UnknownHostException){
             Log.e("API","Could not establish connection to API.")
-            return ApiResponse(
-                Info(0, 0, "none", "none"),
-                listOf(Character())
+            return Pair(
+                    first = emptyList(),
+                    second = false
             )
         }
+
     }
     suspend fun getAllLocationsFromApi(page : Int) : ApiResponse<List<LocationFull>>{
         try {

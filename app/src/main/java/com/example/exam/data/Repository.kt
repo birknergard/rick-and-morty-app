@@ -49,9 +49,9 @@ object Repository {
     }
 
     // API
-    suspend fun loadCharactersFromApi(page : Int) : List<Character>{
+    suspend fun loadCharactersFromApi(page : Int) : Pair<List<Character>, Boolean>{
         val response = RetrofitInstance().getAllCharactersFromApi(page)
-        return response.result
+        return response
     }
 
     suspend fun getSimpleLocationsFromApi() : List<Location>{
