@@ -1,6 +1,7 @@
 package com.example.exam.viewModels
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class Screen01ViewModel() : ViewModel(){
     val navUIState = listOf(true, false, false, false)
-    val characterList = MutableStateFlow(listOf<Character>())
+    val characterList = MutableStateFlow(mutableStateListOf<Character>())
     val page = MutableStateFlow(1)
 
     var apiCallSuccessful = MutableStateFlow<Boolean?>(null)
@@ -20,10 +21,16 @@ class Screen01ViewModel() : ViewModel(){
     fun updateCharacterList(page : Int){
         viewModelScope.launch {
             val apiCall = Repository.loadCharactersFromApi(page)
-            apiCallSuccessful.value = apiCall.second
-            characterList.value = apiCall.first
-
-            delay(2000)
+            if(apiCall.first.isNotEmpty() && apiCall.second){
+                apiCallSuccessful.value = apiCall.second
+                characterList.value.addAll(apiCall.first)
+                delay(2000)
+            } else {
+                apiCallSuccessful.value = apiCall.second
+                delay(2000)
+            }
         }
     }
+
+
 }

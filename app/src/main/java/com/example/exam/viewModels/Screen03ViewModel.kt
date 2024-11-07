@@ -69,4 +69,10 @@ class Screen03ViewModel : ViewModel() {
 
     val navUIState = listOf(false, false, true, false)
 
+    fun initializeLocationDatabase(){
+        viewModelScope.launch{
+            Repository.initializeLocationDB()
+        }
+    }
+
 }

@@ -2,14 +2,17 @@ package com.example.exam.data
 
 import android.content.Context
 import android.util.Log
+import androidx.collection.objectIntMap
 import androidx.room.Room
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
+import kotlinx.coroutines.delay
 
 object Repository {
     // Database
     private lateinit var _appDatabase: AppDatabase
+    private val _retrofit = RetrofitInstance()
 
     fun initDB(context : Context){
         _appDatabase = Room.databaseBuilder(
@@ -50,33 +53,64 @@ object Repository {
 
     // API
     suspend fun loadCharactersFromApi(page : Int) : Pair<List<Character>, Boolean>{
-        val response = RetrofitInstance().getAllCharactersFromApi(page)
+        val response = _retrofit.getAllCharactersFromApi(page)
         return response
     }
 
-    suspend fun getSimpleLocationsFromApi() : List<Location>{
+    suspend fun getLocationsFromAPI() : List<Location>{
+        // Creates an empty list to hold new data.
         val parsedList = mutableListOf(Location())
 
-        for(i in 1 .. 7){
-            val response = RetrofitInstance().getAllLocationsFromApi(i)
-            for(k in 0 .. 19){
-                parsedList.add(Location(
-                    response.result.get(k).id,
-                    response.result.get(k).name,
-                    response.result.get(k).url
-                ))
+        // loads the first response to check for page count
+        val initResponse = _retrofit.getLocationsWithPagesFromApi(1)
+
+        // Checks number of pages
+        val pageCount = initResponse.second
+
+        // makes one api per page to retrieve every location.
+        for(i in 2 .. pageCount){
+            val response = _retrofit.getLocationsFromApi(i)
+            if(response.first){
+                response.second.forEach{ location ->
+                    parsedList.add(Location(
+                        name = location.name,
+                        url = location.url
+                    ))
+                }
+                Log.i("LocationAPI","Parsed locations for page#${i} from the API.")
             }
         }
+
+        Log.i("LocationAPI","Parsing complete.")
         return parsedList
     }
 
-    suspend fun insertCondensedLocationsFromApiIntoDB() : Boolean{
-        if(_appDatabase.rickAndMortyDao().getLocationsFromDB().isEmpty()){
-            val locations = getSimpleLocationsFromApi()
-            _appDatabase.rickAndMortyDao().insertLocationList(locations)
+    suspend fun insertLocationsIntoDB(locationsFromAPI : List<Location>) : Boolean{
+        val locationsInAPI = locationsFromAPI.size
+        val locationsInDB : Int = _appDatabase.rickAndMortyDao().getLocationCount()
+
+        if(locationsInAPI != locationsInDB) {
+            if(locationsInDB > 0) {
+                _appDatabase.rickAndMortyDao().wipeTable()
+            }
+            _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
             return true
+
         } else {
+            Log.i("DATABASE","Database already loaded.")
             return false
         }
     }
+    suspend fun initializeLocationDB(){
+        if(_appDatabase.rickAndMortyDao().getLocationCount() == 0){
+            Log.d("DATABASE", "Database is empty, loading API.")
+            val locationsFromAPI = getLocationsFromAPI()
+            if (locationsFromAPI.isNotEmpty()){
+                Log.d("API", "GET request returned results, insert into database.")
+                _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
+            }
+            delay(2000)
+        }
+    }
+
 }

@@ -35,6 +35,12 @@ interface RickAndMortyDao {
     @Query("SELECT * FROM Location WHERE :locationId = id")
     suspend fun getLocationByID(locationId : Int) : Location
 
+    @Query("SELECT COUNT(id) FROM Location")
+    suspend fun getLocationCount() : Int
+
+    @Query("DELETE FROM Location")
+    suspend fun wipeTable()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocationList(list : List<Location>)
 }

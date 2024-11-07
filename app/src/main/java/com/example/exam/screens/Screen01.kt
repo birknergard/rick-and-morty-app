@@ -2,7 +2,9 @@ package com.example.exam.screens
 
 import android.graphics.drawable.Icon
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -33,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
@@ -40,6 +47,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.Location
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen01ViewModel
 import kotlinx.coroutines.awaitAll
@@ -50,14 +58,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun Screen01(vm: Screen01ViewModel){
     // Setup
-    val page = vm.page.collectAsState()
     val characters = vm.characterList.collectAsState()
 
     val apiCallSuccessful = vm.apiCallSuccessful.collectAsState()
 
     LaunchedEffect(Unit) {
         if(apiCallSuccessful.value == null){
-            vm.updateCharacterList(page.value)
+            vm.page.value = 1
+            vm.updateCharacterList(vm.page.value)
         }
         delay(2000)
         Log.e("IMAGEURL", characters.value[0].image!!)
@@ -78,9 +86,29 @@ fun Screen01(vm: Screen01ViewModel){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(750.dp)
+                .padding(horizontal = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            item {
+                Spacer(modifier = Modifier.padding(top = 5.dp))
+            }
             items(characters.value) { character ->
+                Spacer(modifier = Modifier.padding(top = 10.dp))
                 Item(character)
+            }
+            item {
+                Surface(
+                    modifier = Modifier.padding(20.dp),
+                    onClick = {
+                        vm.page.value++
+                        vm.updateCharacterList(vm.page.value)
+                    }
+                ) {
+                    Image(
+                        painter = rememberVectorPainter(Icons.Default.Add),
+                        contentDescription = "Plus icon"
+                    )
+                }
             }
         }
 
@@ -99,14 +127,24 @@ fun Screen01(vm: Screen01ViewModel){
 fun Item(character : Character){
    Row(
        modifier = Modifier
-           .fillMaxWidth().height(200.dp)
+           .fillMaxWidth().height(170.dp)
+           .border(width = 2.dp,
+       color = when (character.status) {
+           "Alive" -> Color.Green
+           "unknown" -> Color.Gray
+           else -> Color.Red
+       },
+       shape = RoundedCornerShape(10.dp))
+
            .background(color = Color.White)
            .padding(horizontal = 10.dp, vertical = 10.dp),
        verticalAlignment = Alignment.CenterVertically,
        horizontalArrangement = Arrangement.SpaceBetween
    ){
        AsyncImage(
-           modifier = Modifier.size(150.dp),
+           modifier = Modifier
+               .size(150.dp)
+               .clip(RoundedCornerShape(10.dp)),
            model = character.image!!,
            placeholder = rememberVectorPainter(Icons.Default.Person),
            contentScale = ContentScale.Crop,
@@ -126,4 +164,35 @@ fun Item(character : Character){
            )
        }
    }
+    Spacer(modifier = Modifier.padding(10.dp).background(Color.White))
+}
+
+@Preview
+@Composable
+fun ItemPreview() {
+    val character = Character(
+        created = "2017-11-04T18:50:21.651Z",
+        episode = listOf(
+            "https://rickandmortyapi.com/api/episode/1",
+            "https://rickandmortyapi.com/api/episode/2"
+            // Add more episodes as needed
+        ),
+        gender = "Male",
+        id = 2,
+        image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+        location = Location(
+            name = "Earth",
+            url = "https://rickandmortyapi.com/api/location/20"
+        ),
+        name = "Morty Smith",
+        origin = Location(
+            name = "Earth",
+            url = "https://rickandmortyapi.com/api/location/1"
+        ),
+        species = "Human",
+        status = "Alive",
+        type = "",
+        url = "https://rickandmortyapi.com/api/character/2"
+    )
+    Item(character)
 }

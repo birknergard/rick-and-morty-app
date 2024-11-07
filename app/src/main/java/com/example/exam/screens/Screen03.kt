@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -36,6 +37,10 @@ import com.example.exam.viewModels.Screen03ViewModel
 
 @Composable
 fun Screen03(viewModel: Screen03ViewModel){
+
+    LaunchedEffect(Unit) {
+        viewModel.initializeLocationDatabase()
+    }
 
     val createdCharacter = viewModel.createdCharacter.collectAsState()
 
@@ -85,6 +90,13 @@ fun GenderSelectionGrid(
         }
 
     }
+}
+
+@Composable
+fun LocationSelect(
+
+){
+
 }
 
 @Composable

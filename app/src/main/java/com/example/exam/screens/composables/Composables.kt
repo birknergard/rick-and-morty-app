@@ -28,6 +28,9 @@ import com.example.exam.Screen01
 import com.example.exam.Screen02
 import com.example.exam.Screen03
 import com.example.exam.Screen04
+import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.Location
+import com.example.exam.screens.Item
 import com.example.exam.viewModels.Screen04ViewModel
 
 
@@ -49,13 +52,12 @@ fun UITemplate(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Red)
         ){
             Spacer(
                 modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth().background(color = Color.Gray)
-                    .padding(vertical = 5.dp)
+                    .padding(vertical = 2.dp)
             )
 
             screenComposable()
@@ -163,7 +165,6 @@ fun NavItem(label : String, isActive : Boolean, onClick : () -> Unit){
                 text = label,
                 color = if (isActive) Color.White else Color.Magenta,
                 fontWeight = FontWeight.Bold
-
             )
         }
     }
