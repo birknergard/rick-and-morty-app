@@ -29,10 +29,10 @@ interface RickAndMortyDao {
     suspend fun insertCreatedCharacters(characters: List<CreatedCharacter>)
 
     // For location db
-    @Query("SELECT * FROM Location")
+    @Query("SELECT * FROM Location ORDER BY name DESC")
     suspend fun getLocationsFromDB() : List<Location>
 
-    @Query("SELECT name FROM Location")
+    @Query("SELECT name FROM Location ")
     suspend fun getLocationNames() : List<String>
 
     @Query("SELECT * FROM Location WHERE :locationId = id")

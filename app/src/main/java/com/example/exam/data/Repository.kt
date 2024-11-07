@@ -151,5 +151,7 @@ object Repository {
        // _appDatabase.rickAndMortyDao().getLocationNames().forEach{locationName ->
        //     Log.d("DATABASE", "${locationName.toString()}")
     }
-
+    suspend fun getLocations() : List<Location>{
+        return _appDatabase.rickAndMortyDao().getLocationsFromDB()
+    }
 }

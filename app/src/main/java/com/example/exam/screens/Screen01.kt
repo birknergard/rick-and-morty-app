@@ -73,7 +73,7 @@ fun Screen01(vm: Screen01ViewModel){
 
     if(apiCallSuccessful.value == null){
         Column(
-            modifier = Modifier.fillMaxWidth().height(750.dp).background(Color.White),
+            modifier = Modifier.fillMaxWidth().height(730.dp).background(Color.White),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -85,7 +85,7 @@ fun Screen01(vm: Screen01ViewModel){
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(750.dp)
+                .height(730.dp)
                 .padding(horizontal = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -114,7 +114,7 @@ fun Screen01(vm: Screen01ViewModel){
 
     } else {
         Column(
-            modifier = Modifier.fillMaxWidth().height(750.dp),
+            modifier = Modifier.fillMaxWidth().height(730.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -164,35 +164,5 @@ fun Item(character : Character){
            )
        }
    }
-    Spacer(modifier = Modifier.padding(10.dp).background(Color.White))
-}
-
-@Preview
-@Composable
-fun ItemPreview() {
-    val character = Character(
-        created = "2017-11-04T18:50:21.651Z",
-        episode = listOf(
-            "https://rickandmortyapi.com/api/episode/1",
-            "https://rickandmortyapi.com/api/episode/2"
-            // Add more episodes as needed
-        ),
-        gender = "Male",
-        id = 2,
-        image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-        location = Location(
-            name = "Earth",
-            url = "https://rickandmortyapi.com/api/location/20"
-        ),
-        name = "Morty Smith",
-        origin = Location(
-            name = "Earth",
-            url = "https://rickandmortyapi.com/api/location/1"
-        ),
-        species = "Human",
-        status = "Alive",
-        type = "",
-        url = "https://rickandmortyapi.com/api/character/2"
-    )
-    Item(character)
+   Spacer(modifier = Modifier.padding(10.dp).background(Color.White))
 }

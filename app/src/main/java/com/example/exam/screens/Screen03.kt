@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -22,17 +25,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastFilter
 import androidx.navigation.NavController
 import androidx.room.util.TableInfo
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.dataClasses.Location
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen03ViewModel
 
@@ -41,6 +52,7 @@ fun Screen03(viewModel: Screen03ViewModel){
 
     LaunchedEffect(Unit) {
         viewModel.initializeLocationDatabase()
+        viewModel.loadLocations()
     }
 
     val createdCharacter = viewModel.createdCharacter.collectAsState()
@@ -50,7 +62,7 @@ fun Screen03(viewModel: Screen03ViewModel){
     // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     Column(
         modifier = Modifier
-            .background(Color.White).height(750.dp),
+            .background(Color.White).height(730.dp),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -68,6 +80,8 @@ fun Screen03(viewModel: Screen03ViewModel){
             createdCharacter = createdCharacter.value
 
         )
+
+        LocationSelect(viewModel.getLocationList())
     }
 }
 
@@ -95,9 +109,49 @@ fun GenderSelectionGrid(
 
 @Composable
 fun LocationSelect(
-
+locationList : List<Location>
 ){
-
+    val focusRequester = remember { FocusRequester() }
+    val locationInput = rememberSaveable {mutableStateOf("")}
+    val isFocused = remember { mutableStateOf(false) }
+    Column {
+        OutlinedTextField(
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    isFocused.value = focusState.isFocused
+                },
+            value = locationInput.value,
+            onValueChange = { locationInput.value = it },
+            label = { Text("Origin") }
+        )
+        if(isFocused.value){
+        LazyColumn (
+            modifier = Modifier
+                .width(250.dp).height(200.dp).padding(start = 10.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ){
+                items(locationList.filter {
+                    it.name!!.lowercase().startsWith(
+                        locationInput.value.lowercase()
+                    )
+                }){ location ->
+                    Surface(
+                        onClick = {
+                            focusRequester.requestFocus()
+                            locationInput.value = location.name!!
+                        }
+                    ) {
+                        Text(
+                            text =  location.name!!,
+                            fontSize = 20.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
