@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.room.util.TableInfo
+import com.example.exam.data.Repository
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen03ViewModel

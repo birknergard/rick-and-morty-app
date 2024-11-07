@@ -32,11 +32,17 @@ interface RickAndMortyDao {
     @Query("SELECT * FROM Location")
     suspend fun getLocationsFromDB() : List<Location>
 
+    @Query("SELECT name FROM Location")
+    suspend fun getLocationNames() : List<String>
+
     @Query("SELECT * FROM Location WHERE :locationId = id")
     suspend fun getLocationByID(locationId : Int) : Location
 
     @Query("SELECT COUNT(id) FROM Location")
     suspend fun getLocationCount() : Int
+
+    @Query("SELECT DISTINCT COUNT(name) FROM Location")
+    suspend fun getDistinctLocations() : Int
 
     @Query("DELETE FROM Location")
     suspend fun wipeTable()
