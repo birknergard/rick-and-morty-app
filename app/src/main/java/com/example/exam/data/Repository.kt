@@ -55,7 +55,7 @@ object Repository {
         return response
     }
 
-    private suspend fun getLocationsFromAPI() : Pair<Boolean, List<Location>>{
+    private suspend fun getAllLocationsFromAPI() : Pair<Boolean, List<Location>>{
         // Creates an empty list to hold new data.
         val parsedList = mutableListOf<Location>()
 
@@ -105,7 +105,7 @@ object Repository {
     }
 
     suspend fun initializeLocationDB(){
-        val locationsFromAPI : List<Location>
+        val locationsList : List<Location>
         val numberOfLocationsFromDB : Int = _appDatabase.rickAndMortyDao().getLocationCount()
 
         Log.d("DATABASE", "There are ${_appDatabase.rickAndMortyDao().getDistinctLocations()} " +
@@ -113,34 +113,34 @@ object Repository {
 
         if(numberOfLocationsFromDB == 0){
             Log.d("DATABASE", "Database is empty, loading API ...")
-            val apiResponse = getLocationsFromAPI()
+            val apiResponse = getAllLocationsFromAPI()
 
             val isSuccessful = apiResponse.first
-            locationsFromAPI = apiResponse.second
+            locationsList = apiResponse.second
 
             if (isSuccessful){
-                Log.d("API", "GET request returned ${locationsFromAPI.size} results, inserting into database ...")
-                _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
-                Log.d("DATABASE", "Inserted ${locationsFromAPI.size} rows into DB. There are now ${_appDatabase.rickAndMortyDao().getDistinctLocations()} " +
-                        "distinct locations.")
+                //Log.d("API", "GET request returned ${locationsList.size} results, inserting into database ...")
+                insertLocationsIntoDB(locationsList)
+                //Log.d("DATABASE", "Inserted ${locationsList.size} rows into DB. There are now ${_appDatabase.rickAndMortyDao().getDistinctLocations()} distinct locations.")
             }
 
         } else if(numberOfLocationsFromDB > 0){
+            Log.d("DATABASE", "Database already has entries, verifying ...")
             val numberOfLocationsFromAPI = _retrofit.getLocationCountFromAPI()
 
 
             if(numberOfLocationsFromDB != numberOfLocationsFromAPI){
-                Log.d("DATABASE", "Mismatch between database(${numberOfLocationsFromDB}) and API(${numberOfLocationsFromAPI}). Reloading local data ...")
-                val apiResponse = getLocationsFromAPI()
+                //Log.d("DATABASE", "Mismatch between database(${numberOfLocationsFromDB}) and API(${numberOfLocationsFromAPI}). Reloading local data ...")
+                val apiResponse = getAllLocationsFromAPI()
                 val isSuccessful = apiResponse.first
                 val locationList = apiResponse.second
 
                 if(isSuccessful){
-                    Log.d("API", "GET request returned ${numberOfLocationsFromAPI} results, inserting into database ...")
+                    //Log.d("API", "GET request returned ${numberOfLocationsFromAPI} results, inserting into database ...")
                     _appDatabase.rickAndMortyDao().wipeTable()
-                    Log.d("DATABASE", "Number of rows in database after wipe: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
-                    _appDatabase.rickAndMortyDao().insertLocationList(locationList)
-                    Log.d("DATABASE", "Number of rows in database after insert: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
+                    //Log.d("DATABASE", "Number of rows in database after wipe: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
+                    insertLocationsIntoDB(locationList)
+                    //Log.d("DATABASE", "Number of rows in database after insert: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
                 }
 
             } else {
