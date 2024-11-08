@@ -111,27 +111,29 @@ fun GenderSelectionGrid(
 fun LocationSelect(
 locationList : List<Location>
 ){
-    val focusRequester = remember { FocusRequester() }
+    val locationListToggle = remember { mutableStateOf(false) }
     val locationInput = rememberSaveable {mutableStateOf("")}
     val isFocused = remember { mutableStateOf(false) }
     Column {
         OutlinedTextField(
             modifier = Modifier
-                .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
                     isFocused.value = focusState.isFocused
-                },
+                    if(isFocused.value){
+                        locationListToggle.value = true
+                    }
+                } ,
             value = locationInput.value,
             onValueChange = { locationInput.value = it },
             label = { Text("Origin") }
         )
-        if(isFocused.value){
         LazyColumn (
             modifier = Modifier
                 .width(250.dp).height(200.dp).padding(start = 10.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ){
+            if(locationListToggle.value){
                 items(locationList.filter {
                     it.name!!.lowercase().startsWith(
                         locationInput.value.lowercase()
@@ -139,8 +141,8 @@ locationList : List<Location>
                 }){ location ->
                     Surface(
                         onClick = {
-                            focusRequester.requestFocus()
                             locationInput.value = location.name!!
+                            locationListToggle.value = false
                         }
                     ) {
                         Text(

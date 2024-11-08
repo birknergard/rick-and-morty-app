@@ -3,17 +3,16 @@ Exam for android development program.
     
     ## Completed so far:
     A lot of backend stuff
-
-    ## TODO
+    Make sure location fetching API actually works as intended.
     Make database functional. There are typeconverters necessary since i need a 
     location table as well as the main one with the created characters.
+    UI for screen 01
+    NavBar
 
-    Make sure location fetching API actually works as intended.
+    ## TODO
+    UI for Screen 2, 3(About halfway done) and 4.
 
-    UI for Screen 1,2,3.
-
-    Making screen 4. Screen 4 will be an overview of episodes where you can click in on an
-    episode to view more information about it. It will fetch data from the API. Perhaps you can toggle whether
-    you have seen it and save it to a local database?
+    Making screen 4. Screen 4 will be a quiz where you can guess how many episodes a given character has appeared in,
+    perhaps which seasons as well. 
 
     
