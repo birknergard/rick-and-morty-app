@@ -1,5 +1,6 @@
 package com.example.exam.dataClasses
 
+import android.icu.util.Calendar
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
@@ -7,15 +8,10 @@ import androidx.room.PrimaryKey
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 
-@Entity(foreignKeys = [ForeignKey(
-    entity = Location::class,
-    parentColumns = ["id"],
-    childColumns = ["originId"],
-    onDelete = ForeignKey.CASCADE
-)])
+@Entity
 data class CreatedCharacter(
    @PrimaryKey
-   val id : Int? = null,
+   val id : Int = createId(),
 
    @SerializedName("name")
    var name: String? = null,
@@ -23,18 +19,29 @@ data class CreatedCharacter(
    @SerializedName("gender")
    var gender: String? = null,
 
-   @SerializedName("originId")
-   val originId: Int? = null,
+   @SerializedName("origin")
+   var origin: String? = null,
 
    @SerializedName("species")
-   val species: String? = null,
+   var species: String? = null,
 
    @SerializedName("description")
-   val description: String? = null,
+   var description: String? = null,
 
-    @SerializedName("created")
-    val created: String? = null,
+   @SerializedName("created")
+   var created: String = logCurrentDateTime(),
 ) {
+    companion object{
+        private var counter = 0
+        private fun createId() : Int{
+            val id = counter
+            counter++
+            return id
+        }
+        private fun logCurrentDateTime() : String{
+            return Calendar.getInstance().time.toString()
+        }
+    }
     suspend fun uploadToDB(){
         Repository.insertCharacterIntoDB(this)
     }

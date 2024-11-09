@@ -22,8 +22,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastFilter
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.room.util.TableInfo
 import com.example.exam.data.Repository
@@ -55,7 +58,12 @@ fun Screen03(viewModel: Screen03ViewModel){
         viewModel.loadLocations()
     }
 
-    val createdCharacter = viewModel.createdCharacter.collectAsState()
+    val name = viewModel.name.collectAsState()
+    val gender = viewModel.gender.collectAsState()
+    val origin = viewModel.origin.collectAsState()
+    val species = viewModel.species.collectAsState()
+    val description = viewModel.description.collectAsState()
+
 
     // Column is set to 750 dp to fill out the template.
     // Could not be done automatically by any means.
@@ -66,31 +74,42 @@ fun Screen03(viewModel: Screen03ViewModel){
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(text = "Create your own character", fontSize = 25.sp)
         OutlinedTextField(
-            value = createdCharacter.value.name!!,
-            onValueChange = { createdCharacter.value.name = it
-            },
+            value = name.value,
+            onValueChange = { viewModel.setName(it) },
             label = { Text("Enter a name") }
         )
 
-        GenderSelectionGrid(
-            options = viewModel.genderOptions,
-            selection = viewModel.getSelectionToggleList(),
-            createdCharacter = createdCharacter.value
-
-        )
+        GenderSelectionGrid(viewModel = viewModel)
 
         LocationSelect(viewModel.getLocationList())
+
+        OutlinedTextField(
+            value = species.value,
+            onValueChange = {
+                viewModel.setSpecies(it)
+            },
+            label = { Text("Species") }
+        )
+
+        OutlinedTextField(
+            value = description.value,
+            onValueChange = {
+                viewModel.setSpecies(it)
+            },
+            label = { Text("Description") }
+        )
     }
 }
 
 @Composable
 fun GenderSelectionGrid(
-    options: List<String>,
-    selection: SnapshotStateList<Boolean>,
-    createdCharacter: CreatedCharacter
+    viewModel: Screen03ViewModel
 ){
+    val options = viewModel.genderOptions
+    val selection = viewModel.getSelectionToggleList()
 
     LazyVerticalGrid(
         horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
@@ -101,7 +120,7 @@ fun GenderSelectionGrid(
             .padding(horizontal = 30.dp)
     ) {
         items(options){ option ->
-            SelectButton(option, selection, options.indexOf(option), createdCharacter)
+            SelectButton(option, selection, options.indexOf(option), viewModel)
         }
 
     }
@@ -161,15 +180,13 @@ fun SelectButton(
     text : String,
     isToggled : MutableList<Boolean>,
     thisItem : Int,
-    character: CreatedCharacter
+    viewModel: Screen03ViewModel
 ){
     Surface(onClick = {
         isToggled[thisItem] = !isToggled[thisItem] // Inverses the boolean  on click
         isToggled.indices.forEach { i -> if(i != thisItem) isToggled[i] = false } // Sets all other booleans to false, so you cant toggle more than one field
-        character.gender = text.lowercase()
-        Log.i("CreatedCharacter", character.gender.toString())
-        }
-    ) {
+        viewModel.setGender(text.lowercase())
+    }) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

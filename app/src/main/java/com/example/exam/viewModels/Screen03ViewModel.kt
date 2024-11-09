@@ -15,18 +15,30 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
-    val createdCharacter = MutableStateFlow(CreatedCharacter(
-        name = "",
-        id = null,
-        gender = null,
-        originId = null,
-        species = null,
-        description = "",
-        created = null
-    ))
-    var uniqueId = MutableStateFlow(0)
+    var name = MutableStateFlow("")
+    val gender = MutableStateFlow("")
+    val origin = MutableStateFlow("")
+    val species = MutableStateFlow("")
+    val description = MutableStateFlow("")
 
     val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
+
+    fun setName(name : String){
+        this.name.value = name
+    }
+    fun setGender(gender : String){
+        this.gender.value = gender
+    }
+    fun setOrigin(location : String){
+        this.origin.value = location
+    }
+    fun setSpecies(species : String){
+        this.species.value = species
+    }
+    fun setDesc(description : String){
+        this.description.value = description
+    }
+
 
     private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
     fun getSelectionToggleList() : SnapshotStateList<Boolean>{
@@ -35,37 +47,21 @@ class Screen03ViewModel : ViewModel() {
 
     val speciesOptions = listOf("Human", "Alien")
 
-    fun createUniqueID(){
-        viewModelScope.launch {
-            uniqueId.value = Repository.getUniqueID()
-        }
-        Log.d("ViewModel 3", "Unique ID created.")
-    }
-
     fun uploadCharacterToDB(){
         viewModelScope.launch {
-            createdCharacter.value!!.uploadToDB()
+
         }
     }
 
-    fun setCharacterAttributes(
-        gender : String,
-        name : String,
-        species : String,
-        description : String,
-        locationId : Int
-    ){
-       createUniqueID()
-       createdCharacter.value = CreatedCharacter(
-           id = uniqueId.value,
+    fun createCharacter() : CreatedCharacter{
+       return CreatedCharacter(
+           name = name.value,
+           gender = gender.value,
+           origin = origin.value,
+           species = species.value,
+           description = description.value,
            created = "${Calendar.getInstance().time}",
-           name = name,
-           gender = gender,
-           originId = locationId,
-           species = species,
-           description = description,
        )
-
     }
 
     val navUIState = listOf(false, false, true, false)
@@ -86,5 +82,4 @@ class Screen03ViewModel : ViewModel() {
     fun getLocationList(): List<Location>{
         return _locationList.value
     }
-
 }
