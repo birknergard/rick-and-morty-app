@@ -10,8 +10,8 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class CreatedCharacter(
-   @PrimaryKey
-   val id : Int = createId(),
+   @PrimaryKey(autoGenerate = true)
+   val id : Int = 0,
 
    @SerializedName("name")
    var name: String? = null,
@@ -29,17 +29,12 @@ data class CreatedCharacter(
    var description: String? = null,
 
    @SerializedName("created")
-   var created: String = logCurrentDateTime(),
+   var created: String = createCurrentDate(),
 ) {
     companion object{
-        private var counter = 0
-        private fun createId() : Int{
-            val id = counter
-            counter++
-            return id
-        }
-        private fun logCurrentDateTime() : String{
-            return Calendar.getInstance().time.toString()
+        private fun createCurrentDate() : String{
+            val datetime = Calendar.getInstance().time.toString()
+            return datetime.removeRange(9,29)
         }
     }
     suspend fun uploadToDB(){

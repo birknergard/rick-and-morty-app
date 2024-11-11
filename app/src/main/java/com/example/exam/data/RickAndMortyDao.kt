@@ -51,7 +51,7 @@ interface RickAndMortyDao {
     suspend fun insertLocationList(list : List<Location>)
 }
 
-@Database(entities = [CreatedCharacter::class, Location::class], version = 2, exportSchema = false)
+@Database(entities = [CreatedCharacter::class, Location::class], version = 3, exportSchema = false)
 abstract class AppDatabase: RoomDatabase(){
     abstract fun rickAndMortyDao() : RickAndMortyDao
 }

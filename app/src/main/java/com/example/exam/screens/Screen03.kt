@@ -223,7 +223,7 @@ fun SelectButton(
     ) {
         Box(
             modifier = Modifier
-                .width(180.dp).height(100.dp)
+                .width(165.dp).height(100.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(if (!isToggled[thisItem]) Color.White else Color.Gray)
                 .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
@@ -238,16 +238,16 @@ fun SelectButton(
 @Composable
 fun OriginSelect(
     viewModel: Screen03ViewModel
-){
+) {
     val locationListToggle = remember { mutableStateOf(false) }
     val isFocused = remember { mutableStateOf(false) }
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = defaultVerticalPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Text("Origin")
         OutlinedTextField(
             modifier = Modifier
@@ -255,37 +255,41 @@ fun OriginSelect(
                 .onFocusChanged { focusState ->
                     isFocused.value = focusState.isFocused
                     locationListToggle.value = isFocused.value
-                } ,
+                },
             value = viewModel.origin.collectAsState().value,
             onValueChange = {
-                if(it.length <= 50){
-                     viewModel.setOrigin(it)
+                if (it.length <= 50) {
+                    viewModel.setOrigin(it)
                 }
             },
             label = { Text("Origin") }
         )
-        if(locationListToggle.value){
-            LazyColumn (
+        if (locationListToggle.value) {
+            LazyColumn(
                 modifier = Modifier
                     .width(250.dp).height(200.dp).padding(start = 5.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
-            ){
+            ) {
                 items(viewModel.getLocationList().filter {
                     it.name!!.lowercase().startsWith(
                         viewModel.origin.value.lowercase()
                     )
-                }){ location ->
-                    Surface(
-                        onClick = {
-                            viewModel.setOrigin(location.name!!)
-                            locationListToggle.value = false
+                }) { location ->
+                    if (location.name!!.isEmpty()) {
+                        Text("No matching location could be found. Press add to create new location.")
+                    } else {
+                        Surface(
+                            onClick = {
+                                viewModel.setOrigin(location.name)
+                                locationListToggle.value = false
+                            }
+                        ) {
+                            Text(
+                                text = location.name,
+                                fontSize = 20.sp
+                            )
                         }
-                    ) {
-                        Text(
-                            text =  location.name!!,
-                            fontSize = 20.sp
-                        )
                     }
                 }
             }

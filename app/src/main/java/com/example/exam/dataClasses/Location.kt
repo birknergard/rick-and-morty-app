@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Location(
     @PrimaryKey
-    val id : Int = getNextId(),
+    val id : Int = createId(),
     @SerializedName("name")
     val name : String? = null,
     @SerializedName("url")
@@ -15,7 +15,7 @@ data class Location(
 ) {
     companion object{
         private var currentId = 0
-        fun getNextId() : Int{
+        fun createId() : Int{
             currentId++
             return currentId
         }
