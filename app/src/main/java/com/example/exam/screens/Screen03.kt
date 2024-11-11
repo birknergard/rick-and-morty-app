@@ -80,7 +80,10 @@ fun Screen03(viewModel: Screen03ViewModel){
             text = "Create your own character",
             fontSize = 25.sp
         )
-        Row {
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ){
             AddButton(viewModel)
             Surface(onClick = {viewModel.clearAllFields()}) {
                 Icon(
