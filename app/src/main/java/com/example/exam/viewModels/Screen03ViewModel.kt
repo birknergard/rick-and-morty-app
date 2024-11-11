@@ -16,17 +16,28 @@ import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
     var name = MutableStateFlow("")
-    val gender = MutableStateFlow("")
+    private val gender = MutableStateFlow("")
     val origin = MutableStateFlow("")
     val species = MutableStateFlow("")
     val description = MutableStateFlow("")
 
-    val allFieldsAreFilled = MutableStateFlow(false)
+    val allFieldsAreFilled = MutableStateFlow(true)
 
-    fun checkIfAllFieldsAreFilled() : Boolean{
-        val fields = listOf(name, gender, origin, species, description)
-        fields.forEach { field ->
-            if(field.value != "" || field.value.length >= 2){
+    fun verifyFields(){
+        allFieldsAreFilled.value = checkIfAllFieldsAreFilled()
+    }
+
+    private fun checkIfAllFieldsAreFilled() : Boolean{
+        val fields = mapOf<String, String>(
+            "name" to name.value,
+            "gender" to gender.value,
+            "origin" to origin.value,
+            "species" to species.value,
+            "desc" to description.value
+        )
+        fields.forEach { (fieldName, fieldValue) ->
+            if(fieldValue.length <= 2){
+                Log.d("Screen03", "Checked field returned false, -${fieldName} : $fieldValue")
                 return false
             }
         }
@@ -70,7 +81,14 @@ class Screen03ViewModel : ViewModel() {
         }
     }
 
-    fun createCharacter() : CreatedCharacter{
+    private fun clearAllFields(){
+        setName("")
+        setGender("")
+        setOrigin("")
+        setSpecies("")
+        setDesc("")
+    }
+    private fun createCharacter() : CreatedCharacter{
        return CreatedCharacter(
            name = name.value,
            gender = gender.value,

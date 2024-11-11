@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -105,7 +107,8 @@ fun Screen01(vm: Screen01ViewModel){
                     }
                 ) {
                     Image(
-                        painter = rememberVectorPainter(Icons.Default.Add),
+                        modifier = Modifier.height(30.dp).width(30.dp),
+                        painter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
                         contentDescription = "Plus icon"
                     )
                 }

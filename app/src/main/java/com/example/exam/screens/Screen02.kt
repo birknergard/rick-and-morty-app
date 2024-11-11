@@ -81,10 +81,6 @@ fun Screen02(vm : Screen02ViewModel){
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )
-            Icon(
-                painter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
-                contentDescription = "Icon of arrow"
-            )
         }
     }
 
