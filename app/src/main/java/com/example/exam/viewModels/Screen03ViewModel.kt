@@ -21,6 +21,20 @@ class Screen03ViewModel : ViewModel() {
     val species = MutableStateFlow("")
     val description = MutableStateFlow("")
 
+    val allFieldsAreFilled = MutableStateFlow(false)
+
+    fun checkIfAllFieldsAreFilled() : Boolean{
+        val fields = listOf(name, gender, origin, species, description)
+        fields.forEach { field ->
+            if(field.value != "" || field.value.length >= 2){
+                return false
+            }
+        }
+        return true
+    }
+
+
+
     val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
 
     fun setName(name : String){
@@ -49,7 +63,10 @@ class Screen03ViewModel : ViewModel() {
 
     fun uploadCharacterToDB(){
         viewModelScope.launch {
-
+            if(allFieldsAreFilled.value){
+                val character = createCharacter()
+                character.uploadToDB()
+            }
         }
     }
 
@@ -60,7 +77,6 @@ class Screen03ViewModel : ViewModel() {
            origin = origin.value,
            species = species.value,
            description = description.value,
-           created = "${Calendar.getInstance().time}",
        )
     }
 

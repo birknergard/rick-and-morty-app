@@ -3,6 +3,7 @@ package com.example.exam.data
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import androidx.room.migration.Migration
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
@@ -17,7 +18,9 @@ object Repository {
             context = context,
             klass = AppDatabase::class.java,
             name = "rick-and-morty-database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     suspend fun insertCharacterIntoDB(character: CreatedCharacter){

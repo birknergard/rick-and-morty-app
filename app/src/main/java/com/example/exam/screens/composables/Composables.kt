@@ -41,7 +41,8 @@ fun UITemplate(
     screenComposable: @Composable () -> Unit
 ){
     Column (modifier = Modifier
-        .fillMaxSize()
+        .fillMaxHeight()
+        .fillMaxWidth()
         .padding(vertical = 40.dp)
         .padding(top = 5.dp)
         ,
