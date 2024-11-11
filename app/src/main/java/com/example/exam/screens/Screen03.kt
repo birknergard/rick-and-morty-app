@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -56,6 +58,8 @@ fun Screen03(viewModel: Screen03ViewModel){
     }
 
     val name = viewModel.name.collectAsState()
+    val gender = viewModel.gender.collectAsState()
+    val origin = viewModel.origin.collectAsState()
     val species = viewModel.species.collectAsState()
     val description = viewModel.description.collectAsState()
 
@@ -76,7 +80,16 @@ fun Screen03(viewModel: Screen03ViewModel){
             text = "Create your own character",
             fontSize = 25.sp
         )
-        AddButton(viewModel, allFieldsFilled.value)
+        Row {
+            AddButton(viewModel)
+            Surface(onClick = {viewModel.clearAllFields()}) {
+                Icon(
+                    painter = rememberVectorPainter(Icons.Default.Clear),
+                    contentDescription = "Clear icon"
+                )
+            }
+
+        }
 
         if(!allFieldsFilled.value){
             Text(
@@ -106,7 +119,7 @@ fun Screen03(viewModel: Screen03ViewModel){
     }
 }
 @Composable
-fun AddButton(viewModel: Screen03ViewModel, fieldsAreFilled : Boolean){
+fun AddButton(viewModel: Screen03ViewModel){
     Surface(
         modifier = Modifier
             .padding(vertical = defaultVerticalPadding)
@@ -227,7 +240,6 @@ fun OriginSelect(
     viewModel: Screen03ViewModel
 ){
     val locationListToggle = remember { mutableStateOf(false) }
-    val locationInput = rememberSaveable {mutableStateOf("")}
     val isFocused = remember { mutableStateOf(false) }
     Column (
         modifier = Modifier

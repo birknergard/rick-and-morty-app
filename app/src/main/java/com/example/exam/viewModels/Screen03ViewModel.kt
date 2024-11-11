@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
     var name = MutableStateFlow("")
-    private val gender = MutableStateFlow("")
+    val gender = MutableStateFlow("")
     val origin = MutableStateFlow("")
     val species = MutableStateFlow("")
     val description = MutableStateFlow("")
@@ -66,6 +66,13 @@ class Screen03ViewModel : ViewModel() {
 
 
     private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
+    fun resetSelection(){
+        _genderSelectionToggle.value[0] = false
+        _genderSelectionToggle.value[1] = false
+        _genderSelectionToggle.value[2] = false
+        _genderSelectionToggle.value[3] = false
+    }
+
     fun getSelectionToggleList() : SnapshotStateList<Boolean>{
         return _genderSelectionToggle.asStateFlow().value
     }
@@ -77,15 +84,21 @@ class Screen03ViewModel : ViewModel() {
             if(allFieldsAreFilled.value){
                 val character = createCharacter()
                 character.uploadToDB()
+                clearAllFields()
             }
         }
     }
 
-    private fun clearAllFields(){
+    fun clearAllFields(){
         setName("")
+
         setGender("")
+        resetSelection()
+
         setOrigin("")
+
         setSpecies("")
+
         setDesc("")
     }
     private fun createCharacter() : CreatedCharacter{
