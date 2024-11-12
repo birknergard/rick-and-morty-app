@@ -1,5 +1,6 @@
 package com.example.exam.dataClasses
 
+import android.util.Log
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ data class Episode(
 
     suspend fun updateCharacters(){
         setCharacters(getCharactersFromAPI())
+        Log.d("Episode", "Appearing characters: ${appearingCharacters.value}")
     }
     fun listIsEmpty() : Boolean{
         return appearingCharacters.value.isEmpty()
@@ -44,17 +46,19 @@ data class Episode(
         val parsedListOfIds = mutableListOf<Int>()
         getAppearingCharacterURLs().forEach { character : String ->
             val urlLength = character.length
+            Log.d("Episode", "Url length ($urlLength)")
             when(urlLength){
-                46 -> parsedListOfIds.add(character.takeLast(1).toInt())
-                47 -> parsedListOfIds.add(character.takeLast(2).toInt())
-                48 -> parsedListOfIds.add(character.takeLast(3).toInt())
+                43 -> parsedListOfIds.add(character.takeLast(1).toInt())
+                44 -> parsedListOfIds.add(character.takeLast(2).toInt())
+                45 -> parsedListOfIds.add(character.takeLast(3).toInt())
             }
         }
+        Log.d("Episode", "List of ids: $parsedListOfIds")
         return parsedListOfIds
     }
 
     private suspend fun getCharactersFromAPI() : List<SimplifiedCharacter>{
-        return Repository.loadSimplifiedCharactersFromApi(getAppearingCharacterIds())
+        return Repository.loadSimplifiedCharactersFromApi(this.getAppearingCharacterIds())
     }
 
 

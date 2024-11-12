@@ -6,14 +6,15 @@ import com.example.exam.dataClasses.EpisodeData
 import com.example.exam.dataClasses.LocationFull
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RickAndMortyApiService {
     @GET("api/character/")
     suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse<List<Character>>>
 
-    @GET("api/character/")
-    suspend fun getMultipleCharacters(@Query("ids") listOfIds : List<Int>) : Response<List<Character>>
+    @GET("api/character/{ids}")
+    suspend fun getMultipleCharacters(@Path("ids") listOfIds : List<Int>) : Response<List<Character>>
 
     @GET("api/location/")
     suspend fun getAllLocations(@Query("page") page : Int) : Response<ApiResponse<List<LocationFull>>>

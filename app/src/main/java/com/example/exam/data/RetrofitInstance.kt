@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.IllegalStateException
 import java.net.UnknownHostException
 
 class RetrofitInstance{
@@ -151,6 +152,9 @@ class RetrofitInstance{
         } catch (e : UnknownHostException){
             Log.e("API", "Could not establish connection to API.")
             return Pair(first = false, second = emptyList())
+        } catch (f : IllegalStateException){
+            f.printStackTrace()
+            return Pair(first = false, second = emptyList())
         }
     }
 
@@ -166,6 +170,9 @@ class RetrofitInstance{
             }
         } catch (e : UnknownHostException){
             Log.e("API", "Could not establish connection to API.")
+            return Pair(first = false, second = emptyList())
+        } catch (f : IllegalStateException){
+            f.printStackTrace()
             return Pair(first = false, second = emptyList())
         }
     }

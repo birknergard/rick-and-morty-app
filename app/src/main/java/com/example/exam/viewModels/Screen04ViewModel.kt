@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class Screen04ViewModel : ViewModel() {
 
     val episodes = MutableStateFlow<List<Episode>>(emptyList())
+    val toggles = MutableStateFlow<MutableList<Boolean>>(mutableListOf())
 
     fun initialize(){
         if(episodeListIsEmpty()){
