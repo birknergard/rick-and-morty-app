@@ -44,9 +44,9 @@ import com.example.exam.dataClasses.Location
 import com.example.exam.viewModels.Screen03ViewModel
 
 // UI variables
-private val textBoxWidth = 350.dp
-private val defaultVerticalPadding = 15.dp
-private val defaultPadding = 5.dp
+val textBoxWidth = 350.dp
+val defaultVerticalPadding = 15.dp
+val defaultPadding = 5.dp
 
 
 @Composable

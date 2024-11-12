@@ -1,37 +1,22 @@
 package com.example.exam.dataClasses
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 
-@Entity
 data class EpisodeData(
-
-    @PrimaryKey
-    val id: Int,
-
-    @SerializedName("air_date")
-    val aired: String? = null,
+    val air_date: String,
 
     @SerializedName("characters")
-    private val _appearingCharacterUrls: List<String>? = null,
+    private val _appearingCharacterUrls: List<String>,
 
-    @Ignore
     val created: String,
-
-    @SerializedName("episode")
-    val episode: String? = null,
-
-    @SerializedName("name")
-    val name: String? = null,
-
-    @Ignore
+    val episode: String,
+    val id: Int,
+    val name: String,
     val url: String
 ) {
     fun getAppearingCharacters() : List<String>{
-        return _appearingCharacterUrls!!
+        return _appearingCharacterUrls
     }
 }
 
