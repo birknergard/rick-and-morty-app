@@ -1,5 +1,6 @@
 package com.example.exam.dataClasses
 
+import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 
 data class EpisodeData(
@@ -21,9 +22,16 @@ data class EpisodeData(
 
 data class Episode(
     val data : EpisodeData,
-    val appearingCharacters: List<Character> = emptyList()
+    var appearingCharacters: List<SimplifiedCharacter> = emptyList()
 ) {
 
+    fun setCharacters(characters : List<SimplifiedCharacter>){
+        this.appearingCharacters = characters
+    }
+
+    suspend fun updateCharacters(){
+        setCharacters(getCharactersFromAPI())
+    }
     private fun getAppearingCharacterURLs() : List<String>{
         return data.getAppearingCharacters()
     }
@@ -40,4 +48,10 @@ data class Episode(
         }
         return parsedListOfIds
     }
+
+    private suspend fun getCharactersFromAPI() : List<SimplifiedCharacter>{
+        return Repository.loadSimplifiedCharactersFromApi(getAppearingCharacterIds())
+    }
+
+
 }

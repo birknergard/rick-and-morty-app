@@ -9,6 +9,7 @@ import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Episode
 import com.example.exam.dataClasses.EpisodeData
 import com.example.exam.dataClasses.Location
+import com.example.exam.dataClasses.SimplifiedCharacter
 
 object Repository {
     // Database
@@ -45,6 +46,16 @@ object Repository {
     // API
     suspend fun loadCharactersFromApi(page : Int) : Pair<List<Character>, Boolean>{
         return _retrofit.getAllCharactersFromApi(page)
+    }
+    suspend fun loadSimplifiedCharactersFromApi(listOfIds : List<Int>) : List<SimplifiedCharacter>{
+        val output = mutableListOf<SimplifiedCharacter>()
+        val response = _retrofit.getMultipleCharactersFromAPI(listOfIds)
+        if(response.first == true){
+            response.second.forEach { character ->
+                output.add(character.getSimplifiedCharacter())
+            }
+        }
+        return output
     }
 
     private suspend fun getAllLocationsFromAPI() : Pair<Boolean, List<Location>>{
@@ -147,28 +158,24 @@ object Repository {
         return _appDatabase.rickAndMortyDao().getLocationsFromDB()
     }
 
-
-    private suspend fun getCharactersByMultipleIDs(listOfIDs : List<Int>){
-
-    }
-
-
     private suspend fun fetchEpisodesFromAPI(page : Int) : Pair<Boolean, List<Episode>>{
-        val episodesWithCharacters = mutableListOf<Character>()
         val response = _retrofit.getEpisodesFromAPI(page)
+        val parsedEpisodes = mutableListOf<Episode>()
+
 
         if(response.first == true){
-
+            response.second.forEach { data : EpisodeData ->
+                parsedEpisodes.add(Episode(data))
+            }
+            return Pair(
+                first = true,
+                second = parsedEpisodes
+            )
+        } else {
+            return Pair(
+                first = false,
+                second = emptyList()
+            )
         }
-        response.second.forEach { episode ->
-
-        }
-
-        TODO(
-            "Convert the List of string url characters in Episode to " +
-                    "List<SimplifiedCharacter> For use in screen04. This way i can" +
-                    "find the relevant characters directly without having to expand" +
-                    "the api logic to other parts of the code."
-        )
     }
 }

@@ -28,4 +28,22 @@ data class Character(
 
     val type: String? = null,
     val url: String? = null
-)
+){
+    fun getSimplifiedCharacter() : SimplifiedCharacter{
+        return SimplifiedCharacter(
+            id = this.id,
+            image = this.image,
+            name = this.name
+        )
+    }
+}
+
+data class SimplifiedCharacter(
+    val id: Int? = null,
+
+    val image: String? = null,
+
+    val name: String? = null,
+){
+
+}

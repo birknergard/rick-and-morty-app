@@ -17,6 +17,8 @@ import androidx.navigation.NavController
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen04ViewModel
 
+
+
 @Composable
 fun Screen04(vm : Screen04ViewModel){
 
