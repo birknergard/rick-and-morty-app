@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import com.example.exam.dataClasses.ApiResponse
 import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.Episode
+import com.example.exam.dataClasses.EpisodeData
 import com.example.exam.dataClasses.Info
 import com.example.exam.dataClasses.Location
 import com.example.exam.dataClasses.LocationFull
@@ -133,6 +135,38 @@ class RetrofitInstance{
         } catch (e : UnknownHostException){
             Log.e("API","Could not establish connection to API.")
             return 0
+        }
+    }
+
+    suspend fun getEpisodesFromAPI(page : Int) : Pair<Boolean, List<EpisodeData>>{
+        try {
+            val response = _rickAndMortyApiService.getEpisodes(page)
+            if(response.isSuccessful){
+                return Pair(first = true, second = response.body()!!.result)
+            } else if (response.errorBody()!!.equals("There is nothing here")){
+                return Pair(first = false, second = emptyList())
+            } else {
+                return Pair(first = false, second = emptyList())
+            }
+        } catch (e : UnknownHostException){
+            Log.e("API", "Could not establish connection to API.")
+            return Pair(first = false, second = emptyList())
+        }
+    }
+
+    suspend fun getMultipleCharactersFromAPI(listOfIds : List<Int>) : Pair<Boolean, List<Character>>{
+        try {
+            val response = _rickAndMortyApiService.getMultipleCharacters(listOfIds)
+            if(response.isSuccessful){
+                return Pair(first = true, second = response.body()!!)
+            } else if(response.errorBody()!!.equals("There is nothing here")){
+                return Pair(first = false, second = emptyList())
+            } else {
+                return Pair(first = false, second = emptyList())
+            }
+        } catch (e : UnknownHostException){
+            Log.e("API", "Could not establish connection to API.")
+            return Pair(first = false, second = emptyList())
         }
     }
 }

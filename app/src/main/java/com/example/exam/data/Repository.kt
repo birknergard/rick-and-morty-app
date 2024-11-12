@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.dataClasses.Episode
+import com.example.exam.dataClasses.EpisodeData
 import com.example.exam.dataClasses.Location
 
 object Repository {
@@ -40,22 +42,9 @@ object Repository {
     suspend fun getCharacterByID(id : Int) : CreatedCharacter? {
         return _appDatabase.rickAndMortyDao().getCreatedCharacterById(id)
     }
-    suspend fun getUniqueID() : Int {
-        val listOfIntegers = _appDatabase.rickAndMortyDao().getAllIds()
-
-        // checks all ids in list for the highest one. If there is no ids (database is empty)
-        // it returns 1, otherwise it returns the highest number incremented by one.
-        if (listOfIntegers == null){
-            return 1
-        } else {
-            return listOfIntegers.max() + 1
-        }
-    }
-
     // API
     suspend fun loadCharactersFromApi(page : Int) : Pair<List<Character>, Boolean>{
-        val response = _retrofit.getAllCharactersFromApi(page)
-        return response
+        return _retrofit.getAllCharactersFromApi(page)
     }
 
     private suspend fun getAllLocationsFromAPI() : Pair<Boolean, List<Location>>{
@@ -103,7 +92,7 @@ object Repository {
         }
     }
 
-    suspend fun insertLocationsIntoDB(locationsFromAPI : List<Location>){
+    private suspend fun insertLocationsIntoDB(locationsFromAPI : List<Location>){
         _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
     }
 
@@ -156,5 +145,30 @@ object Repository {
     }
     suspend fun getLocations() : List<Location>{
         return _appDatabase.rickAndMortyDao().getLocationsFromDB()
+    }
+
+
+    private suspend fun getCharactersByMultipleIDs(listOfIDs : List<Int>){
+
+    }
+
+
+    private suspend fun fetchEpisodesFromAPI(page : Int) : Pair<Boolean, List<Episode>>{
+        val episodesWithCharacters = mutableListOf<Character>()
+        val response = _retrofit.getEpisodesFromAPI(page)
+
+        if(response.first == true){
+
+        }
+        response.second.forEach { episode ->
+
+        }
+
+        TODO(
+            "Convert the List of string url characters in Episode to " +
+                    "List<SimplifiedCharacter> For use in screen04. This way i can" +
+                    "find the relevant characters directly without having to expand" +
+                    "the api logic to other parts of the code."
+        )
     }
 }
