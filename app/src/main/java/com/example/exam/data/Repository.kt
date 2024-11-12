@@ -177,12 +177,5 @@ object Repository {
                 second = emptyList()
             )
         }
-
-        TODO(
-            "Convert the List of string url characters in Episode to " +
-                    "List<SimplifiedCharacter> For use in screen04. This way i can" +
-                    "find the relevant characters directly without having to expand" +
-                    "the api logic to other parts of the code."
-        )
     }
 }
