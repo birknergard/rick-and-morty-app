@@ -2,6 +2,7 @@ package com.example.exam.dataClasses
 
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.flow.MutableStateFlow
 
 data class EpisodeData(
     val air_date: String,
@@ -22,21 +23,24 @@ data class EpisodeData(
 
 data class Episode(
     val data : EpisodeData,
-    var appearingCharacters: List<SimplifiedCharacter> = emptyList()
+    var appearingCharacters: MutableStateFlow<List<SimplifiedCharacter>> = MutableStateFlow(emptyList())
 ) {
-
-    fun setCharacters(characters : List<SimplifiedCharacter>){
-        this.appearingCharacters = characters
-    }
 
     suspend fun updateCharacters(){
         setCharacters(getCharactersFromAPI())
     }
+    fun listIsEmpty() : Boolean{
+        return appearingCharacters.value.isEmpty()
+    }
+
     private fun getAppearingCharacterURLs() : List<String>{
         return data.getAppearingCharacters()
     }
+    private fun setCharacters(characters : List<SimplifiedCharacter>){
+        this.appearingCharacters.value = characters
+    }
 
-    fun getAppearingCharacterIds() : List<Int>{
+    private fun getAppearingCharacterIds() : List<Int>{
         val parsedListOfIds = mutableListOf<Int>()
         getAppearingCharacterURLs().forEach { character : String ->
             val urlLength = character.length

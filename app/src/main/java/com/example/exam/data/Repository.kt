@@ -158,12 +158,13 @@ object Repository {
         return _appDatabase.rickAndMortyDao().getLocationsFromDB()
     }
 
-    private suspend fun fetchEpisodesFromAPI(page : Int) : Pair<Boolean, List<Episode>>{
+    suspend fun fetchEpisodesFromAPI(page : Int) : Pair<Boolean, List<Episode>>{
         val response = _retrofit.getEpisodesFromAPI(page)
         val parsedEpisodes = mutableListOf<Episode>()
 
 
         if(response.first == true){
+            Log.d("API", "Api call fetchEpisodesFromAPI() successful")
             response.second.forEach { data : EpisodeData ->
                 parsedEpisodes.add(Episode(data))
             }

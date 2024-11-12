@@ -1,11 +1,12 @@
 package com.example.exam.viewModels
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.CreatedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class Screen02ViewModel {
+class Screen02ViewModel : ViewModel() {
     val characters = MutableStateFlow<List<CreatedCharacter>>(emptyList())
 
     suspend fun initialize(){

@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
                 val viewModel01 = Screen01ViewModel()
                 val viewModel02 = Screen02ViewModel()
                 val viewModel03 = Screen03ViewModel()
+                val viewModel04 = Screen04ViewModel()
                 val nav = rememberNavController()
                 NavHost(
                     startDestination = Screen03,
@@ -69,7 +70,6 @@ class MainActivity : ComponentActivity() {
                         )
                    }
                     composable<Screen03> {
-                        val vm = Screen03ViewModel()
 
                         UITemplate(
                             nav = nav,
@@ -79,12 +79,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<Screen04> {
-                        val vm = Screen04ViewModel()
 
                         UITemplate(
                             nav = nav,
-                            navUIState = vm.navUIState,
-                            screenComposable = { Screen04(vm) }
+                            navUIState = viewModel04.navUIState,
+                            screenComposable = { Screen04(viewModel04) }
                         )
                     }
                 }
