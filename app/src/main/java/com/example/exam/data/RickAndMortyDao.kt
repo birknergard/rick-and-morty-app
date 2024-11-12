@@ -6,8 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.dataClasses.EpisodeData
 import com.example.exam.dataClasses.Location
 
 @Dao
@@ -49,9 +51,13 @@ interface RickAndMortyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocationList(list : List<Location>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEpisodeList(list : List<EpisodeData>)
 }
 
-@Database(entities = [CreatedCharacter::class, Location::class], version = 3, exportSchema = false)
+@Database(entities = [CreatedCharacter::class, Location::class, EpisodeData::class], version = 4, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase(){
     abstract fun rickAndMortyDao() : RickAndMortyDao
 }

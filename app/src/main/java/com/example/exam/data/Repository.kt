@@ -3,7 +3,6 @@ package com.example.exam.data
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import androidx.room.migration.Migration
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Episode
@@ -17,13 +16,22 @@ object Repository {
     private val _retrofit = RetrofitInstance()
 
     fun initDB(context : Context){
-        _appDatabase = Room.databaseBuilder(
-            context = context,
-            klass = AppDatabase::class.java,
-            name = "rick-and-morty-database"
-        )
-            //.fallbackToDestructiveMigration() // For use on startup when table qualities change
-            .build()
+        //try {
+            _appDatabase = Room.databaseBuilder(
+                context = context,
+                klass = AppDatabase::class.java,
+                name = "rick-and-morty-database"
+            ).build()
+
+        /*} catch (e : IllegalStateException){
+            _appDatabase = Room.databaseBuilder(
+                context = context,
+                klass = AppDatabase::class.java,
+                name = "rick-and-morty-database"
+            )
+                //.fallbackToDestructiveMigration() // For use on startup when table qualities change
+                .build()
+        } */
     }
 
     suspend fun insertCharacterIntoDB(character: CreatedCharacter){
@@ -176,6 +184,34 @@ object Repository {
                 first = false,
                 second = emptyList()
             )
+        }
+    }
+    private suspend fun createEpisodeDatabase(episodes : List<EpisodeData>){
+        _appDatabase.rickAndMortyDao().insertEpisodeList(episodes)
+    }
+    suspend fun loadAllEpisodesIntoDatabase(){
+        Log.d("API", "Loading episodes from database ...")
+        val episodes = mutableListOf<EpisodeData>()
+
+        val initialResponse = _retrofit.getEpisodesWithPages()
+
+        if(initialResponse.first == true){
+            val pageCount = initialResponse.third
+            initialResponse.second.forEach { episode ->
+                episodes.add(episode)
+            }
+            for(i in 2..pageCount){
+                val response = _retrofit.getEpisodesFromAPI(i)
+                if(response.first == true){
+                    response.second.forEach { episode ->
+                        episodes.add(episode)
+                    }
+                }
+            }
+            Log.d("API//DATABASE", "Episodes loaded from API, inserting into database ...")
+            createEpisodeDatabase(episodes)
+        } else {
+            Log.d("API", "API call getEpisodeWithPages() failed.")
         }
     }
 }

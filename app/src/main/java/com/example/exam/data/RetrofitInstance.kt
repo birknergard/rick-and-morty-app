@@ -138,6 +138,23 @@ class RetrofitInstance{
         }
     }
 
+
+   suspend fun getEpisodesWithPages() : Triple<Boolean, List<EpisodeData>, Int>{
+           try {
+               val response = _rickAndMortyApiService.getEpisodes(1)
+               if(response.isSuccessful){
+                   return Triple(first = true, second = response.body()!!.result, third = response.body()!!.info.pages)
+               } else if (response.errorBody()!!.equals("There is nothing here")){
+                   return Triple(first = false, second = emptyList(), third = 0)
+               } else {
+                   return Triple(first = false, second = emptyList(), third = 0)
+               }
+           } catch (e : UnknownHostException){
+               Log.e("API", "Could not establish connection to API.")
+               return Triple(first = false, second = emptyList(), third = 0)
+           }
+   }
+
     suspend fun getEpisodesFromAPI(page : Int) : Pair<Boolean, List<EpisodeData>>{
         try {
             val response = _rickAndMortyApiService.getEpisodes(page)
