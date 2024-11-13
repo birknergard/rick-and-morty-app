@@ -1,9 +1,13 @@
 package com.example.exam.dataClasses
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 data class EpisodeData(
     val air_date: String,
@@ -24,8 +28,17 @@ data class EpisodeData(
 
 data class Episode(
     val data : EpisodeData,
-    var appearingCharacters: MutableStateFlow<List<SimplifiedCharacter>> = MutableStateFlow(emptyList())
+    val appearingCharacters: MutableStateFlow<List<SimplifiedCharacter>> = MutableStateFlow(emptyList()),
+    val toggle : MutableStateFlow<Boolean> = MutableStateFlow(false)
 ) {
+
+    fun isToggled() : Boolean{
+        return toggle.asStateFlow().value
+    }
+
+    fun toggleCharacterList(){
+        this.toggle.value = !this.toggle.value
+    }
 
     suspend fun updateCharacters(){
         setCharacters(getCharactersFromAPI())
@@ -48,6 +61,8 @@ data class Episode(
             val urlLength = character.length
             Log.d("Episode", "Url length ($urlLength)")
             when(urlLength){
+                // Since the URL of the characters have the same length, i use the length
+                // as the condition, and based on the size i take more or less digits.
                 43 -> parsedListOfIds.add(character.takeLast(1).toInt())
                 44 -> parsedListOfIds.add(character.takeLast(2).toInt())
                 45 -> parsedListOfIds.add(character.takeLast(3).toInt())

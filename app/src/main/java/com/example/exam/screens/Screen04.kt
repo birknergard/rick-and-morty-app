@@ -42,6 +42,7 @@ import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen04ViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -86,9 +87,7 @@ fun Screen04(vm : Screen04ViewModel){
 
 @Composable
 fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
-    val toggle = rememberSaveable() {
-        mutableStateOf(false)
-    }
+    val toggle = episode.toggle.collectAsState()
 
     Column(
         modifier = Modifier
@@ -103,11 +102,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
         )
         Surface(
             onClick = {
-                if(episode.listIsEmpty()){
-                    viewModel.getCharactersByEpisode(episode)
-                    toggle.value = !toggle.value
-                }
-
+                viewModel.toggleCharacterList(episode)
                 Log.d("Screen04", "Episode character list in screen04 composable: ${episode.appearingCharacters.value}")
             },
             modifier = Modifier
