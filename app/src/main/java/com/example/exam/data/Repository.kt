@@ -22,7 +22,7 @@ object Repository {
             klass = AppDatabase::class.java,
             name = "rick-and-morty-database"
         )
-            //.fallbackToDestructiveMigration() // For use on startup when table qualities change
+        //    .fallbackToDestructiveMigration() // For use on startup when table qualities change
             .build()
     }
 

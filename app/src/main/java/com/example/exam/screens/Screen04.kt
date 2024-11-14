@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +24,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material.icons.automirrored.sharp.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
@@ -55,9 +59,12 @@ import kotlinx.coroutines.launch
 
 
 // UI Variables
-private val componentHeight = 690.dp
+private val componentHeight = 670.dp
 private val defaultVerticalPadding = 15.dp
-private val defaultPadding = 5.dp
+private val defaultPadding = 10.dp
+private val arrowSize = 35.dp
+private val textSize = 16.sp
+private val titleTextSize = 24.sp
 
 @Composable
 fun Screen04(vm : Screen04ViewModel){
@@ -65,45 +72,44 @@ fun Screen04(vm : Screen04ViewModel){
     LaunchedEffect(Unit) {
         vm.initialize()
     }
+
     val episodes = vm.filteredList.collectAsState()
-    val selectedSeason = vm.selectedSeason.collectAsState()
+    val season = vm.selectedSeason.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 15.dp),
+            .padding(vertical = defaultVerticalPadding)
+        ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Episodes",
-            fontSize = 24.sp
-        )
-        Spacer(Modifier.height(2.dp).fillMaxWidth().background(Color.Gray))
-
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Surface(
                 onClick = {
                     vm.selectPreviousSeason()
-                },
-
-                ) {
+                }) {
                 Icon(
                     modifier = Modifier
-                        .size(20.dp),
+                        .size(arrowSize),
                     painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowBack),
                     contentDescription = "Arrow"
                 )
             }
-            Text("")
+            Text(
+                text = "Season ${season.value}",
+                fontSize = 24.sp,
+            )
             Surface(
                 onClick = {
                     vm.selectNextSeason()
-                },
-
-                ) {
+                }) {
                 Icon(
                     modifier = Modifier
-                        .size(20.dp),
+                        .size(arrowSize),
                     painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowForward),
                     contentDescription = "Arrow"
                 )
@@ -126,8 +132,6 @@ fun Screen04(vm : Screen04ViewModel){
         items(episodes.value){ episode ->
             EpisodeDisplay(episode, vm)
         }
-        item {
-        }
     }
 }
 
@@ -139,13 +143,15 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(defaultPadding)
-            .height(IntrinsicSize.Max),
+            .defaultMinSize(minHeight = 100.dp)
+            .padding(vertical = defaultVerticalPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = "${episode.data.getSeasonAndEpisode().second} - ${episode.data.name}",
+            modifier = Modifier
+                .padding(bottom = 5.dp),
+            text = "${episode.data.getSeasonAndEpisode().second} - \"${episode.data.name}\"",
             fontSize = 20.sp
         )
         Surface(
@@ -154,6 +160,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                 Log.d("Screen04", "Episode character list in screen04 composable: ${episode.appearingCharacters.value}")
             },
             modifier = Modifier
+                .fillMaxWidth(0.9f)
                 .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
         ) {
             if(toggle.value){
@@ -161,7 +168,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(500.dp)
-                        .padding(top = 30.dp)
+                        .padding(top = defaultPadding)
                     ,
                     columns = GridCells.FixedSize(170.dp),
                     verticalArrangement = Arrangement.Center,
@@ -170,12 +177,13 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                 ){
                     items(episode.appearingCharacters.value){ character ->
                         Column(
-                            verticalArrangement = Arrangement.SpaceEvenly
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
 
                         ) {
                             Text(
                                 text = character.name!!,
-                                fontSize = 12.sp
+                                fontSize = textSize
                             )
                             AsyncImage(
                                 modifier = Modifier.size(150.dp).clip(RoundedCornerShape(10.dp)),
@@ -189,9 +197,32 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
 
                 }
             } else {
-
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(defaultPadding)
+                    ) {
+                        Text(
+                            text = "Date aired: ${episode.data.air_date}",
+                            fontSize = textSize
+                        )
+                        Spacer(Modifier.height(5.dp))
+                        Text(
+                            text = "Appearing characters: ${episode.data.getAppearingCharacters().size + 1}"
+                        )
+                    }
+                    Icon(
+                        modifier = Modifier.size(45.dp).padding(end = 10.dp),
+                        painter = rememberVectorPainter(Icons.Outlined.Info),
+                        contentDescription = "Icon"
+                    )
+                }
             }
         }
     }
-
 }
+
