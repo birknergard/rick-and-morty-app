@@ -34,9 +34,12 @@ data class CreatedCharacter(
     companion object{
         private fun createCurrentDate() : String{
             val datetime = Calendar.getInstance().time.toString()
-            return datetime.removeRange(9,29)
+            return datetime//.removeRange(9,29)
         }
     }
+
+
+
     suspend fun uploadToDB(){
         Repository.insertCharacterIntoDB(this)
     }

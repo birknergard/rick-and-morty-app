@@ -3,6 +3,7 @@ package com.example.exam.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,12 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,9 +40,9 @@ import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen02ViewModel
 
-private val componentHeight = 700.dp
-private val fontSizeNormal = 16.dp
-private val fontSizeTitle = 20.dp
+private val componentHeight = 795.dp
+private val fontSizeNormal = 16.sp
+private val fontSizeTitle = 22.sp
 
 @Composable
 fun Screen02(vm : Screen02ViewModel){
@@ -46,21 +50,6 @@ fun Screen02(vm : Screen02ViewModel){
         vm.initialize()
     }
     val characters = vm.characters.collectAsState()
-
-    Column(modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(
-            text = "Your Created Characters",
-            fontSize = 25.sp
-        )
-        Spacer(Modifier
-            .padding(top = 5.dp)
-            .height(2.dp)
-            .fillMaxWidth()
-            .background(Color.Gray)
-        )
-    }
 
     if(vm.hasCreatedCharacters()){
         LazyColumn(
@@ -87,14 +76,14 @@ fun Screen02(vm : Screen02ViewModel){
         ) {
             Text(
                 text = "No characters have been created yet.",
-                fontSize = 20.sp,
+                fontSize = fontSizeTitle,
                 textAlign = TextAlign.Center,
                 color = Color.Red
             )
             Spacer(Modifier.padding(5.dp))
             Text(
                 text = "Go to \"Create\" screen to make characters.",
-                fontSize = 18.sp,
+                fontSize = fontSizeNormal,
                 textAlign = TextAlign.Center
             )
         }
@@ -108,60 +97,81 @@ fun CreatedCharacterItem(character : CreatedCharacter){
 
     Column (
         modifier = Modifier
-            .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
-            .padding(15.dp),
+            .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Text(
             text = character.name!!,
-            fontSize = 26.sp,
+            fontSize = fontSizeTitle,
         )
 
-        Surface(
-            onClick = {
-                toggle.value = !toggle.value
-            }
+        Column(
+            modifier = Modifier.padding(15.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
+            Surface(
+                onClick = {
+                    toggle.value = !toggle.value
+                }
             ) {
-                if(!toggle.value){
-                    CharacterInfo(character)
-                } else {
-                    CharacterDescription(character.description!!)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    if(!toggle.value){
+                        CharacterInfo(character)
+                    } else {
+                        CharacterDescription(character.description!!)
+                    }
                 }
             }
         }
-
-        Text("created: ${character.created}")
+        Spacer(Modifier.height(2.dp).fillMaxWidth().background(color = Color.Gray))
+        Text(
+            text = "created: ${character.created}",
+            fontSize = fontSizeNormal
+        )
     }
 }
 
 @Composable
 fun CharacterInfo(character: CreatedCharacter){
-    Text("Info", fontSize = 24.sp)
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text("Info", fontSize = fontSizeTitle)
+        Icon(
+            modifier = Modifier.size(30.dp),
+            painter = rememberVectorPainter(Icons.Rounded.Add),
+            contentDescription = "Icon"
+        )
+    }
     Text(
         text = "sex: ${character.gender!!}",
-        fontSize = 20.sp
+        fontSize = fontSizeNormal
     )
     Text(
         text = "species: ${character.species}",
-        fontSize = 20.sp
+        fontSize = fontSizeNormal
     )
     Text(
-        text = "originating from: ${character.origin}"
+        text = "originating from: ${character.origin}",
+        fontSize = fontSizeNormal
     )
 }
 
 @Composable
 fun CharacterDescription(description : String){
-    Text("Description", fontSize = 24.sp)
     Text(
-        text = description
+        text = "Description",
+        fontSize =  fontSizeTitle
+    )
+    Text(
+        text = description,
+        fontSize = fontSizeNormal
     )
 }

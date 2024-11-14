@@ -13,16 +13,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.exam.Screen01
 import com.example.exam.Screen02
@@ -32,7 +36,16 @@ import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.Location
 import com.example.exam.screens.Item
 import com.example.exam.viewModels.Screen04ViewModel
+import okhttp3.internal.cookieToString
 
+
+val colorPalette : List<Color> = listOf(
+    Color(red = 68, green = 40, blue = 29),
+    Color(red = 228, green = 167, blue = 136),
+    Color(red = 240, green = 225, blue = 74),
+    Color(red = 151, green = 206, blue = 76),
+    Color(red = 232, green = 154, blue = 199),
+)
 
 @Composable
 fun UITemplate(
@@ -43,6 +56,7 @@ fun UITemplate(
     Column (modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()
+        .background(colorPalette[2])
         .padding(vertical = 10.dp)
         .padding(top = 15.dp)
         ,
@@ -56,8 +70,8 @@ fun UITemplate(
         ){
             Spacer(
                 modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth().background(color = Color.Gray)
+                    .height(2.dp)
+                    .fillMaxWidth().background(color = colorPalette[0])
                     .padding(vertical = 2.dp)
             )
 
@@ -71,15 +85,21 @@ fun UITemplate(
 
 @Composable
 fun NavBar(booleanList : List<Boolean>, nav: NavController) {
-    Column {
+    Column (
+        Modifier
+            .fillMaxHeight()
+            .background(colorPalette[3])
+    ){
         Spacer(modifier = Modifier
-            .height(1.dp)
+            .height(2.dp)
             .fillMaxWidth()
-            .background(color = Color.Gray))
+            .background(colorPalette[0])
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth()
-                .height(80.dp),
+                .height(80.dp)
+            ,
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -158,13 +178,14 @@ fun NavItem(label : String, isActive : Boolean, onClick : () -> Unit){
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .border(width = 2.dp, color = Color.Magenta, shape = RectangleShape)
-                .background(if (isActive) Color.Magenta else Color.White),
+                .border(width = 1.dp, color = if(isActive) colorPalette[3] else colorPalette[0])
+                .background(if (isActive) colorPalette[3] else colorPalette[2]),
             contentAlignment = Alignment.Center
         ){
             Text(
                 text = label,
-                color = if (isActive) Color.White else Color.Magenta,
+                color = if (isActive) colorPalette[0] else colorPalette[0],
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
         }

@@ -52,6 +52,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.exam.dataClasses.Episode
 import com.example.exam.screens.composables.NavBar
+import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen04ViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -80,6 +81,7 @@ fun Screen04(vm : Screen04ViewModel){
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(vertical = defaultVerticalPadding)
+            .background(colorPalette[2])
         ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -95,9 +97,11 @@ fun Screen04(vm : Screen04ViewModel){
                 }) {
                 Icon(
                     modifier = Modifier
-                        .size(arrowSize),
+                        .size(arrowSize)
+                        .background(colorPalette[2]),
                     painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowBack),
-                    contentDescription = "Arrow"
+                    contentDescription = "Arrow",
+                    tint = colorPalette[0]
                 )
             }
             Text(
@@ -110,9 +114,11 @@ fun Screen04(vm : Screen04ViewModel){
                 }) {
                 Icon(
                     modifier = Modifier
-                        .size(arrowSize),
+                        .size(arrowSize)
+                        .background(colorPalette[2]),
                     painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowForward),
-                    contentDescription = "Arrow"
+                    contentDescription = "Arrow",
+                    tint = colorPalette[0]
                 )
             }
         }
@@ -127,7 +133,10 @@ fun Screen04(vm : Screen04ViewModel){
     ) {
         if(episodes.value.isEmpty()){
             item {
-                Text("Episodelist is empty.")
+                Text(
+                    text = "LOADING ...",
+                    fontSize = 26.sp
+                )
             }
         }
         items(episodes.value){ episode ->
@@ -145,7 +154,8 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 100.dp)
-            .padding(vertical = defaultVerticalPadding),
+            .padding(vertical = defaultVerticalPadding)
+        ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -164,15 +174,16 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
             },
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(10.dp))
+                .border(width = 2.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp))
         ) {
             if(toggle.value){
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(500.dp)
-                        .padding(top = defaultPadding)
-                    ,
+                        .background(colorPalette[4])
+                        .padding(top = defaultPadding),
                     columns = GridCells.FixedSize(170.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.Center
@@ -189,7 +200,10 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                                 fontSize = textSize
                             )
                             AsyncImage(
-                                modifier = Modifier.size(150.dp).clip(RoundedCornerShape(10.dp)),
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .border(width = 1.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp)),
                                 model = character.image,
                                 contentDescription = "image of character",
                                 placeholder = rememberVectorPainter(Icons.Default.Person)
@@ -201,6 +215,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                 }
             } else {
                 Row(
+                    modifier = Modifier.background(colorPalette[4]),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ){
