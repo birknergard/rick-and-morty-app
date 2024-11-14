@@ -1,35 +1,46 @@
 package com.example.exam.viewModels
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.Episode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Screen04ViewModel : ViewModel() {
 
-    val episodes = MutableStateFlow<List<Episode>>(emptyList())
+    val episodes = MutableStateFlow<SnapshotStateList<Episode>>(mutableStateListOf())
+    var filteredList = MutableStateFlow<List<Episode>>(emptyList())
 
     fun initialize(){
-        if(episodeListIsEmpty()){
-            getEpisodesFromApi(1)
+        viewModelScope.launch {
+            if(episodeListIsEmpty()){
+                getEpisodesFromApi(1)
+                filteredList.value = filterEpisodes(1)
+            }
         }
     }
 
-    fun getEpisodesFromApi(page : Int){
-        viewModelScope.launch {
+    fun filterEpisodes(season : Int) : List<Episode>{
+        return episodes.value.filter { episode: Episode ->
+            episode.data.getSeasonAndEpisode().first == season
+        }
+    }
+
+    suspend fun getEpisodesFromApi(page : Int){
             val response = Repository.fetchEpisodesFromAPI(page).second
-            episodes.value = response
+            episodes.value.addAll(response)
             Log.d("API", "Api call callback: ${response}")
             Log.d("Screen04VM", "Read-only list: ${episodes.value}")
-            delay(2000)
+            delay(200)
 
-        }
     }
+
     private fun episodeListIsEmpty() : Boolean{
         return episodes.value.isEmpty()
     }

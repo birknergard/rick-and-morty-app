@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.lang.NullPointerException
 
 data class EpisodeData(
     val air_date: String,
@@ -16,13 +17,23 @@ data class EpisodeData(
     private val _appearingCharacterUrls: List<String>,
 
     val created: String,
-    val episode: String,
+
+    @SerializedName("episode")
+    private val _episode: String,
     val id: Int,
     val name: String,
     val url: String
 ) {
     fun getAppearingCharacters() : List<String>{
         return _appearingCharacterUrls
+    }
+
+    fun getSeasonAndEpisode() : Pair<Int /*Season*/, Int /*Episode*/>{
+            Log.d("EpisodeData", "Episode field raw: ${this._episode}")
+            val season = this._episode.drop(1).dropLast(3).toInt()
+            val episode = this._episode.drop(4).toInt()
+            Log.d("EpisodeData", "Season: $season - Episode: $episode")
+            return Pair(season, episode)
     }
 }
 

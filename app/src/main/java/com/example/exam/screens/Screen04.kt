@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +19,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.sharp.ArrowForward
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +30,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
@@ -57,7 +63,7 @@ fun Screen04(vm : Screen04ViewModel){
     LaunchedEffect(Unit) {
         vm.initialize()
     }
-    val episodes = vm.episodes.collectAsState()
+    val episodes = vm.filteredList.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -79,8 +85,28 @@ fun Screen04(vm : Screen04ViewModel){
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if(episodes.value.isEmpty()){
+            item {
+                Text("Episodelist is empty.")
+            }
+        }
         items(episodes.value){ episode ->
             EpisodeDisplay(episode, vm)
+        }
+        item {
+            Surface(
+                onClick = {
+
+                },
+
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp),
+                    painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowForward),
+                    contentDescription = "Arrow"
+                )
+            }
         }
     }
 }
@@ -88,16 +114,18 @@ fun Screen04(vm : Screen04ViewModel){
 @Composable
 fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
     val toggle = episode.toggle.collectAsState()
+    episode.data.getSeasonAndEpisode()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(defaultPadding),
+            .padding(defaultPadding)
+            .height(IntrinsicSize.Max),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = episode.data.name,
+            text = "${episode.data.getSeasonAndEpisode().second} - ${episode.data.name}",
             fontSize = 20.sp
         )
         Surface(
@@ -112,10 +140,10 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
-                        .height(580.dp)
+                        .height(500.dp)
                         .padding(top = 30.dp)
                     ,
-                    columns = GridCells.FixedSize(110.dp),
+                    columns = GridCells.FixedSize(170.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.Center
 
@@ -130,13 +158,15 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                                 fontSize = 12.sp
                             )
                             AsyncImage(
-                                modifier = Modifier.size(90.dp),
+                                modifier = Modifier.size(150.dp).clip(RoundedCornerShape(10.dp)),
                                 model = character.image,
                                 contentDescription = "image of character",
                                 placeholder = rememberVectorPainter(Icons.Default.Person)
                             )
+                            Spacer(Modifier.height(15.dp))
                         }
                     }
+
                 }
             } else {
 
