@@ -36,7 +36,9 @@ import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.NavBar
 import com.example.exam.viewModels.Screen02ViewModel
 
-private val _componentHeight = 700.dp
+private val componentHeight = 700.dp
+private val fontSizeNormal = 16.dp
+private val fontSizeTitle = 20.dp
 
 @Composable
 fun Screen02(vm : Screen02ViewModel){
@@ -62,7 +64,7 @@ fun Screen02(vm : Screen02ViewModel){
 
     if(vm.hasCreatedCharacters()){
         LazyColumn(
-            modifier = Modifier.height(_componentHeight)
+            modifier = Modifier.height(componentHeight)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Center,
@@ -75,7 +77,7 @@ fun Screen02(vm : Screen02ViewModel){
         }
     } else {
         Column(
-            modifier = Modifier.height(_componentHeight)
+            modifier = Modifier.height(componentHeight)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
             ,
