@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material.icons.automirrored.sharp.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Person
@@ -64,6 +66,7 @@ fun Screen04(vm : Screen04ViewModel){
         vm.initialize()
     }
     val episodes = vm.filteredList.collectAsState()
+    val selectedSeason = vm.selectedSeason.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -76,6 +79,36 @@ fun Screen04(vm : Screen04ViewModel){
             fontSize = 24.sp
         )
         Spacer(Modifier.height(2.dp).fillMaxWidth().background(Color.Gray))
+
+        Row {
+            Surface(
+                onClick = {
+                    vm.selectPreviousSeason()
+                },
+
+                ) {
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp),
+                    painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowBack),
+                    contentDescription = "Arrow"
+                )
+            }
+            Text("")
+            Surface(
+                onClick = {
+                    vm.selectNextSeason()
+                },
+
+                ) {
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp),
+                    painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowForward),
+                    contentDescription = "Arrow"
+                )
+            }
+        }
     }
 
     LazyColumn(
@@ -94,19 +127,6 @@ fun Screen04(vm : Screen04ViewModel){
             EpisodeDisplay(episode, vm)
         }
         item {
-            Surface(
-                onClick = {
-
-                },
-
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp),
-                    painter = rememberVectorPainter(Icons.AutoMirrored.Sharp.ArrowForward),
-                    contentDescription = "Arrow"
-                )
-            }
         }
     }
 }

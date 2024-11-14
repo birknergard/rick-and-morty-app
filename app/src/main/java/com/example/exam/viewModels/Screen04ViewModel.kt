@@ -2,7 +2,6 @@ package com.example.exam.viewModels
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,14 +14,33 @@ import kotlinx.coroutines.launch
 class Screen04ViewModel : ViewModel() {
 
     val episodes = MutableStateFlow<SnapshotStateList<Episode>>(mutableStateListOf())
+
+    val selectedSeason = MutableStateFlow(1)
+
     var filteredList = MutableStateFlow<List<Episode>>(emptyList())
 
     fun initialize(){
         viewModelScope.launch {
             if(episodeListIsEmpty()){
-                getEpisodesFromApi(1)
+                getAllEpisodesFromApi()
                 filteredList.value = filterEpisodes(1)
             }
+        }
+    }
+
+    fun selectNextSeason(){
+        if(selectedSeason.value != 5){
+            selectedSeason.value++
+            filteredList.value = filterEpisodes(selectedSeason.value)
+            if(filteredList.value.size > 10){
+
+            }
+        }
+    }
+    fun selectPreviousSeason(){
+        if(selectedSeason.value != 1){
+            selectedSeason.value--
+            filteredList.value = filterEpisodes(selectedSeason.value)
         }
     }
 
@@ -39,6 +57,11 @@ class Screen04ViewModel : ViewModel() {
             Log.d("Screen04VM", "Read-only list: ${episodes.value}")
             delay(200)
 
+    }
+    suspend fun getAllEpisodesFromApi(){
+        getEpisodesFromApi(1)
+        getEpisodesFromApi(2)
+        getEpisodesFromApi(3)
     }
 
     private fun episodeListIsEmpty() : Boolean{
