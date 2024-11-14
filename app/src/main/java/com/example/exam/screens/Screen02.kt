@@ -30,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.NavBar
+import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen02ViewModel
 
 private val componentHeight = 795.dp
@@ -60,7 +62,7 @@ fun Screen02(vm : Screen02ViewModel){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(characters.value){ character ->
-                Spacer(Modifier.height(15.dp))
+                Spacer(Modifier.height(25.dp))
                 CreatedCharacterItem(character)
             }
         }
@@ -96,27 +98,33 @@ fun CreatedCharacterItem(character : CreatedCharacter){
     val toggle = remember { mutableStateOf(false) }
 
     Column (
-        modifier = Modifier
-            .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = character.name!!,
             fontSize = fontSizeTitle,
+            color = colorPalette[0]
         )
 
         Column(
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier
+                .background(colorPalette[4])
+                .clip(RoundedCornerShape(10.dp))
+                .border(width = 2.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp))
+                .padding(15.dp)
         ) {
             Surface(
+                modifier = Modifier.background(colorPalette[4]).clip(RoundedCornerShape(10.dp)),
                 onClick = {
                     toggle.value = !toggle.value
                 }
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .background(colorPalette[4]).clip(RoundedCornerShape(10.dp))
+                    ,
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -125,14 +133,15 @@ fun CreatedCharacterItem(character : CreatedCharacter){
                     } else {
                         CharacterDescription(character.description!!)
                     }
+                    Spacer(Modifier.height(2.dp).fillMaxWidth().background(colorPalette[0]))
+                    Text(
+                        text = "created: ${character.created}",
+                        fontSize = fontSizeNormal,
+                        color = colorPalette[0]
+                    )
                 }
             }
         }
-        Spacer(Modifier.height(2.dp).fillMaxWidth().background(color = Color.Gray))
-        Text(
-            text = "created: ${character.created}",
-            fontSize = fontSizeNormal
-        )
     }
 }
 
@@ -143,7 +152,6 @@ fun CharacterInfo(character: CreatedCharacter){
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ){
-        Text("Info", fontSize = fontSizeTitle)
         Icon(
             modifier = Modifier.size(30.dp),
             painter = rememberVectorPainter(Icons.Rounded.Add),

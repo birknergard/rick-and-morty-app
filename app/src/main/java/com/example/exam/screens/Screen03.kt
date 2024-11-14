@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exam.dataClasses.Location
+import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen03ViewModel
 
 // UI variables
@@ -75,7 +78,8 @@ fun Screen03(viewModel: Screen03ViewModel){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = defaultPadding),
+            .background(colorPalette[3])
+            .padding(top = defaultPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -95,22 +99,24 @@ fun Screen03(viewModel: Screen03ViewModel){
                 textAlign = TextAlign.Center
             )
         }
-        
-        Spacer(modifier = Modifier.height(1.dp).fillMaxWidth().background(Color.Gray))
+        Spacer(modifier = Modifier.height(1.dp).fillMaxWidth().background(colorPalette[0]))
+
     }
     Column(
         modifier = Modifier
-            .background(Color.White)
             .height(composableHeight)
             .fillMaxWidth()
+            .background(colorPalette[2])
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             modifier = Modifier.padding(horizontal = defaultPadding, vertical = defaultVerticalPadding + 10.dp),
             text = "Create your own Rick and Morty character",
             fontSize = 18.sp,
+            color = colorPalette[0]
         )
         NameSelect(name.value, viewModel)
         GenderSelectionGrid(viewModel)
@@ -128,7 +134,7 @@ fun AddButton(viewModel: Screen03ViewModel){
             .width(buttonWidth)
             .height(buttonHeight)
             .clip(RoundedCornerShape(10.dp)),
-        color = Color.Magenta,
+        color = colorPalette[4],
         onClick = {
             viewModel.verifyFields()
             Log.d("Screen03", "Fields filled boolean = ${viewModel.allFieldsAreFilled.value}")
@@ -168,7 +174,7 @@ fun ClearButton(viewModel: Screen03ViewModel){
             .width(buttonWidth)
             .height(50.dp)
             .clip(RoundedCornerShape(10.dp)),
-        color = Color.Gray,
+        color = colorPalette[0],
         onClick = {
             viewModel.clearAllFields()
         }
@@ -199,19 +205,22 @@ fun ClearButton(viewModel: Screen03ViewModel){
 @Composable
 fun NameSelect(name : String, viewModel: Screen03ViewModel){
     Text(
+        modifier = Modifier.background(colorPalette[2]),
         text = "Name",
         fontSize = titleFontSize,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = colorPalette[0]
     )
     OutlinedTextField(
-        modifier = Modifier.width(textBoxWidth),
+        modifier = Modifier.width(textBoxWidth)
+            .background(colorPalette[2]),
         value = name,
         onValueChange = {
             if(it.length <= 50){
                 viewModel.setName(it)
             }
         },
-        label = { Text("Enter a name") }
+        label = { Text(color = colorPalette[0], text = "Enter a name") },
     )
 }
 
@@ -225,14 +234,16 @@ fun GenderSelectionGrid(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = defaultVerticalPadding),
+            .padding(vertical = defaultVerticalPadding)
+            .background(colorPalette[2]),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = "Gender",
             fontSize = titleFontSize,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = colorPalette[0]
         )
         Row (
             modifier = Modifier,
@@ -265,18 +276,22 @@ fun SelectButton(
         isToggled.indices.forEach { i -> if(i != thisItem) isToggled[i] = false } // Sets all other booleans to false, so you cant toggle more than one field
         viewModel.setGender(text.lowercase())
     },
-        modifier = Modifier.padding(10.dp)
+        color = if(isToggled[thisItem]) colorPalette[4] else colorPalette[2],
+        modifier = Modifier.padding(10.dp).clip(RoundedCornerShape(10.dp))
     ) {
         Box(
             modifier = Modifier
-                .width(165.dp).height(100.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(if (!isToggled[thisItem]) Color.White else Color.Gray)
-                .border(1.dp, Color.Gray, RoundedCornerShape(5.dp))
+                .width(145.dp).height(80.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, colorPalette[0], RoundedCornerShape(10.dp))
             ,
             contentAlignment = Alignment.Center,
         ){
-            Text(text = text, color = if(!isToggled[thisItem]) Color.Black else Color.White)
+            Text(
+                text = text,
+                color = if(!isToggled[thisItem]) colorPalette[0] else Color.White,
+                fontSize = 20.sp
+            )
         }
     }
 }
@@ -297,7 +312,8 @@ fun OriginSelect(
         Text(
             text = "Origin",
             fontSize = titleFontSize,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = colorPalette[0]
         )
         OutlinedTextField(
             modifier = Modifier
@@ -317,27 +333,31 @@ fun OriginSelect(
         if (locationListToggle.value) {
             LazyColumn(
                 modifier = Modifier
-                    .width(250.dp).height(200.dp).padding(start = 5.dp),
+                    .width(250.dp)
+                    .height(200.dp)
+                    .padding(start = 5.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                items(viewModel.getLocationList().filter {
-                    it.name!!.lowercase().startsWith(
-                        viewModel.origin.value.lowercase()
-                    )
-                }) { location ->
-                    if (location.name!!.isEmpty()) {
+                if(viewModel.getFilteredLocationList().isEmpty()){
+                    item {
                         Text("No matching location could be found. Press add to create new location.")
-                    } else {
+                    }
+                } else {
+                    items(viewModel.getFilteredLocationList()) { location ->
                         Surface(
                             onClick = {
-                                viewModel.setOrigin(location.name)
+                                viewModel.setOrigin(location.name!!)
                                 locationListToggle.value = false
-                            }
+                            },
+                            modifier = Modifier.background(colorPalette[2])
                         ) {
                             Text(
-                                text = location.name,
-                                fontSize = 20.sp
+                                modifier = Modifier.background(colorPalette[2]),
+                                text = location.name!!,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = colorPalette[0]
                             )
                         }
                     }
@@ -352,7 +372,8 @@ fun SpeciesSelect(species : String, viewModel: Screen03ViewModel){
     Text(
         text = "Species",
         fontSize = titleFontSize,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = colorPalette[0]
     )
     OutlinedTextField(
         modifier = Modifier.width(textBoxWidth),
@@ -372,7 +393,8 @@ fun Description(description : String, viewModel: Screen03ViewModel){
     Text(
         text = "Description",
         fontSize = titleFontSize,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = colorPalette[0]
     )
     OutlinedTextField(
         modifier = Modifier.width(textBoxWidth),

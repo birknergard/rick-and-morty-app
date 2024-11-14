@@ -76,6 +76,14 @@ class Screen03ViewModel : ViewModel() {
 
     val speciesOptions = listOf("Human", "Alien")
 
+    fun getFilteredLocationList() : List<Location>{
+        return getLocationList().filter { location ->
+            location.name!!.lowercase().startsWith(
+                origin.value.lowercase()
+            )
+        }
+    }
+
     fun uploadCharacterToDB(){
         viewModelScope.launch {
             if(allFieldsAreFilled.value){

@@ -41,7 +41,7 @@ import okhttp3.internal.cookieToString
 
 val colorPalette : List<Color> = listOf(
     Color(red = 68, green = 40, blue = 29),
-    Color(red = 228, green = 167, blue = 136),
+    Color(red = 228, green = 177, blue = 156),
     Color(red = 240, green = 225, blue = 74),
     Color(red = 151, green = 206, blue = 76),
     Color(red = 232, green = 154, blue = 199),
