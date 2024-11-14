@@ -43,8 +43,8 @@ fun UITemplate(
     Column (modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()
-        .padding(vertical = 40.dp)
-        .padding(top = 5.dp)
+        .padding(vertical = 10.dp)
+        .padding(top = 15.dp)
         ,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally

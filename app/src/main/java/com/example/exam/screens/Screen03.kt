@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -47,6 +48,7 @@ import com.example.exam.viewModels.Screen03ViewModel
 private val textBoxWidth = 350.dp
 private val defaultVerticalPadding = 15.dp
 private val defaultPadding = 5.dp
+private val buttonWidth = 175.dp
 
 
 @Composable
@@ -58,8 +60,6 @@ fun Screen03(viewModel: Screen03ViewModel){
     }
 
     val name = viewModel.name.collectAsState()
-    val gender = viewModel.gender.collectAsState()
-    val origin = viewModel.origin.collectAsState()
     val species = viewModel.species.collectAsState()
     val description = viewModel.description.collectAsState()
 
@@ -76,22 +76,12 @@ fun Screen03(viewModel: Screen03ViewModel){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Create your own character",
-            fontSize = 25.sp
-        )
         Row (
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ){
             AddButton(viewModel)
-            Surface(onClick = {viewModel.clearAllFields()}) {
-                Icon(
-                    painter = rememberVectorPainter(Icons.Default.Clear),
-                    contentDescription = "Clear icon"
-                )
-            }
-
+            ClearButton(viewModel)
         }
 
         if(!allFieldsFilled.value){
@@ -126,7 +116,7 @@ fun AddButton(viewModel: Screen03ViewModel){
     Surface(
         modifier = Modifier
             .padding(vertical = defaultVerticalPadding)
-            .fillMaxWidth(0.5f)
+            .width(buttonWidth)
             .height(40.dp)
             .clip(RoundedCornerShape(10.dp)),
         color = Color.Magenta,
@@ -146,7 +136,7 @@ fun AddButton(viewModel: Screen03ViewModel){
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "ADD",
+                text = "Create",
                 fontSize = 25.sp,
                 color = Color.White
             )
@@ -156,6 +146,42 @@ fun AddButton(viewModel: Screen03ViewModel){
                 painter = rememberVectorPainter(Icons.Default.Add),
                 tint = Color.White,
                 contentDescription = "Add icon"
+            )
+        }
+    }
+}
+
+@Composable
+fun ClearButton(viewModel: Screen03ViewModel){
+    Surface(
+        modifier = Modifier
+            .padding(vertical = defaultVerticalPadding)
+            .width(buttonWidth)
+            .height(50.dp)
+            .clip(RoundedCornerShape(10.dp)),
+        color = Color.Gray,
+        onClick = {
+            viewModel.clearAllFields()
+        }
+    ) {
+        Row(
+            modifier = Modifier
+                .height(150.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Clear All",
+                fontSize = 22.sp,
+                color = Color.White
+            )
+            Spacer(Modifier.width(10.dp))
+            Icon(
+                modifier = Modifier.height(27.dp).width(27.dp),
+                painter = rememberVectorPainter(Icons.Default.Clear),
+                tint = Color.White,
+                contentDescription = "clear icon"
             )
         }
     }
