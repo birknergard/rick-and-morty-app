@@ -44,8 +44,6 @@ class Screen03ViewModel : ViewModel() {
         return true
     }
 
-
-
     val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
 
     fun setName(name : String){
@@ -63,7 +61,6 @@ class Screen03ViewModel : ViewModel() {
     fun setDesc(description : String){
         this.description.value = description
     }
-
 
     private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
     fun resetSelection(){
@@ -91,16 +88,13 @@ class Screen03ViewModel : ViewModel() {
 
     fun clearAllFields(){
         setName("")
-
         setGender("")
         resetSelection()
-
         setOrigin("")
-
         setSpecies("")
-
         setDesc("")
     }
+
     private fun createCharacter() : CreatedCharacter{
        return CreatedCharacter(
            name = name.value,

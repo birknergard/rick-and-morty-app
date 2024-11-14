@@ -38,6 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,10 +47,14 @@ import com.example.exam.dataClasses.Location
 import com.example.exam.viewModels.Screen03ViewModel
 
 // UI variables
+private val composableHeight = 705.dp
 private val textBoxWidth = 350.dp
 private val defaultVerticalPadding = 15.dp
 private val defaultPadding = 5.dp
-private val buttonWidth = 175.dp
+private val buttonWidth = 150.dp
+private val buttonHeight = 50.dp
+
+private val titleFontSize = 20.sp
 
 
 @Composable
@@ -66,9 +72,6 @@ fun Screen03(viewModel: Screen03ViewModel){
     val allFieldsFilled = viewModel.allFieldsAreFilled.collectAsState()
 
 
-    // Column is set to 750 dp to fill out the template.
-    // Could not be done automatically by any means.
-    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,11 +80,12 @@ fun Screen03(viewModel: Screen03ViewModel){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ){
-            AddButton(viewModel)
             ClearButton(viewModel)
+            AddButton(viewModel)
         }
 
         if(!allFieldsFilled.value){
@@ -97,18 +101,23 @@ fun Screen03(viewModel: Screen03ViewModel){
     Column(
         modifier = Modifier
             .background(Color.White)
-            .height(620.dp)
+            .height(composableHeight)
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            modifier = Modifier.padding(horizontal = defaultPadding, vertical = defaultVerticalPadding + 10.dp),
+            text = "Create your own Rick and Morty character",
+            fontSize = 18.sp,
+        )
         NameSelect(name.value, viewModel)
         GenderSelectionGrid(viewModel)
         OriginSelect(viewModel)
         SpeciesSelect(species.value, viewModel)
         Description(description.value, viewModel)
-        Spacer(Modifier.height(300.dp)) // This is here incase of onscreen keyboard.
+        Spacer(Modifier.height(200.dp)) // This is here incase of onscreen keyboard.
     }
 }
 @Composable
@@ -117,7 +126,7 @@ fun AddButton(viewModel: Screen03ViewModel){
         modifier = Modifier
             .padding(vertical = defaultVerticalPadding)
             .width(buttonWidth)
-            .height(40.dp)
+            .height(buttonHeight)
             .clip(RoundedCornerShape(10.dp)),
         color = Color.Magenta,
         onClick = {
@@ -130,13 +139,13 @@ fun AddButton(viewModel: Screen03ViewModel){
     ) {
         Row(
             modifier = Modifier
-                .height(150.dp)
+                .height(buttonHeight)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Create",
+                text = "New",
                 fontSize = 25.sp,
                 color = Color.White
             )
@@ -189,7 +198,11 @@ fun ClearButton(viewModel: Screen03ViewModel){
 
 @Composable
 fun NameSelect(name : String, viewModel: Screen03ViewModel){
-    Text("Name")
+    Text(
+        text = "Name",
+        fontSize = titleFontSize,
+        fontWeight = FontWeight.Bold
+    )
     OutlinedTextField(
         modifier = Modifier.width(textBoxWidth),
         value = name,
@@ -216,7 +229,11 @@ fun GenderSelectionGrid(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text("Gender")
+        Text(
+            text = "Gender",
+            fontSize = titleFontSize,
+            fontWeight = FontWeight.Bold
+        )
         Row (
             modifier = Modifier,
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -277,7 +294,11 @@ fun OriginSelect(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Origin")
+        Text(
+            text = "Origin",
+            fontSize = titleFontSize,
+            fontWeight = FontWeight.Bold
+        )
         OutlinedTextField(
             modifier = Modifier
                 .width(textBoxWidth)
@@ -328,7 +349,11 @@ fun OriginSelect(
 
 @Composable
 fun SpeciesSelect(species : String, viewModel: Screen03ViewModel){
-    Text("Species")
+    Text(
+        text = "Species",
+        fontSize = titleFontSize,
+        fontWeight = FontWeight.Bold
+    )
     OutlinedTextField(
         modifier = Modifier.width(textBoxWidth),
         value = species,
@@ -344,7 +369,11 @@ fun SpeciesSelect(species : String, viewModel: Screen03ViewModel){
 
 @Composable
 fun Description(description : String, viewModel: Screen03ViewModel){
-    Text("Description")
+    Text(
+        text = "Description",
+        fontSize = titleFontSize,
+        fontWeight = FontWeight.Bold
+    )
     OutlinedTextField(
         modifier = Modifier.width(textBoxWidth),
         minLines = 3,

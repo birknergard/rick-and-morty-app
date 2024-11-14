@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -59,7 +60,7 @@ import kotlinx.coroutines.launch
 
 
 // UI Variables
-private val componentHeight = 670.dp
+private val componentHeight = 717.dp
 private val defaultVerticalPadding = 15.dp
 private val defaultPadding = 10.dp
 private val arrowSize = 35.dp
@@ -150,9 +151,11 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
     ){
         Text(
             modifier = Modifier
-                .padding(bottom = 5.dp),
+                .padding(bottom = 5.dp)
+                .width(330.dp),
             text = "${episode.data.getSeasonAndEpisode().second} - \"${episode.data.name}\"",
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
         )
         Surface(
             onClick = {
