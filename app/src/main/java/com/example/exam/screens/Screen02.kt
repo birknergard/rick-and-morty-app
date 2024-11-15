@@ -29,30 +29,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen02ViewModel
-import okhttp3.internal.cookieToString
 
 private val componentHeight = 795.dp
-private val fontSizeNormal = 16.sp
-private val fontSizeTitle = 22.sp
+private val fontSizeNormal = 18.sp
+private val fontSizeTitle = 24.sp
 
 @Composable
-fun Screen02(vm : Screen02ViewModel){
+fun Screen02(viewModel : Screen02ViewModel){
     LaunchedEffect(Unit) {
-        vm.initialize()
+        viewModel.initialize()
     }
-    val characters = vm.characters.collectAsState()
+    val characters = viewModel.characters.collectAsState()
 
-    if(vm.hasCreatedCharacters()){
+    if(viewModel.hasCreatedCharacters()){
         LazyColumn(
-            modifier = Modifier.height(componentHeight)
+            modifier = Modifier
+                .background(colorPalette[2])
+                .height(componentHeight)
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp)
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -111,12 +114,13 @@ fun CreatedCharacterItem(character : CreatedCharacter){
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .border(width = 2.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp))
-                .background(colorPalette[4]),
+                .background(colorPalette[3]),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Surface(
-                modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                modifier = Modifier
+                    .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp, bottomStart = 0.dp, bottomEnd = 0.dp))
                     .background(colorPalette[4])
                     .padding(15.dp)
                 ,
@@ -127,7 +131,7 @@ fun CreatedCharacterItem(character : CreatedCharacter){
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(colorPalette[4]).clip(RoundedCornerShape(10.dp))
+                        .background(colorPalette[4])
                     ,
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start
@@ -142,7 +146,7 @@ fun CreatedCharacterItem(character : CreatedCharacter){
             Spacer(Modifier.height(2.dp).fillMaxWidth().background(colorPalette[0]))
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                text = "created: ${character.created}",
+                text = "Created: ${character.getDate()}",
                 fontSize = fontSizeNormal,
                 color = colorPalette[0],
                 textAlign = TextAlign.Center
@@ -159,16 +163,32 @@ fun CharacterInfo(character: CreatedCharacter){
         horizontalArrangement = Arrangement.SpaceBetween
     ){
         Column {
-            Text(
-                text = "sex: ${character.gender!!}",
-                fontSize = fontSizeNormal,
-                color = colorPalette[0]
-            )
-            Text(
-                text = "species: ${character.species}",
-                fontSize = fontSizeNormal,
-                color = colorPalette[0]
-            )
+            Row {
+                Text(
+                    text = "Sex: ",
+                    fontSize = fontSizeNormal,
+                    color = colorPalette[0],
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = character.getGenderCapitalized(),
+                    fontSize = fontSizeNormal,
+                    color = colorPalette[0]
+                )
+            }
+            Row {
+                Text(
+                    text = "Species: ",
+                    fontSize = fontSizeNormal,
+                    color = colorPalette[0],
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = character.species!!,
+                    fontSize = fontSizeNormal,
+                    color = colorPalette[0]
+                )
+            }
         }
         Icon(
             modifier = Modifier.size(30.dp),
@@ -177,11 +197,20 @@ fun CharacterInfo(character: CreatedCharacter){
             tint = colorPalette[0]
         )
     }
-    Text(
-        text = "origin: ${character.origin}",
-        fontSize = fontSizeNormal,
-        color = colorPalette[0]
-    )
+    Row {
+        Text(
+            text = "Origin: ",
+            fontSize = fontSizeNormal,
+            color = colorPalette[0],
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = character.origin!!,
+            fontSize = fontSizeNormal,
+            color = colorPalette[0]
+        )
+    }
 }
 
 @Composable

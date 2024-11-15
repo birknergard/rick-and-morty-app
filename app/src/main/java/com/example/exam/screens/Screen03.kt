@@ -50,7 +50,7 @@ import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen03ViewModel
 
 // UI variables
-private val composableHeight = 705.dp
+private val composableHeight = 710.dp
 private val textBoxWidth = 350.dp
 private val defaultVerticalPadding = 15.dp
 private val defaultPadding = 5.dp
@@ -78,7 +78,7 @@ fun Screen03(viewModel: Screen03ViewModel){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorPalette[3])
+            .background(colorPalette[2])
             .padding(top = defaultPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

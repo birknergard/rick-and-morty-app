@@ -38,6 +38,18 @@ data class CreatedCharacter(
         }
     }
 
+    fun getDate() : String{
+        val splitDate = this.created.split(" ")
+        return "${splitDate[2]}. ${splitDate[1]}. ${splitDate[splitDate.size - 1]}"
+    }
+
+    fun getGenderCapitalized() : String{
+        val capitalized = this.gender!!
+            .take(1)
+            .uppercase() + this.gender!!
+            .takeLast(this.gender!!.length - 1)
+        return capitalized
+    }
 
 
     suspend fun uploadToDB(){

@@ -56,7 +56,7 @@ fun UITemplate(
     Column (modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()
-        .background(colorPalette[2])
+        .background(colorPalette[3])
         .padding(vertical = 10.dp)
         .padding(top = 15.dp)
         ,
@@ -87,7 +87,6 @@ fun UITemplate(
 fun NavBar(booleanList : List<Boolean>, nav: NavController) {
     Column (
         Modifier
-            .fillMaxHeight()
             .background(colorPalette[3])
     ){
         Spacer(modifier = Modifier

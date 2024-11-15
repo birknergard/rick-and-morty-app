@@ -80,21 +80,24 @@ fun Screen04(vm : Screen04ViewModel){
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = defaultVerticalPadding)
             .background(colorPalette[2])
         ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .background(colorPalette[2])
+                .padding(vertical = defaultVerticalPadding),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Surface(
                 onClick = {
                     vm.selectPreviousSeason()
-                }) {
+                },
+                color = colorPalette[2]
+                ) {
                 Icon(
                     modifier = Modifier
                         .size(arrowSize)
@@ -122,12 +125,14 @@ fun Screen04(vm : Screen04ViewModel){
                 )
             }
         }
+        Spacer(Modifier.background(colorPalette[0]).height(1.dp).fillMaxWidth())
     }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .height(componentHeight),
+            .height(componentHeight)
+            .background(colorPalette[2]),
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -147,13 +152,18 @@ fun Screen04(vm : Screen04ViewModel){
 
 @Composable
 fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
+
     val toggle = episode.toggle.collectAsState()
-    episode.data.getSeasonAndEpisode()
+
+    LaunchedEffect(Unit) {
+        episode.data.getSeasonAndEpisode()
+    }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 100.dp)
+            .background(colorPalette[2])
             .padding(vertical = defaultVerticalPadding)
         ,
         verticalArrangement = Arrangement.Center,

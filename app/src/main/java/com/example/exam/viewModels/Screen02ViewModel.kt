@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.dataClasses.SimplifiedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Screen02ViewModel : ViewModel() {
@@ -17,6 +18,7 @@ class Screen02ViewModel : ViewModel() {
     fun hasCreatedCharacters() : Boolean{
         return characters.value.isNotEmpty()
     }
+
 
     val navUIState = listOf(false, true, false, false)
 }
