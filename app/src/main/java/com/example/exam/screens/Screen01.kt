@@ -5,9 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,8 +20,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.rounded.Circle
+import androidx.compose.material.icons.rounded.QuestionMark
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,11 +43,12 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 
 import com.example.exam.dataClasses.Character
+import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen01ViewModel
 import kotlinx.coroutines.delay
 
 // UI variables
-private val componentHeight = 680.dp
+private val componentHeight = 736.dp
 
 //@Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -61,20 +69,27 @@ fun Screen01(vm: Screen01ViewModel){
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 15.dp),
-        verticalArrangement = Arrangement.Center,
+            .background(colorPalette[2])
+        ,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
+            modifier = Modifier.padding(vertical = 15.dp),
             text = "Rick and Morty Characters",
-            fontSize = 24.sp
+            fontSize = 24.sp,
+            color = colorPalette[0]
         )
-        Spacer(Modifier.height(2.dp).fillMaxWidth().background(Color.Gray))
+        Spacer(Modifier.height(2.dp).fillMaxWidth().background(colorPalette[0]))
     }
 
     if(apiCallSuccessful.value == null){
         Column(
-            modifier = Modifier.fillMaxWidth().height(componentHeight).background(Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(componentHeight)
+                .background(colorPalette[2])
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -87,26 +102,28 @@ fun Screen01(vm: Screen01ViewModel){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(componentHeight)
-                .padding(horizontal = 10.dp),
+                .background(colorPalette[2])
+                .padding(horizontal = 10.dp)
+            ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Spacer(modifier = Modifier.padding(top = 5.dp))
+                Spacer(modifier = Modifier.height(5.dp))
             }
             items(characters.value) { character ->
-                Spacer(modifier = Modifier.padding(top = 10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Item(character)
             }
             item {
                 Surface(
-                    modifier = Modifier.padding(20.dp),
+                    modifier = Modifier.padding(10.dp),
                     onClick = {
                         vm.page.value++
                         vm.updateCharacterList(vm.page.value)
                     }
                 ) {
                     Image(
-                        modifier = Modifier.height(30.dp).width(30.dp),
+                        modifier = Modifier.size(50.dp).background(colorPalette[2]),
                         painter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
                         contentDescription = "Plus icon"
                     )
@@ -116,7 +133,11 @@ fun Screen01(vm: Screen01ViewModel){
 
     } else {
         Column(
-            modifier = Modifier.fillMaxWidth().height(componentHeight),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(componentHeight)
+                .background(colorPalette[2])
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -130,38 +151,55 @@ fun Item(character : Character){
    Row(
        modifier = Modifier
            .fillMaxWidth().height(170.dp)
-           .border(width = 2.dp,
-       color = when (character.status) {
-           "Alive" -> Color.Green
-           "unknown" -> Color.Gray
-           else -> Color.Red
-       },
-       shape = RoundedCornerShape(10.dp))
-
-           .background(color = Color.White)
-           .padding(horizontal = 10.dp, vertical = 10.dp),
+           .clip(RoundedCornerShape(15.dp))
+           .border(width = 2.dp, color = colorPalette[0], shape = RoundedCornerShape(15.dp))
+           .background(color = colorPalette[1])
+           .padding(end = 10.dp),
        verticalAlignment = Alignment.CenterVertically,
-       horizontalArrangement = Arrangement.SpaceBetween
+       horizontalArrangement = Arrangement.Start
    ){
-       AsyncImage(
-           modifier = Modifier
-               .size(150.dp)
-               .clip(RoundedCornerShape(10.dp)),
-           model = character.image!!,
-           placeholder = rememberVectorPainter(Icons.Default.Person),
-           contentScale = ContentScale.Crop,
-           contentDescription = "Image of character"
-       )
-
-       Spacer(modifier = Modifier.padding(10.dp))
-
-       Column {
-           Text(
-               text = character.name!!,
-               fontSize = 20.sp,
+       Row {
+           AsyncImage(
+               modifier = Modifier
+                   .size(170.dp)
+                   .clip(RoundedCornerShape(topStart = 15.dp, bottomStart = 15.dp))
+               ,
+               model = character.image!!,
+               placeholder = rememberVectorPainter(Icons.Default.Person),
+               contentScale = ContentScale.Crop,
+               contentDescription = "Image of character"
            )
+           Spacer(Modifier.width(1.dp).fillMaxHeight().background(colorPalette[0]))
+       }
+
+       Column (
+           modifier = Modifier
+               .padding(start = 10.dp)
+           ,
+           horizontalAlignment = Alignment.Start
+       ){
+           Row {
+               Text(
+                   modifier = Modifier.width(150.dp),
+                   text = character.name!!,
+                   fontSize = 20.sp,
+               )
+               Icon(
+                   painter = rememberVectorPainter(
+                       when(character.status!!.lowercase()){
+                           "unknown" -> Icons.Rounded.QuestionMark
+                           else -> Icons.Rounded.Circle
+                       } ),
+                   contentDescription = "Status icon",
+                   tint = when(character.status.lowercase()){
+                       "alive" -> Color.Green
+                       "dead" -> Color.Red
+                       else -> Color.White
+                   }
+               )
+           }
            Text(
-               text = character.gender!!,
+               text = "${character.gender!!} - ${character.species}",
                fontSize = 16.sp
            )
        }

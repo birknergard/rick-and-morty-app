@@ -22,11 +22,11 @@ class Screen01ViewModel() : ViewModel(){
         viewModelScope.launch {
             val apiCall = Repository.loadCharactersFromApi(page)
             if(apiCall.first.isNotEmpty() && apiCall.second){
-                apiCallSuccessful.value = apiCall.second
+                apiCallSuccessful.value = true
                 characterList.value.addAll(apiCall.first)
                 delay(2000)
             } else {
-                apiCallSuccessful.value = apiCall.second
+                apiCallSuccessful.value = false
                 delay(2000)
             }
         }
