@@ -225,11 +225,6 @@ fun CharacterInfo(character: CreatedCharacter){
 
 @Composable
 fun CharacterDescription(description : String){
-//    Text(
-//        text = "Description",
-//        fontSize =  fontSizeTitle,
-//        color = colorPalette[0]
-//    )
     Row (
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceBetween,

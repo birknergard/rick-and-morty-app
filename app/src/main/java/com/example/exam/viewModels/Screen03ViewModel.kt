@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
-    // Character properties as stateflows.
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Character field handling
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     val name = MutableStateFlow("")
     private val gender = MutableStateFlow("")
     val origin = MutableStateFlow("")
@@ -44,9 +46,15 @@ class Screen03ViewModel : ViewModel() {
         return true
     }
 
-    val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
+    fun clearAllFields(){
+        setName("")
+        setGender("")
+        resetSelection()
+        setOrigin("")
+        setSpecies("")
+        setDesc("")
+    }
 
-    // Wrote setters to prevent loading of state variables in UI code. May be redundant or unnecessary.
     fun setName(name : String){
         this.name.value = name
     }
@@ -63,7 +71,13 @@ class Screen03ViewModel : ViewModel() {
         this.description.value = description
     }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// Gender select
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
+
     private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
+
     private fun resetSelection(){
         for (i in 0 .. 3){
             _genderSelectionToggle.value[i] = false
@@ -74,33 +88,42 @@ class Screen03ViewModel : ViewModel() {
         return _genderSelectionToggle.asStateFlow().value
     }
 
-    fun getFilteredLocationList() : List<Location>{
-        return getLocationList().filter { location ->
-            location.name!!.lowercase().startsWith(
-                origin.value.lowercase()
-            )
+    fun select(i : Int, gender : String){
+        _genderSelectionToggle.value[i] = true
+        _genderSelectionToggle.value.indices.forEach { switchIndex ->
+            if(switchIndex != i){
+                _genderSelectionToggle.value[switchIndex] = false
+            }
         }
+
+        setGender(gender.lowercase())
     }
 
-    fun uploadCharacterToDB(){
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Database
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    fun upload(){
         viewModelScope.launch {
+            verifyFields()
             if(allFieldsAreFilled.value){
                 val character = createCharacter()
-                character.uploadToDB()
+                character.upload()
                 clearAllFields()
             }
         }
     }
 
-    fun clearAllFields(){
-        setName("")
-        setGender("")
-        resetSelection()
-        setOrigin("")
-        setSpecies("")
-        setDesc("")
+    fun initializeLocationDatabase(){
+        viewModelScope.launch{
+            Repository.initializeLocationDatabase()
+        }
     }
 
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Create new character
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     private fun createCharacter() : CreatedCharacter{
        return CreatedCharacter(
            name = name.value,
@@ -111,12 +134,9 @@ class Screen03ViewModel : ViewModel() {
        )
     }
 
-    fun initializeLocationDatabase(){
-        viewModelScope.launch{
-            Repository.initializeLocationDatabase()
-        }
-    }
-
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Origin selection
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     private var _locationList = mutableStateOf<List<Location>>(emptyList())
 
     fun loadLocations(){
@@ -129,5 +149,16 @@ class Screen03ViewModel : ViewModel() {
         return _locationList.value
     }
 
+    fun getFilteredLocationList() : List<Location>{
+        return getLocationList().filter { location ->
+            location.name!!.lowercase().startsWith(
+                origin.value.lowercase()
+            )
+        }
+    }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Navigation button states.
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     val navUIState = listOf(false, false, true, false)
 }

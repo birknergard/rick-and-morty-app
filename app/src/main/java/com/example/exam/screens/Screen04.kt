@@ -67,7 +67,7 @@ private val defaultVerticalPadding = 15.dp
 private val defaultPadding = 10.dp
 private val arrowSize = 35.dp
 private val textSize = 16.sp
-private val titleTextSize = 24.sp
+private val titleTextSize = 22.sp
 
 @Composable
 fun Screen04(vm : Screen04ViewModel){
@@ -110,7 +110,7 @@ fun Screen04(vm : Screen04ViewModel){
             }
             Text(
                 text = "Season ${season.value}",
-                fontSize = 24.sp,
+                fontSize = titleTextSize,
             )
             Surface(
                 onClick = {
@@ -139,11 +139,10 @@ fun Screen04(vm : Screen04ViewModel){
     ) {
         if(episodes.value.isEmpty()){
             item {
-
                 Text(
                     modifier = Modifier.padding(50.dp),
                     text = "LOADING ...",
-                    fontSize = 26.sp
+                    fontSize = titleTextSize
                 )
             }
         }
@@ -175,9 +174,9 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
         Text(
             modifier = Modifier
                 .padding(bottom = 5.dp)
-                .width(330.dp),
-            text = "${episode.data.getSeasonAndEpisode().second} - \"${episode.data.name}\"",
-            fontSize = 20.sp,
+                .width(370.dp),
+            text = "Episode ${episode.data.getSeasonAndEpisode().second} - \"${episode.data.name}\"",
+            fontSize = titleTextSize,
             textAlign = TextAlign.Center
         )
         Surface(
@@ -200,18 +199,17 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                     columns = GridCells.FixedSize(170.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.Center
-
                 ){
                     items(episode.appearingCharacters.value){ character ->
                         Column(
                             verticalArrangement = Arrangement.SpaceEvenly,
                             horizontalAlignment = Alignment.CenterHorizontally
-
                         ) {
                             Text(
                                 text = character.name!!,
                                 fontSize = textSize
                             )
+
                             AsyncImage(
                                 modifier = Modifier
                                     .size(150.dp)
@@ -221,6 +219,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                                 contentDescription = "image of character",
                                 placeholder = rememberVectorPainter(Icons.Default.Person)
                             )
+
                             Spacer(Modifier.height(15.dp))
                         }
                     }
@@ -240,11 +239,15 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                             text = "Date aired: ${episode.data.air_date}",
                             fontSize = textSize
                         )
+
                         Spacer(Modifier.height(5.dp))
+
                         Text(
-                            text = "Appearing characters: ${episode.data.getAppearingCharacters().size + 1}"
+                            text = "Appearing characters: ${episode.data.getAppearingCharacters().size + 1}",
+                            fontSize = textSize
                         )
                     }
+
                     Icon(
                         modifier = Modifier.size(45.dp).padding(end = 10.dp),
                         painter = rememberVectorPainter(Icons.Outlined.ExpandMore),

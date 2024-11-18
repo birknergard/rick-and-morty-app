@@ -36,8 +36,7 @@ class RetrofitInstance{
     val episodeAPI = EpisodeAPI()
 
     inner class CharacterAPI{
-
-        private fun parseBasic(response: Response<List<Character>>) : ApiOutput<Character>{
+        private fun parseSimple(response: Response<List<Character>>) : ApiOutput<Character>{
             if(response.isSuccessful){
                 return ApiOutput(
                     isSuccessful = true,
@@ -61,7 +60,7 @@ class RetrofitInstance{
         }
 
 
-        suspend fun get(page : Int) : ApiOutput<Character> {
+        suspend fun fetch(page : Int) : ApiOutput<Character> {
             try {
                 val response = _rickAndMortyApiService.getAllCharacters(page)
                 return parse(response)
@@ -78,10 +77,10 @@ class RetrofitInstance{
 
         }
 
-        suspend fun get(listOfIds : List<Int>) : ApiOutput<Character>{
+        suspend fun fetch(listOfIds : List<Int>) : ApiOutput<Character>{
             try {
                 val response = _rickAndMortyApiService.getMultipleCharacters(listOfIds)
-                return parseBasic(response)
+                return parseSimple(response)
 
             } catch (e : UnknownHostException){
                 Log.e("API", "Could not establish connection to API.")
@@ -108,7 +107,8 @@ class RetrofitInstance{
                 return ApiOutput()
             }
         }
-        suspend fun get(page : Int) : ApiOutput<LocationFull>{
+
+        suspend fun fetch(page : Int) : ApiOutput<LocationFull>{
             try {
                 val response = _rickAndMortyApiService.getAllLocations(page)
                 return parse(response)
@@ -116,20 +116,6 @@ class RetrofitInstance{
             } catch (e : UnknownHostException){
                 Log.e("API","Could not establish connection to API.")
                 return ApiOutput()
-            }
-        }
-
-        suspend fun getPageCount() : Int{
-            try {
-                val response = _rickAndMortyApiService.getAllLocations(1)
-                return parse(response).pages
-
-            } catch (e : UnknownHostException){
-                Log.e("API","Could not establish connection to API.")
-                return 0
-            } catch (f : IllegalStateException){
-                f.printStackTrace()
-                return 0
             }
         }
     }

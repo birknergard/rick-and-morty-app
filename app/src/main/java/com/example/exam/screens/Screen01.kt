@@ -1,11 +1,9 @@
 package com.example.exam.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,10 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.Circle
@@ -45,26 +40,18 @@ import coil3.compose.AsyncImage
 import com.example.exam.dataClasses.Character
 import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen01ViewModel
-import kotlinx.coroutines.delay
 
 // UI variables
 private val componentHeight = 736.dp
 
 //@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Screen01(vm: Screen01ViewModel){
-    // Setup
-    val characters = vm.characterList.collectAsState()
-
-    val apiCallSuccessful = vm.apiCallSuccessful.collectAsState()
+fun Screen01(viewModel: Screen01ViewModel){
+    val characters = viewModel.characterList.collectAsState()
+    val apiCallSuccessful = viewModel.apiCallSuccessful.collectAsState()
 
     LaunchedEffect(Unit) {
-        if(apiCallSuccessful.value == null){
-            vm.page.value = 1
-            vm.updateCharacterList(vm.page.value)
-        }
-        delay(2000)
-        Log.e("IMAGEURL", characters.value[0].image!!)
+        viewModel.initialize()
     }
 
     Column(
@@ -118,8 +105,8 @@ fun Screen01(vm: Screen01ViewModel){
                 Surface(
                     modifier = Modifier.padding(10.dp),
                     onClick = {
-                        vm.page.value++
-                        vm.updateCharacterList(vm.page.value)
+                        viewModel.page.value++
+                        viewModel.updateCharacterList(viewModel.page.value)
                     }
                 ) {
                     Image(

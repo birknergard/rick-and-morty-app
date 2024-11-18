@@ -60,7 +60,7 @@ object Repository {
 
         } else if(numberOfLocationsFromDB > 0){
             Log.d("DATABASE", "Database already has entries, verifying ...")
-            val numberOfLocationsFromAPI = _retrofit.CharacterAPI().get(1).output.size + 1
+            val numberOfLocationsFromAPI = _retrofit.CharacterAPI().fetch(1).output.size + 1
 
 
             if(numberOfLocationsFromDB != numberOfLocationsFromAPI){
@@ -92,12 +92,12 @@ object Repository {
 // API
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
     suspend fun fetchCharacters(page : Int) : ApiOutput<Character>{
-        return _retrofit.characterAPI.get(page)
+        return _retrofit.characterAPI.fetch(page)
     }
 
     suspend fun fetchSimplifiedCharacters(listOfIds : List<Int>) : List<SimplifiedCharacter>{
         val characterList = mutableListOf<SimplifiedCharacter>()
-        val response = _retrofit.characterAPI.get(listOfIds)
+        val response = _retrofit.characterAPI.fetch(listOfIds)
 
         if(response.isSuccessful){
             response.output.forEach { character ->
@@ -112,7 +112,7 @@ object Repository {
         val parsedList = mutableListOf<Location>()
 
         // loads the first response to check for page count
-        val initResponse = _retrofit.locationAPI.get(1)
+        val initResponse = _retrofit.locationAPI.fetch(1)
 
         if(initResponse.isSuccessful) {
             val pageCount = initResponse.pages
@@ -128,7 +128,7 @@ object Repository {
             Log.d("LocationAPI", "Parsed locations for page#1 from the API.")
             // makes one api per page to retrieve every location.
             for (i in 2..pageCount) {
-                val response = _retrofit.locationAPI.get(i)
+                val response = _retrofit.locationAPI.fetch(i)
                 if (response.isSuccessful) {
                     response.output.forEach { location ->
                         parsedList.add(

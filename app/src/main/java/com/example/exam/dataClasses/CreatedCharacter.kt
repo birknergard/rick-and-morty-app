@@ -50,7 +50,7 @@ data class CreatedCharacter(
     }
 
 
-    suspend fun uploadToDB(){
+    suspend fun upload(){
         Repository.saveCharacter(this)
     }
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,22 +20,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Autorenew
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,12 +38,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.exam.dataClasses.Location
 import com.example.exam.screens.composables.colorPalette
 import com.example.exam.viewModels.Screen03ViewModel
 
@@ -176,7 +168,7 @@ fun CharacterInputField(
             focusedTextColor = colorPalette[0],
             focusedBorderColor = colorPalette[4],
             unfocusedBorderColor = colorPalette[0],
-            focusedLabelColor = colorPalette[4]
+            focusedLabelColor = colorPalette[0]
         )
     )
     Spacer(Modifier.padding(vertical = 15.dp))
@@ -193,11 +185,8 @@ fun AddButton(viewModel: Screen03ViewModel){
             .border(width = 1.dp, colorPalette[0], RoundedCornerShape(10.dp)),
         color = colorPalette[4],
         onClick = {
-            viewModel.verifyFields()
             Log.d("Screen03", "Fields filled boolean = ${viewModel.allFieldsAreFilled.value}")
-            if(viewModel.allFieldsAreFilled.value){
-                viewModel.uploadCharacterToDB()
-            }
+            viewModel.upload() // uploads character to database if all fields are filled
         }
     ) {
         Row(
@@ -287,7 +276,7 @@ fun GenderSelectionGrid(
             verticalAlignment = Alignment.CenterVertically
         ){
             for(i in 0 .. 1){
-                SelectButton(options[i], selection, i, viewModel)
+                SelectButton(options[i], i, viewModel)
             }
         }
 
@@ -297,7 +286,7 @@ fun GenderSelectionGrid(
             verticalAlignment = Alignment.CenterVertically
         ) {
             for(i in 2 .. 3){
-                SelectButton(options[i], selection, i, viewModel)
+                SelectButton(options[i], i, viewModel)
             }
         }
     }
@@ -306,21 +295,13 @@ fun GenderSelectionGrid(
 @Composable
 fun SelectButton(
     text : String,
-    isToggled : MutableList<Boolean>,
     thisItem : Int,
     viewModel: Screen03ViewModel
 ){
     Surface(onClick = {
-        isToggled[thisItem] = !isToggled[thisItem] // Inverts the boolean  on click
-
-        // Sets all other booleans to false, so you cant toggle more than one field
-        isToggled.indices.forEach {
-            i -> if(i != thisItem) isToggled[i] = false
-        }
-
-        viewModel.setGender(text.lowercase())
+        viewModel.select(thisItem, text)
     },
-        color = if(isToggled[thisItem]) colorPalette[4] else colorPalette[2],
+        color = if(viewModel.getSelectionToggleList()[thisItem]) colorPalette[4] else colorPalette[2],
         modifier = Modifier.padding(10.dp).clip(RoundedCornerShape(10.dp))
     ) {
         Box(
@@ -333,7 +314,7 @@ fun SelectButton(
         ){
             Text(
                 text = text,
-                color = if(!isToggled[thisItem]) colorPalette[0] else Color.White,
+                color = if(!viewModel.getSelectionToggleList()[thisItem]) colorPalette[0] else Color.White,
                 fontSize = 20.sp
             )
         }
@@ -383,7 +364,7 @@ fun OriginSelect(
                 focusedTextColor = colorPalette[0],
                 focusedBorderColor = colorPalette[4],
                 unfocusedBorderColor = colorPalette[0],
-                focusedLabelColor = colorPalette[4]
+                focusedLabelColor = colorPalette[0]
             )
         )
 
@@ -466,7 +447,7 @@ fun Description(description : String, viewModel: Screen03ViewModel){
             focusedTextColor = colorPalette[0],
             focusedBorderColor = colorPalette[4],
             unfocusedBorderColor = colorPalette[0],
-            focusedLabelColor = colorPalette[4]
+            focusedLabelColor = colorPalette[0]
         )
     )
 }
