@@ -1,10 +1,5 @@
 package com.example.exam.dataClasses
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-
-
 data class Character(
     val created: String? = null,
 
@@ -28,7 +23,7 @@ data class Character(
 
     val type: String? = null,
     val url: String? = null
-){
+) {
     fun getSimplifiedCharacter() : SimplifiedCharacter{
         return SimplifiedCharacter(
             id = this.id,

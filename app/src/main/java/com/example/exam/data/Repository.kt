@@ -3,7 +3,7 @@ package com.example.exam.data
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import androidx.room.migration.Migration
+import com.example.exam.dataClasses.ApiOutput
 import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Episode
@@ -12,11 +12,13 @@ import com.example.exam.dataClasses.Location
 import com.example.exam.dataClasses.SimplifiedCharacter
 
 object Repository {
-    // Database
     private lateinit var _appDatabase: AppDatabase
     private val _retrofit = RetrofitInstance()
 
-    fun initDB(context : Context){
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+// DATABASE
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+    fun initializeDatabase(context : Context){
         _appDatabase = Room.databaseBuilder(
             context = context,
             klass = AppDatabase::class.java,
@@ -26,7 +28,7 @@ object Repository {
             .build()
     }
 
-    suspend fun insertCharacterIntoDB(character: CreatedCharacter){
+    suspend fun insertCharacterIntoDatabase(character: CreatedCharacter){
         Log.d("DATABASE", "Inserting $character into database...")
         _appDatabase.rickAndMortyDao().insertCreatedCharacter(character)
     }
@@ -40,35 +42,85 @@ object Repository {
         return _appDatabase.rickAndMortyDao().getCreatedCharacters()
     }
 
-    suspend fun getCharacterByID(id : Int) : CreatedCharacter? {
-        return _appDatabase.rickAndMortyDao().getCreatedCharacterById(id)
-    }
-    // API
-    suspend fun loadCharactersFromApi(page : Int) : Pair<List<Character>, Boolean>{
-        return _retrofit.getAllCharactersFromApi(page)
-    }
-    suspend fun loadSimplifiedCharactersFromApi(listOfIds : List<Int>) : List<SimplifiedCharacter>{
-        val output = mutableListOf<SimplifiedCharacter>()
-        val response = _retrofit.getMultipleCharactersFromAPI(listOfIds)
-        if(response.first == true){
-            response.second.forEach { character ->
-                output.add(character.getSimplifiedCharacter())
-            }
-        }
-        return output
+    private suspend fun insertLocationsIntoDB(locationsFromAPI : List<Location>){
+        _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
     }
 
-    private suspend fun getAllLocationsFromAPI() : Pair<Boolean, List<Location>>{
+    suspend fun initializeLocationDB(){
+        val numberOfLocationsFromDB : Int = _appDatabase.rickAndMortyDao().getLocationCount()
+
+        Log.d("DATABASE", "There are ${_appDatabase.rickAndMortyDao().getDistinctLocations()} " +
+                "distinct locations in the database, and ${_appDatabase.rickAndMortyDao().getLocationCount()} total.")
+
+        if(numberOfLocationsFromDB == 0){
+            Log.d("DATABASE", "Database is empty, loading API ...")
+            val apiResponse = getAllLocationsFromAPI()
+
+
+            if (apiResponse.isSuccessful){
+                //Log.d("API", "GET request returned ${locationsList.size} results, inserting into database ...")
+                insertLocationsIntoDB(apiResponse.output)
+                //Log.d("DATABASE", "Inserted ${locationsList.size} rows into DB. There are now ${_appDatabase.rickAndMortyDao().getDistinctLocations()} distinct locations.")
+            }
+
+        } else if(numberOfLocationsFromDB > 0){
+            Log.d("DATABASE", "Database already has entries, verifying ...")
+            val numberOfLocationsFromAPI = _retrofit.CharacterAPI().get(1).output.size + 1
+
+
+            if(numberOfLocationsFromDB != numberOfLocationsFromAPI){
+                //Log.d("DATABASE", "Mismatch between database(${numberOfLocationsFromDB}) and API(${numberOfLocationsFromAPI}). Reloading local data ...")
+                val apiResponse = getAllLocationsFromAPI()
+
+                if(apiResponse.isSuccessful){
+                    //Log.d("API", "GET request returned ${numberOfLocationsFromAPI} results, inserting into database ...")
+                    _appDatabase.rickAndMortyDao().wipeTable()
+                    //Log.d("DATABASE", "Number of rows in database after wipe: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
+                    insertLocationsIntoDB(apiResponse.output)
+                    //Log.d("DATABASE", "Number of rows in database after insert: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
+                }
+
+            } else {
+                Log.d("DATABASE","Database already loaded with correct number of entries.")
+            }
+        }
+        // Debugging
+        // _appDatabase.rickAndMortyDao().getLocationNames().forEach{locationName ->
+        //     Log.d("DATABASE", "${locationName.toString()}")
+    }
+    suspend fun getLocations() : List<Location>{
+        return _appDatabase.rickAndMortyDao().getLocationsFromDB()
+    }
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+// API
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+    suspend fun loadCharactersFromApi(page : Int) : ApiOutput<Character>{
+        return _retrofit.CharacterAPI().get(page)
+    }
+    suspend fun loadSimplifiedCharactersFromApi(listOfIds : List<Int>) : List<SimplifiedCharacter>{
+        val characterList = mutableListOf<SimplifiedCharacter>()
+        val response = _retrofit.CharacterAPI().get(listOfIds)
+
+        if(response.isSuccessful){
+            response.output.forEach { character ->
+                characterList.add(character.getSimplifiedCharacter())
+            }
+        }
+        return characterList
+    }
+
+    private suspend fun getAllLocationsFromAPI() : ApiOutput<Location>{
         // Creates an empty list to hold new data.
         val parsedList = mutableListOf<Location>()
 
         // loads the first response to check for page count
-        val initResponse = _retrofit.getLocationsWithPagesFromApi(1)
+        val initResponse = _retrofit.LocationAPI().get(1)
 
-        if(initResponse.first) {
-            val pageCount = initResponse.second
+        if(initResponse.isSuccessful) {
+            val pageCount = initResponse.pages
             Log.d("API", "Number of pages(${pageCount}).")
-            initResponse.third.forEach { location ->
+            initResponse.output.forEach { location ->
                 parsedList.add(
                     Location(
                         name = location.name,
@@ -79,9 +131,9 @@ object Repository {
             Log.d("LocationAPI", "Parsed locations for page#1 from the API.")
             // makes one api per page to retrieve every location.
             for (i in 2..pageCount) {
-                val response = _retrofit.getLocationsFromApi(i)
-                if (response.first) {
-                    response.second.forEach { location ->
+                val response = _retrofit.LocationAPI().get(i)
+                if (response.isSuccessful) {
+                    response.output.forEach { location ->
                         parsedList.add(
                             Location(
                                 name = location.name,
@@ -92,91 +144,33 @@ object Repository {
                     Log.d("LocationAPI", "Parsed locations for page#${i} from the API.")
                 } else {
                     Log.d("LocationAPI", "Error in fetch. Cant find data for page#${i}.")
-                    return Pair(false, emptyList())
+                    return ApiOutput()
                 }
             }
             Log.d("LocationAPI", "Parsing complete.")
-            return Pair(true, parsedList)
+            return ApiOutput()
         } else {
             Log.d("API", "Error in api fetch.")
-            return Pair(false, emptyList())
+            return ApiOutput()
         }
     }
 
-    private suspend fun insertLocationsIntoDB(locationsFromAPI : List<Location>){
-        _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
-    }
-
-    suspend fun initializeLocationDB(){
-        val locationsList : List<Location>
-        val numberOfLocationsFromDB : Int = _appDatabase.rickAndMortyDao().getLocationCount()
-
-        Log.d("DATABASE", "There are ${_appDatabase.rickAndMortyDao().getDistinctLocations()} " +
-                "distinct locations in the database, and ${_appDatabase.rickAndMortyDao().getLocationCount()} total.")
-
-        if(numberOfLocationsFromDB == 0){
-            Log.d("DATABASE", "Database is empty, loading API ...")
-            val apiResponse = getAllLocationsFromAPI()
-
-            val isSuccessful = apiResponse.first
-            locationsList = apiResponse.second
-
-            if (isSuccessful){
-                //Log.d("API", "GET request returned ${locationsList.size} results, inserting into database ...")
-                insertLocationsIntoDB(locationsList)
-                //Log.d("DATABASE", "Inserted ${locationsList.size} rows into DB. There are now ${_appDatabase.rickAndMortyDao().getDistinctLocations()} distinct locations.")
-            }
-
-        } else if(numberOfLocationsFromDB > 0){
-            Log.d("DATABASE", "Database already has entries, verifying ...")
-            val numberOfLocationsFromAPI = _retrofit.getLocationCountFromAPI()
-
-
-            if(numberOfLocationsFromDB != numberOfLocationsFromAPI){
-                //Log.d("DATABASE", "Mismatch between database(${numberOfLocationsFromDB}) and API(${numberOfLocationsFromAPI}). Reloading local data ...")
-                val apiResponse = getAllLocationsFromAPI()
-                val isSuccessful = apiResponse.first
-                val locationList = apiResponse.second
-
-                if(isSuccessful){
-                    //Log.d("API", "GET request returned ${numberOfLocationsFromAPI} results, inserting into database ...")
-                    _appDatabase.rickAndMortyDao().wipeTable()
-                    //Log.d("DATABASE", "Number of rows in database after wipe: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
-                    insertLocationsIntoDB(locationList)
-                    //Log.d("DATABASE", "Number of rows in database after insert: ${_appDatabase.rickAndMortyDao().getLocationCount()}")
-                }
-
-            } else {
-                Log.d("DATABASE","Database already loaded with correct number of entries.")
-            }
-        }
-        // Debugging
-       // _appDatabase.rickAndMortyDao().getLocationNames().forEach{locationName ->
-       //     Log.d("DATABASE", "${locationName.toString()}")
-    }
-    suspend fun getLocations() : List<Location>{
-        return _appDatabase.rickAndMortyDao().getLocationsFromDB()
-    }
-
-    suspend fun fetchEpisodesFromAPI(page : Int) : Pair<Boolean, List<Episode>>{
-        val response = _retrofit.getEpisodesFromAPI(page)
+    suspend fun fetchEpisodesFromAPI(page : Int) : ApiOutput<Episode>{
+        val response = _retrofit.EpisodeAPI().get(page)
         val parsedEpisodes = mutableListOf<Episode>()
 
 
-        if(response.first == true){
+        if(response.isSuccessful == true){
             Log.d("API", "Api call fetchEpisodesFromAPI() successful")
-            response.second.forEach { data : EpisodeData ->
+            response.output.forEach { data : EpisodeData ->
                 parsedEpisodes.add(Episode(data))
             }
-            return Pair(
-                first = true,
-                second = parsedEpisodes
+            return ApiOutput(
+                isSuccessful = true,
+                output = parsedEpisodes
             )
         } else {
-            return Pair(
-                first = false,
-                second = emptyList()
-            )
+            return ApiOutput()
         }
     }
 }

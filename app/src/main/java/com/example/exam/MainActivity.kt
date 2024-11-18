@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Repository.initDB(applicationContext)
+        Repository.initializeDatabase(applicationContext)
 
         enableEdgeToEdge()
         setContent {
