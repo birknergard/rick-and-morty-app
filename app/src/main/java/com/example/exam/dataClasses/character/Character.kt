@@ -1,4 +1,6 @@
-package com.example.exam.dataClasses
+package com.example.exam.dataClasses.character
+
+import com.example.exam.dataClasses.location.Location
 
 data class Character(
     val created: String? = null,
@@ -24,7 +26,7 @@ data class Character(
     val type: String? = null,
     val url: String? = null
 ) {
-    fun getSimplifiedCharacter() : SimplifiedCharacter{
+    fun getSimplifiedCharacter() : SimplifiedCharacter {
         return SimplifiedCharacter(
             id = this.id,
             image = this.image,
@@ -33,12 +35,3 @@ data class Character(
     }
 }
 
-data class SimplifiedCharacter(
-    val id: Int? = null,
-
-    val image: String? = null,
-
-    val name: String? = null,
-){
-
-}

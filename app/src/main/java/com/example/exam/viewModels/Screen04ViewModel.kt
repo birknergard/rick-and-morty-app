@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
-import com.example.exam.dataClasses.Episode
+import com.example.exam.dataClasses.episode.Episode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -51,13 +51,13 @@ class Screen04ViewModel : ViewModel() {
         //  Calls for all episodes on a given page and adds it to the mutableList "episodes"
             val response = Repository.fetchEpisodes(page).output
             episodes.value.addAll(response)
-            Log.d("API", "Api call callback: ${response}")
+            Log.d("API", "Api call callback: $response")
             Log.d("Screen04VM", "Read-only list: ${episodes.value}")
             delay(200)
 
     }
     private suspend fun getAllEpisodesFromApi(){
-        // This could be changed to a loop where the pagecount is retrieved first, then be ran
+        // This could be changed to a loop where the page count is retrieved first from api, then be ran
         // accordingly. But since it was only three pages i didn't bother.
         for (i in 1 .. 3){
             getEpisodesFromApi(i)

@@ -1,4 +1,4 @@
-package com.example.exam.screens
+package com.example.exam.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,8 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.exam.dataClasses.CreatedCharacter
-import com.example.exam.screens.composables.colorPalette
+import com.example.exam.dataClasses.character.CreatedCharacter
 import com.example.exam.viewModels.Screen02ViewModel
 
 private val componentHeight = 795.dp
@@ -81,6 +79,7 @@ fun Screen02(viewModel : Screen02ViewModel){
         Column(
             modifier = Modifier.height(componentHeight)
                 .fillMaxWidth()
+                .background(colorPalette[2])
                 .padding(horizontal = 20.dp)
             ,
 

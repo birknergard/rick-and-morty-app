@@ -10,8 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.exam.data.Repository
-import com.example.exam.screens.*
-import com.example.exam.screens.composables.UITemplate
+import com.example.exam.composables.*
+import com.example.exam.composables.UITemplate
 import com.example.exam.ui.theme.ExamTheme
 import com.example.exam.viewModels.Screen01ViewModel
 import com.example.exam.viewModels.Screen02ViewModel
@@ -70,7 +70,6 @@ class MainActivity : ComponentActivity() {
                         )
                    }
                     composable<Screen03> {
-
                         UITemplate(
                             nav = nav,
                             viewModel03.navUIState,
@@ -79,7 +78,6 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<Screen04> {
-
                         UITemplate(
                             nav = nav,
                             navUIState = viewModel04.navUIState,

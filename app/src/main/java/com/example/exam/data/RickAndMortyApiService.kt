@@ -1,9 +1,9 @@
 package com.example.exam.data
 
 import com.example.exam.dataClasses.ApiResponse
-import com.example.exam.dataClasses.Character
-import com.example.exam.dataClasses.EpisodeData
-import com.example.exam.dataClasses.LocationFull
+import com.example.exam.dataClasses.character.Character
+import com.example.exam.dataClasses.episode.EpisodeData
+import com.example.exam.dataClasses.location.LocationFull
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

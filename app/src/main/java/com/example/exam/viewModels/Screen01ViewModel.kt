@@ -1,16 +1,15 @@
 package com.example.exam.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
-import com.example.exam.dataClasses.Character
+import com.example.exam.dataClasses.character.Character
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class Screen01ViewModel() : ViewModel(){
+class Screen01ViewModel : ViewModel(){
     val navUIState = listOf(true, false, false, false)
     val characterList = MutableStateFlow(mutableStateListOf<Character>())
 

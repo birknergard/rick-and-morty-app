@@ -3,9 +3,9 @@ package com.example.exam.data
 import android.util.Log
 import com.example.exam.dataClasses.ApiOutput
 import com.example.exam.dataClasses.ApiResponse
-import com.example.exam.dataClasses.Character
-import com.example.exam.dataClasses.EpisodeData
-import com.example.exam.dataClasses.LocationFull
+import com.example.exam.dataClasses.character.Character
+import com.example.exam.dataClasses.episode.EpisodeData
+import com.example.exam.dataClasses.location.LocationFull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response

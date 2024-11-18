@@ -1,4 +1,4 @@
-package com.example.exam.dataClasses
+package com.example.exam.dataClasses.location
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

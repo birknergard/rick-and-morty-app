@@ -1,4 +1,4 @@
-package com.example.exam.dataClasses
+package com.example.exam.dataClasses.character
 
 import android.icu.util.Calendar
 import androidx.room.Entity
@@ -8,25 +8,25 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class CreatedCharacter(
-   @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
    val id : Int = 0,
 
-   @SerializedName("name")
+    @SerializedName("name")
    var name: String? = null,
 
-   @SerializedName("gender")
+    @SerializedName("gender")
    var gender: String? = null,
 
-   @SerializedName("origin")
+    @SerializedName("origin")
    var origin: String? = null,
 
-   @SerializedName("species")
+    @SerializedName("species")
    var species: String? = null,
 
-   @SerializedName("description")
+    @SerializedName("description")
    var description: String? = null,
 
-   @SerializedName("created")
+    @SerializedName("created")
    var created: String = createCurrentDate(),
 ) {
     companion object{

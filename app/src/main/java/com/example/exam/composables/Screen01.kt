@@ -1,4 +1,4 @@
-package com.example.exam.screens
+package com.example.exam.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,8 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 
-import com.example.exam.dataClasses.Character
-import com.example.exam.screens.composables.colorPalette
+import com.example.exam.dataClasses.character.Character
 import com.example.exam.viewModels.Screen01ViewModel
 
 // UI variables

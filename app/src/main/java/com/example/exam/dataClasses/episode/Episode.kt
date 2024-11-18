@@ -1,36 +1,9 @@
-package com.example.exam.dataClasses
+package com.example.exam.dataClasses.episode
 
 import android.util.Log
 import com.example.exam.data.Repository
-import com.google.gson.annotations.SerializedName
+import com.example.exam.dataClasses.character.SimplifiedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
-
-data class EpisodeData(
-    val air_date: String,
-
-    @SerializedName("characters")
-    private val _appearingCharacterUrls: List<String>,
-
-    val created: String,
-
-    @SerializedName("episode")
-    private val _episode: String,
-    val id: Int,
-    val name: String,
-    val url: String
-) {
-    fun getAppearingCharacters() : List<String>{
-        return _appearingCharacterUrls
-    }
-
-    fun getSeasonAndEpisode() : Pair<Int /*Season*/, Int /*Episode*/>{
-            Log.d("EpisodeData", "Episode field raw: ${this._episode}")
-            val season = this._episode.drop(1).dropLast(3).toInt()
-            val episode = this._episode.drop(4).toInt()
-            Log.d("EpisodeData", "Season: $season - Episode: $episode")
-            return Pair(season, episode)
-    }
-}
 
 data class Episode(
     val data : EpisodeData,
@@ -77,6 +50,4 @@ data class Episode(
     private suspend fun getCharactersFromAPI() : List<SimplifiedCharacter>{
         return Repository.fetchSimplifiedCharacters(this.getAppearingCharacterIds())
     }
-
-
 }

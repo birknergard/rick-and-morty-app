@@ -1,4 +1,4 @@
-package com.example.exam.screens.composables
+package com.example.exam.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,32 +12,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Chair
+import androidx.compose.material.icons.rounded.FormatListNumbered
+import androidx.compose.material.icons.rounded.PersonAdd
+import androidx.compose.material.icons.rounded.PersonSearch
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.colorspace.Rgb
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.exam.Screen01
 import com.example.exam.Screen02
 import com.example.exam.Screen03
 import com.example.exam.Screen04
-import com.example.exam.dataClasses.Character
-import com.example.exam.dataClasses.Location
-import com.example.exam.screens.Item
-import com.example.exam.viewModels.Screen04ViewModel
-import okhttp3.internal.cookieToString
-
 
 val colorPalette : List<Color> = listOf(
     Color(red = 68, green = 40, blue = 29),
@@ -103,7 +98,7 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NavItem(
-                label = "View",
+                icon = Icons.Rounded.FormatListNumbered,
                 isActive = booleanList[0],
                 onClick = {
                     nav.navigate(Screen01){
@@ -117,7 +112,7 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
             )
 
             NavItem(
-                label = "Your",
+                icon = Icons.Rounded.PersonSearch,
                 isActive = booleanList[1],
                 onClick = {
                     nav.navigate(Screen02){
@@ -130,7 +125,7 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
                 }
             )
             NavItem(
-                label = "Create",
+                icon = Icons.Rounded.PersonAdd,
                 isActive = booleanList[2],
                 onClick = {
                     nav.navigate(Screen03){
@@ -143,7 +138,7 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
                 }
             )
             NavItem(
-                label = "Episode",
+                icon = Icons.Rounded.Chair,
                 isActive = booleanList[3],
                 onClick = {
                     nav.navigate(Screen04){
@@ -161,13 +156,12 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
 }
 
 @Composable
-fun NavItem(label : String, isActive : Boolean, onClick : () -> Unit){
+fun NavItem(icon : ImageVector, isActive : Boolean, onClick : () -> Unit){
     Surface(
         onClick = {
             if(!isActive){
                 onClick()
             }
-            // Doesnt do anything if page is current
         },
         modifier = Modifier
             .width(105.dp)
@@ -181,11 +175,11 @@ fun NavItem(label : String, isActive : Boolean, onClick : () -> Unit){
                 .background(if (isActive) colorPalette[3] else colorPalette[2]),
             contentAlignment = Alignment.Center
         ){
-            Text(
-                text = label,
-                color = if (isActive) colorPalette[0] else colorPalette[0],
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+            Icon(
+                modifier = Modifier.size(50.dp),
+                painter = rememberVectorPainter(icon),
+                tint = if (isActive) colorPalette[0] else colorPalette[0],
+                contentDescription = "Nav item icon"
             )
         }
     }

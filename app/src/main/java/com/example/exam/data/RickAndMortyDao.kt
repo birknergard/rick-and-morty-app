@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
-import com.example.exam.dataClasses.CreatedCharacter
-import com.example.exam.dataClasses.Location
+import com.example.exam.dataClasses.character.CreatedCharacter
+import com.example.exam.dataClasses.location.Location
 
 @Dao
 interface RickAndMortyDao {

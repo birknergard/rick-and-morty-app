@@ -1,4 +1,4 @@
-package com.example.exam.dataClasses
+package com.example.exam.dataClasses.location
 
 data class LocationFull(
     val created: String? = null,

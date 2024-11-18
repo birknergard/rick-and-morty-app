@@ -3,7 +3,7 @@ package com.example.exam.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.exam.data.Repository
-import com.example.exam.dataClasses.CreatedCharacter
+import com.example.exam.dataClasses.character.CreatedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Screen02ViewModel : ViewModel() {

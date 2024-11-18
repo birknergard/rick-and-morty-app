@@ -7,8 +7,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
-import com.example.exam.dataClasses.CreatedCharacter
-import com.example.exam.dataClasses.Location
+import com.example.exam.dataClasses.character.CreatedCharacter
+import com.example.exam.dataClasses.location.Location
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -25,12 +25,12 @@ class Screen03ViewModel : ViewModel() {
 
     val allFieldsAreFilled = MutableStateFlow(true)
 
-    fun verifyFields(){
+    private fun verifyFields(){
         allFieldsAreFilled.value = checkIfAllFieldsAreFilled()
     }
 
     private fun checkIfAllFieldsAreFilled() : Boolean{
-        val fields = mapOf<String, String>(
+        val fields = mapOf(
             "name" to name.value,
             "gender" to gender.value,
             "origin" to origin.value,
@@ -58,7 +58,7 @@ class Screen03ViewModel : ViewModel() {
     fun setName(name : String){
         this.name.value = name
     }
-    fun setGender(gender : String){
+    private fun setGender(gender : String){
         this.gender.value = gender
     }
     fun setOrigin(location : String){
@@ -124,7 +124,7 @@ class Screen03ViewModel : ViewModel() {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //  Create new character
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    private fun createCharacter() : CreatedCharacter{
+    private fun createCharacter() : CreatedCharacter {
        return CreatedCharacter(
            name = name.value,
            gender = gender.value,

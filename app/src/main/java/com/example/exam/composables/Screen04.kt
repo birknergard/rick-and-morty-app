@@ -1,15 +1,12 @@
-package com.example.exam.screens
+package com.example.exam.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,42 +21,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material.icons.automirrored.sharp.ArrowForward
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentRecomposeScope
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.example.exam.dataClasses.Episode
-import com.example.exam.screens.composables.NavBar
-import com.example.exam.screens.composables.colorPalette
+import com.example.exam.dataClasses.episode.Episode
 import com.example.exam.viewModels.Screen04ViewModel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-
 
 // UI Variables
 private val componentHeight = 717.dp
@@ -70,14 +49,14 @@ private val textSize = 16.sp
 private val titleTextSize = 22.sp
 
 @Composable
-fun Screen04(vm : Screen04ViewModel){
+fun Screen04(viewModel : Screen04ViewModel){
 
     LaunchedEffect(Unit) {
-        vm.initialize()
+        viewModel.initialize()
     }
 
-    val episodes = vm.filteredList.collectAsState()
-    val season = vm.selectedSeason.collectAsState()
+    val episodes = viewModel.filteredList.collectAsState()
+    val season = viewModel.selectedSeason.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -95,7 +74,7 @@ fun Screen04(vm : Screen04ViewModel){
         ) {
             Surface(
                 onClick = {
-                    vm.selectPreviousSeason()
+                    viewModel.selectPreviousSeason()
                 },
                 color = colorPalette[2]
                 ) {
@@ -114,7 +93,7 @@ fun Screen04(vm : Screen04ViewModel){
             )
             Surface(
                 onClick = {
-                    vm.selectNextSeason()
+                    viewModel.selectNextSeason()
                 }) {
                 Icon(
                     modifier = Modifier
@@ -147,7 +126,7 @@ fun Screen04(vm : Screen04ViewModel){
             }
         }
         items(episodes.value){ episode ->
-            EpisodeDisplay(episode, vm)
+            EpisodeDisplay(episode, viewModel)
         }
     }
 }
@@ -236,7 +215,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                             .padding(defaultPadding)
                     ) {
                         Text(
-                            text = "Date aired: ${episode.data.air_date}",
+                            text = "Date aired: ${episode.data.airDate}",
                             fontSize = textSize
                         )
 

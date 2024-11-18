@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.exam.dataClasses.ApiOutput
-import com.example.exam.dataClasses.Character
-import com.example.exam.dataClasses.CreatedCharacter
-import com.example.exam.dataClasses.Episode
-import com.example.exam.dataClasses.EpisodeData
-import com.example.exam.dataClasses.Location
-import com.example.exam.dataClasses.SimplifiedCharacter
+import com.example.exam.dataClasses.character.Character
+import com.example.exam.dataClasses.character.CreatedCharacter
+import com.example.exam.dataClasses.episode.Episode
+import com.example.exam.dataClasses.episode.EpisodeData
+import com.example.exam.dataClasses.location.Location
+import com.example.exam.dataClasses.character.SimplifiedCharacter
 
 object Repository {
     private lateinit var _appDatabase: AppDatabase
