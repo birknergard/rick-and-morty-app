@@ -11,20 +11,17 @@ Exam for android development program.
     UI for screen 03
     Basic backend for screen04
     NavBar
-
-    ## TODO
-    ### Critical 
-    Test backend for screen04
     Implement UI for screen 04
     Implement interactivity for screen 04
-
-    ### Important
     Polish UI for screen 02 and 01
-    
-    ### Later
     General refactor and cleaning up the codebase. Optimize.
     Make UI as pretty as possible.
+
+
     
+    ### Final 
+    Polish polish polish
+
     ## Screen 4 functionality
     On screen 4 you will be able to see every episode of Rick and morty. They will be
     divided into seasons. If you click on the episode you can see all of the episodes
