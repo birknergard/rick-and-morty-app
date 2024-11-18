@@ -125,7 +125,8 @@ class Screen03ViewModel : ViewModel() {
             _locationList.value = Repository.getLocations()
         }
     }
-    fun getLocationList(): List<Location>{
+
+    private fun getLocationList(): List<Location>{
         return _locationList.value
     }
 

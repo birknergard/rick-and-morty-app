@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.sharp.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -246,7 +247,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                     }
                     Icon(
                         modifier = Modifier.size(45.dp).padding(end = 10.dp),
-                        painter = rememberVectorPainter(Icons.Outlined.Info),
+                        painter = rememberVectorPainter(Icons.Outlined.ExpandMore),
                         contentDescription = "Icon"
                     )
                 }

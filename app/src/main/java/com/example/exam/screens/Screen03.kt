@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Autorenew
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -136,7 +139,7 @@ fun Screen03(viewModel: Screen03ViewModel){
             labelText = "Enter a species"
         )
         Description(description.value, viewModel)
-        Spacer(Modifier.height(200.dp)) // This is here incase of onscreen keyboard.
+        Spacer(Modifier.height(30.dp)) // This is here incase of onscreen keyboard.
     }
 }
 
@@ -249,7 +252,7 @@ fun ClearButton(viewModel: Screen03ViewModel){
             Spacer(Modifier.width(10.dp))
             Icon(
                 modifier = Modifier.height(27.dp).width(27.dp),
-                painter = rememberVectorPainter(Icons.Default.Clear),
+                painter = rememberVectorPainter(Icons.Rounded.Autorenew),
                 tint = Color.White,
                 contentDescription = "clear icon"
             )
@@ -387,9 +390,11 @@ fun OriginSelect(
         if (locationListToggle.value) {
             LazyColumn(
                 modifier = Modifier
-                    .width(250.dp)
+                    .fillMaxWidth(0.85f)
                     .height(200.dp)
-                    .padding(start = 5.dp),
+                    .clip(RoundedCornerShape(bottomEnd = 15.dp, bottomStart = 15.dp))
+                    .background(colorPalette[4])
+                    .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -404,15 +409,29 @@ fun OriginSelect(
                                 viewModel.setOrigin(location.name!!)
                                 locationListToggle.value = false
                             },
-                            modifier = Modifier.background(colorPalette[2])
+                            modifier = Modifier.background(colorPalette[4])
                         ) {
-                            Text(
-                                modifier = Modifier.background(colorPalette[2]),
-                                text = location.name!!,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = colorPalette[0]
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(colorPalette[4])
+                                ,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "${viewModel.getFilteredLocationList().indexOf(location) + 1}. ${location.name!!}",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colorPalette[0]
+                                )
+                                Icon(
+                                    modifier = Modifier.size(25.dp),
+                                    painter = rememberVectorPainter(Icons.Rounded.Add),
+                                    contentDescription = "Add icon",
+                                    tint = Color.Black
+                                )
+                            }
                         }
                     }
                 }
@@ -438,7 +457,7 @@ fun Description(description : String, viewModel: Screen03ViewModel){
                 viewModel.setDesc(it)
             }
         },
-        label = { Text("Description") },
+        label = { Text("Write a description of your character") },
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = colorPalette[2],
             unfocusedTextColor = colorPalette[0],
