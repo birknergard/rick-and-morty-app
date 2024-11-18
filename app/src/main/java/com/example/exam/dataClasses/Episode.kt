@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 data class EpisodeData(
     val air_date: String,
@@ -76,7 +75,7 @@ data class Episode(
     }
 
     private suspend fun getCharactersFromAPI() : List<SimplifiedCharacter>{
-        return Repository.loadSimplifiedCharactersFromApi(this.getAppearingCharacterIds())
+        return Repository.fetchSimplifiedCharacters(this.getAppearingCharacterIds())
     }
 
 

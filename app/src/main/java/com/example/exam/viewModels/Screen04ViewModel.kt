@@ -49,7 +49,7 @@ class Screen04ViewModel : ViewModel() {
 
     private suspend fun getEpisodesFromApi(page : Int){
         //  Calls for all episodes on a given page and adds it to the mutableList "episodes"
-            val response = Repository.fetchEpisodesFromAPI(page).second
+            val response = Repository.fetchEpisodes(page).second
             episodes.value.addAll(response)
             Log.d("API", "Api call callback: ${response}")
             Log.d("Screen04VM", "Read-only list: ${episodes.value}")

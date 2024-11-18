@@ -1,6 +1,5 @@
 package com.example.exam.viewModels
 
-import android.icu.util.Calendar
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -114,7 +113,7 @@ class Screen03ViewModel : ViewModel() {
 
     fun initializeLocationDatabase(){
         viewModelScope.launch{
-            Repository.initializeLocationDB()
+            Repository.initializeLocationDatabase()
         }
     }
 
@@ -122,7 +121,7 @@ class Screen03ViewModel : ViewModel() {
 
     fun loadLocations(){
         viewModelScope.launch {
-            _locationList.value = Repository.getLocations()
+            _locationList.value = Repository.loadLocations()
         }
     }
 
