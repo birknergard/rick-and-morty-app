@@ -19,9 +19,9 @@ class Screen01ViewModel() : ViewModel(){
     fun updateCharacterList(page : Int){
         viewModelScope.launch {
             val apiCall = Repository.fetchCharacters(page)
-            if(apiCall.first.isNotEmpty() && apiCall.second){
+            if(apiCall.isSuccessful && apiCall.output.isNotEmpty()){
                 apiCallSuccessful.value = true
-                characterList.value.addAll(apiCall.first)
+                characterList.value.addAll(apiCall.output)
                 delay(2000)
             } else {
                 apiCallSuccessful.value = false
