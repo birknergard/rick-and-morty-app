@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -118,14 +119,66 @@ fun Screen03(viewModel: Screen03ViewModel){
             fontSize = 18.sp,
             color = colorPalette[0]
         )
-        NameSelect(name.value, viewModel)
+        CharacterInputField(
+            fieldValue = name.value,
+            setter = {viewModel.setName(it)},
+            maxInputLength = 50,
+            title = "Name",
+            labelText = "Enter a name"
+        )
         GenderSelectionGrid(viewModel)
         OriginSelect(viewModel)
-        SpeciesSelect(species.value, viewModel)
+        CharacterInputField(
+            fieldValue = species.value,
+            setter = {viewModel.setSpecies(it)},
+            maxInputLength = 50,
+            title = "Species",
+            labelText = "Enter a species"
+        )
         Description(description.value, viewModel)
         Spacer(Modifier.height(200.dp)) // This is here incase of onscreen keyboard.
     }
 }
+
+@Composable
+fun CharacterInputField(
+    fieldValue : String,
+    setter : (input : String) -> Unit,
+    maxInputLength : Int,
+    title : String,
+    labelText : String
+){
+    Text(
+        text = title,
+        fontSize = titleFontSize,
+        fontWeight = FontWeight.Bold,
+        color = colorPalette[0]
+    )
+    OutlinedTextField(
+        modifier = Modifier.width(textBoxWidth),
+        value = fieldValue,
+        onValueChange = {
+            if(it.length <= maxInputLength){
+                setter(it)
+            }
+        },
+        label = { Text(
+            text = labelText
+        ) },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = colorPalette[2],
+            unfocusedTextColor = colorPalette[0],
+            unfocusedLabelColor = colorPalette[0],
+            focusedContainerColor = colorPalette[2],
+            focusedTextColor = colorPalette[0],
+            focusedBorderColor = colorPalette[4],
+            unfocusedBorderColor = colorPalette[0],
+            focusedLabelColor = colorPalette[4]
+        )
+    )
+    Spacer(Modifier.padding(vertical = 15.dp))
+}
+
 @Composable
 fun AddButton(viewModel: Screen03ViewModel){
     Surface(
@@ -133,7 +186,8 @@ fun AddButton(viewModel: Screen03ViewModel){
             .padding(vertical = defaultVerticalPadding)
             .width(buttonWidth)
             .height(buttonHeight)
-            .clip(RoundedCornerShape(10.dp)),
+            .clip(RoundedCornerShape(10.dp))
+            .border(width = 1.dp, colorPalette[0], RoundedCornerShape(10.dp)),
         color = colorPalette[4],
         onClick = {
             viewModel.verifyFields()
@@ -173,8 +227,9 @@ fun ClearButton(viewModel: Screen03ViewModel){
             .padding(vertical = defaultVerticalPadding)
             .width(buttonWidth)
             .height(50.dp)
-            .clip(RoundedCornerShape(10.dp)),
-        color = colorPalette[0],
+            .clip(RoundedCornerShape(10.dp))
+            .border(width = 1.dp, colorPalette[0], RoundedCornerShape(10.dp)),
+        color = colorPalette[1],
         onClick = {
             viewModel.clearAllFields()
         }
@@ -203,28 +258,6 @@ fun ClearButton(viewModel: Screen03ViewModel){
 }
 
 @Composable
-fun NameSelect(name : String, viewModel: Screen03ViewModel){
-    Text(
-        modifier = Modifier.background(colorPalette[2]),
-        text = "Name",
-        fontSize = titleFontSize,
-        fontWeight = FontWeight.Bold,
-        color = colorPalette[0]
-    )
-    OutlinedTextField(
-        modifier = Modifier.width(textBoxWidth)
-            .background(colorPalette[2]),
-        value = name,
-        onValueChange = {
-            if(it.length <= 50){
-                viewModel.setName(it)
-            }
-        },
-        label = { Text(color = colorPalette[0], text = "Enter a name") },
-    )
-}
-
-@Composable
 fun GenderSelectionGrid(
     viewModel: Screen03ViewModel
 ){
@@ -250,16 +283,19 @@ fun GenderSelectionGrid(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ){
-            SelectButton(options[0], selection, 0, viewModel)
-            SelectButton(options[1], selection, 1, viewModel)
+            for(i in 0 .. 1){
+                SelectButton(options[i], selection, i, viewModel)
+            }
         }
+
         Row(
             modifier = Modifier,
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SelectButton(options[2], selection, 2, viewModel)
-            SelectButton(options[3], selection, 3, viewModel)
+            for(i in 2 .. 3){
+                SelectButton(options[i], selection, i, viewModel)
+            }
         }
     }
 }
@@ -273,7 +309,12 @@ fun SelectButton(
 ){
     Surface(onClick = {
         isToggled[thisItem] = !isToggled[thisItem] // Inverts the boolean  on click
-        isToggled.indices.forEach { i -> if(i != thisItem) isToggled[i] = false } // Sets all other booleans to false, so you cant toggle more than one field
+
+        // Sets all other booleans to false, so you cant toggle more than one field
+        isToggled.indices.forEach {
+            i -> if(i != thisItem) isToggled[i] = false
+        }
+
         viewModel.setGender(text.lowercase())
     },
         color = if(isToggled[thisItem]) colorPalette[4] else colorPalette[2],
@@ -300,8 +341,9 @@ fun SelectButton(
 fun OriginSelect(
     viewModel: Screen03ViewModel
 ) {
-    val locationListToggle = remember { mutableStateOf(false) }
-    val isFocused = remember { mutableStateOf(false) }
+    val locationListToggle = rememberSaveable{ mutableStateOf(false) }
+    val isFocused = rememberSaveable{ mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -315,6 +357,7 @@ fun OriginSelect(
             fontWeight = FontWeight.Bold,
             color = colorPalette[0]
         )
+
         OutlinedTextField(
             modifier = Modifier
                 .width(textBoxWidth)
@@ -328,8 +371,19 @@ fun OriginSelect(
                     viewModel.setOrigin(it)
                 }
             },
-            label = { Text("Origin") }
+            label = { Text("Origin") },
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = colorPalette[2],
+                unfocusedTextColor = colorPalette[0],
+                unfocusedLabelColor = colorPalette[0],
+                focusedContainerColor = colorPalette[2],
+                focusedTextColor = colorPalette[0],
+                focusedBorderColor = colorPalette[4],
+                unfocusedBorderColor = colorPalette[0],
+                focusedLabelColor = colorPalette[4]
+            )
         )
+
         if (locationListToggle.value) {
             LazyColumn(
                 modifier = Modifier
@@ -368,27 +422,6 @@ fun OriginSelect(
 }
 
 @Composable
-fun SpeciesSelect(species : String, viewModel: Screen03ViewModel){
-    Text(
-        text = "Species",
-        fontSize = titleFontSize,
-        fontWeight = FontWeight.Bold,
-        color = colorPalette[0]
-    )
-    OutlinedTextField(
-        modifier = Modifier.width(textBoxWidth),
-        value = species,
-        onValueChange = {
-            if(it.length <= 50){
-                viewModel.setSpecies(it)
-            }
-        },
-        label = { Text("Species") }
-    )
-    Spacer(Modifier.padding(vertical = 15.dp))
-}
-
-@Composable
 fun Description(description : String, viewModel: Screen03ViewModel){
     Text(
         text = "Description",
@@ -405,6 +438,17 @@ fun Description(description : String, viewModel: Screen03ViewModel){
                 viewModel.setDesc(it)
             }
         },
-        label = { Text("Description") }
+        label = { Text("Description") },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = colorPalette[2],
+            unfocusedTextColor = colorPalette[0],
+            unfocusedLabelColor = colorPalette[0],
+            focusedContainerColor = colorPalette[2],
+            focusedTextColor = colorPalette[0],
+            focusedBorderColor = colorPalette[4],
+            unfocusedBorderColor = colorPalette[0],
+            focusedLabelColor = colorPalette[4]
+        )
     )
 }
+

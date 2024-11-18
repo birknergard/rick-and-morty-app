@@ -15,8 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Screen03ViewModel : ViewModel() {
-    var name = MutableStateFlow("")
-    val gender = MutableStateFlow("")
+    // Character properties as stateflows.
+    val name = MutableStateFlow("")
+    private val gender = MutableStateFlow("")
     val origin = MutableStateFlow("")
     val species = MutableStateFlow("")
     val description = MutableStateFlow("")
@@ -46,6 +47,7 @@ class Screen03ViewModel : ViewModel() {
 
     val genderOptions = listOf("Male", "Female", "Genderless", "Unknown")
 
+    // Wrote setters to prevent loading of state variables in UI code. May be redundant or unnecessary.
     fun setName(name : String){
         this.name.value = name
     }
@@ -63,18 +65,15 @@ class Screen03ViewModel : ViewModel() {
     }
 
     private val _genderSelectionToggle = MutableStateFlow(mutableStateListOf(false, false, false, false))
-    fun resetSelection(){
-        _genderSelectionToggle.value[0] = false
-        _genderSelectionToggle.value[1] = false
-        _genderSelectionToggle.value[2] = false
-        _genderSelectionToggle.value[3] = false
+    private fun resetSelection(){
+        for (i in 0 .. 3){
+            _genderSelectionToggle.value[i] = false
+        }
     }
 
     fun getSelectionToggleList() : SnapshotStateList<Boolean>{
         return _genderSelectionToggle.asStateFlow().value
     }
-
-    val speciesOptions = listOf("Human", "Alien")
 
     fun getFilteredLocationList() : List<Location>{
         return getLocationList().filter { location ->
@@ -113,8 +112,6 @@ class Screen03ViewModel : ViewModel() {
        )
     }
 
-    val navUIState = listOf(false, false, true, false)
-
     fun initializeLocationDatabase(){
         viewModelScope.launch{
             Repository.initializeLocationDB()
@@ -131,4 +128,6 @@ class Screen03ViewModel : ViewModel() {
     fun getLocationList(): List<Location>{
         return _locationList.value
     }
+
+    val navUIState = listOf(false, false, true, false)
 }

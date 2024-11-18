@@ -138,7 +138,9 @@ fun Screen04(vm : Screen04ViewModel){
     ) {
         if(episodes.value.isEmpty()){
             item {
+
                 Text(
+                    modifier = Modifier.padding(50.dp),
                     text = "LOADING ...",
                     fontSize = 26.sp
                 )
@@ -180,7 +182,7 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
         Surface(
             onClick = {
                 viewModel.toggleCharacterList(episode)
-                Log.d("Screen04", "Episode character list in screen04 composable: ${episode.appearingCharacters.value}")
+            //    Log.d("Screen04", "Episode character list in screen04 composable: ${episode.appearingCharacters.value}")
             },
             modifier = Modifier
                 .fillMaxWidth(0.9f)
@@ -188,49 +190,38 @@ fun EpisodeDisplay(episode: Episode, viewModel: Screen04ViewModel){
                 .border(width = 2.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp))
         ) {
             if(toggle.value){
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Appearing characters",
-                        fontSize = 20.sp,
-                        color = colorPalette[0]
-                    )
-                    LazyVerticalGrid(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .height(500.dp)
-                            .background(colorPalette[4])
-                            .padding(top = defaultPadding),
-                        columns = GridCells.FixedSize(170.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalArrangement = Arrangement.Center
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .height(500.dp)
+                        .background(colorPalette[4])
+                        .padding(top = defaultPadding),
+                    columns = GridCells.FixedSize(170.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center
 
-                    ){
-                        items(episode.appearingCharacters.value){ character ->
-                            Column(
-                                verticalArrangement = Arrangement.SpaceEvenly,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    items(episode.appearingCharacters.value){ character ->
+                        Column(
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
 
-                            ) {
-                                Text(
-                                    text = character.name!!,
-                                    fontSize = textSize
-                                )
-                                AsyncImage(
-                                    modifier = Modifier
-                                        .size(150.dp)
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .border(width = 1.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp)),
-                                    model = character.image,
-                                    contentDescription = "image of character",
-                                    placeholder = rememberVectorPainter(Icons.Default.Person)
-                                )
-                                Spacer(Modifier.height(15.dp))
-                            }
+                        ) {
+                            Text(
+                                text = character.name!!,
+                                fontSize = textSize
+                            )
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .border(width = 1.dp, color = colorPalette[0], shape = RoundedCornerShape(10.dp)),
+                                model = character.image,
+                                contentDescription = "image of character",
+                                placeholder = rememberVectorPainter(Icons.Default.Person)
+                            )
+                            Spacer(Modifier.height(15.dp))
                         }
-
                     }
                 }
             } else {
