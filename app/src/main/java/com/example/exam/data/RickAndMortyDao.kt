@@ -6,18 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
-import com.example.exam.dataClasses.Character
 import com.example.exam.dataClasses.CreatedCharacter
 import com.example.exam.dataClasses.Location
 
 @Dao
 interface RickAndMortyDao {
-    // For created character db
+    // For created character database
     @Query("SELECT * FROM CreatedCharacter")
     suspend fun getCreatedCharacters() : List<CreatedCharacter>
-
-    @Query("SELECT id FROM CreatedCharacter")
-    suspend fun getAllIds() : List<Int>?
 
     @Query("SELECT * FROM CreatedCharacter WHERE :characterId = id")
     suspend fun getCreatedCharacterById(characterId : Int) : CreatedCharacter?
@@ -28,12 +24,9 @@ interface RickAndMortyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCreatedCharacters(characters: List<CreatedCharacter>)
 
-    // For location db
+    // For location database
     @Query("SELECT * FROM Location ORDER BY name DESC")
     suspend fun getLocationsFromDB() : List<Location>
-
-    @Query("SELECT name FROM Location ")
-    suspend fun getLocationNames() : List<String>
 
     @Query("SELECT * FROM Location WHERE :locationId = id")
     suspend fun getLocationByID(locationId : Int) : Location
@@ -45,7 +38,7 @@ interface RickAndMortyDao {
     suspend fun getDistinctLocations() : Int
 
     @Query("DELETE FROM Location")
-    suspend fun wipeTable()
+    suspend fun deleteAllLocations()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocationList(list : List<Location>)

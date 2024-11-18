@@ -4,14 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.exam.data.Repository
 import com.example.exam.dataClasses.CreatedCharacter
-import com.example.exam.dataClasses.SimplifiedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Screen02ViewModel : ViewModel() {
     val characters = MutableStateFlow<List<CreatedCharacter>>(emptyList())
 
     suspend fun initialize(){
-        characters.value = Repository.getCharactersFromDB()
+        characters.value = Repository.loadCharacters()
         Log.d("Repository", "Number of characters in database: ${characters.value.size}")
     }
 

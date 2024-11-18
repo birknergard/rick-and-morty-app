@@ -2,8 +2,6 @@ package com.example.exam.dataClasses
 
 import android.icu.util.Calendar
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
@@ -53,7 +51,7 @@ data class CreatedCharacter(
 
 
     suspend fun uploadToDB(){
-        Repository.insertCharacterIntoDB(this)
+        Repository.saveCharacter(this)
     }
 }
 

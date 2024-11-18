@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class Screen04ViewModel : ViewModel() {
 
-    val episodes = MutableStateFlow<SnapshotStateList<Episode>>(mutableStateListOf())
+    private val episodes = MutableStateFlow<SnapshotStateList<Episode>>(mutableStateListOf())
 
     val selectedSeason = MutableStateFlow(1)
 
@@ -29,39 +29,39 @@ class Screen04ViewModel : ViewModel() {
     }
 
     fun selectNextSeason(){
-        if(selectedSeason.value != 5){
+        if(selectedSeason.value < 5){
             selectedSeason.value++
             filteredList.value = filterEpisodes(selectedSeason.value)
-            if(filteredList.value.size > 10){
-
-            }
         }
     }
     fun selectPreviousSeason(){
-        if(selectedSeason.value != 1){
+        if(selectedSeason.value > 1){
             selectedSeason.value--
             filteredList.value = filterEpisodes(selectedSeason.value)
         }
     }
 
-    fun filterEpisodes(season : Int) : List<Episode>{
+    private fun filterEpisodes(season : Int) : List<Episode>{
         return episodes.value.filter { episode: Episode ->
             episode.data.getSeasonAndEpisode().first == season
         }
     }
 
-    suspend fun getEpisodesFromApi(page : Int){
-            val response = Repository.fetchEpisodesFromAPI(page).second
+    private suspend fun getEpisodesFromApi(page : Int){
+        //  Calls for all episodes on a given page and adds it to the mutableList "episodes"
+            val response = Repository.fetchEpisodes(page).output
             episodes.value.addAll(response)
             Log.d("API", "Api call callback: ${response}")
             Log.d("Screen04VM", "Read-only list: ${episodes.value}")
             delay(200)
 
     }
-    suspend fun getAllEpisodesFromApi(){
-        getEpisodesFromApi(1)
-        getEpisodesFromApi(2)
-        getEpisodesFromApi(3)
+    private suspend fun getAllEpisodesFromApi(){
+        // This could be changed to a loop where the pagecount is retrieved first, then be ran
+        // accordingly. But since it was only three pages i didn't bother.
+        for (i in 1 .. 3){
+            getEpisodesFromApi(i)
+        }
     }
 
     private fun episodeListIsEmpty() : Boolean{
@@ -78,7 +78,6 @@ class Screen04ViewModel : ViewModel() {
             episode.toggleCharacterList()
         }
     }
-
 
 
     val navUIState = listOf(false, false, false, true)

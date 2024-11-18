@@ -1,14 +1,9 @@
 package com.example.exam.dataClasses
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import com.example.exam.data.Repository
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import java.lang.NullPointerException
 
 data class EpisodeData(
     val air_date: String,
@@ -42,10 +37,6 @@ data class Episode(
     val appearingCharacters: MutableStateFlow<List<SimplifiedCharacter>> = MutableStateFlow(emptyList()),
     val toggle : MutableStateFlow<Boolean> = MutableStateFlow(false)
 ) {
-
-    fun isToggled() : Boolean{
-        return toggle.asStateFlow().value
-    }
 
     fun toggleCharacterList(){
         this.toggle.value = !this.toggle.value
@@ -84,7 +75,7 @@ data class Episode(
     }
 
     private suspend fun getCharactersFromAPI() : List<SimplifiedCharacter>{
-        return Repository.loadSimplifiedCharactersFromApi(this.getAppearingCharacterIds())
+        return Repository.fetchSimplifiedCharacters(this.getAppearingCharacterIds())
     }
 
 

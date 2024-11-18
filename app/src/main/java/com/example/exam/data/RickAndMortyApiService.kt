@@ -11,14 +11,14 @@ import retrofit2.http.Query
 
 interface RickAndMortyApiService {
     @GET("api/character/")
-    suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse<List<Character>>>
+    suspend fun getAllCharacters(@Query("page") page: Int): Response<ApiResponse<Character>>
 
     @GET("api/character/{ids}")
     suspend fun getMultipleCharacters(@Path("ids") listOfIds : List<Int>) : Response<List<Character>>
 
     @GET("api/location/")
-    suspend fun getAllLocations(@Query("page") page : Int) : Response<ApiResponse<List<LocationFull>>>
+    suspend fun getAllLocations(@Query("page") page : Int) : Response<ApiResponse<LocationFull>>
 
     @GET("api/episode/")
-    suspend fun getEpisodes(@Query("page") page : Int) : Response<ApiResponse<List<EpisodeData>>>
+    suspend fun getEpisodes(@Query("page") page : Int) : Response<ApiResponse<EpisodeData>>
 }
