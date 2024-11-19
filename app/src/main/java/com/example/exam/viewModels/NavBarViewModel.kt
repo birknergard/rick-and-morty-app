@@ -1,6 +1,7 @@
 package com.example.exam.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.exam.Screen01
 import com.example.exam.Screen02
@@ -9,25 +10,41 @@ import com.example.exam.Screen04
 
 class NavBarViewModel : ViewModel() {
     // Ive made one function for each route because i cant (as far as i know) pass serializable objects via. parameters.
+    // Function block code is made with inspiration from this thread:
+    // https://stackoverflow.com/questions/72913451/how-to-save-and-restore-navigation-state-in-jetpack-compose
     fun goToScreen01(navController: NavController){
         navController.navigate(Screen01){
-            launchSingleTop = true // This line makes it so there is only one instance of the screen 1 at a timne.
-            restoreState = true // When route is navigated back to, restores the state of the route from the last time it was accessed.
+            launchSingleTop = true
+            popUpTo(navController.graph.id) {
+                saveState = true
+            }
+            restoreState = true
         }
     }
     fun goToScreen02(navController: NavController){
         navController.navigate(Screen02){
             launchSingleTop = true
+            popUpTo(navController.graph.id) {
+                saveState = true
+            }
+            restoreState = true
         }
     }
     fun goToScreen03(navController: NavController){
         navController.navigate(Screen03){
             launchSingleTop = true
+            popUpTo(navController.graph.id) {
+                saveState = true
+            }
+            restoreState = true
         }
     }
     fun goToScreen04(navController: NavController){
         navController.navigate(Screen04){
             launchSingleTop = true
+            popUpTo(navController.graph.id) {
+                saveState = true
+            }
             restoreState = true
         }
     }
