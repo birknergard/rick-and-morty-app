@@ -59,7 +59,6 @@ class RetrofitInstance{
             }
         }
 
-
         suspend fun fetch(page : Int) : ApiOutput<Character> {
             try {
                 val response = _rickAndMortyApiService.getAllCharacters(page)
@@ -144,5 +143,4 @@ class RetrofitInstance{
             }
         }
     }
-
 }
