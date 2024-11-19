@@ -8,12 +8,11 @@ import com.example.exam.Screen03
 import com.example.exam.Screen04
 
 class NavBarViewModel : ViewModel() {
+    // Ive made one function for each route because i cant (as far as i know) pass serializable objects via. parameters.
     fun goToScreen01(navController: NavController){
         navController.navigate(Screen01){
-            // This code was created with help from chatgpt.
-            // It is passed as an onclick because i can't reference serializable objects
-            // as parameters.
             launchSingleTop = true // This line makes it so there is only one instance of the screen 1 at a timne.
+            restoreState = true // When route is navigated back to, restores the state of the route from the last time it was accessed.
         }
     }
     fun goToScreen02(navController: NavController){
