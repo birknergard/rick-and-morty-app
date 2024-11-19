@@ -13,6 +13,7 @@ import com.example.exam.backend.Repository
 import com.example.exam.composables.*
 import com.example.exam.composables.UITemplate
 import com.example.exam.ui.theme.ExamTheme
+import com.example.exam.viewModels.NavBarViewModel
 import com.example.exam.viewModels.Screen01ViewModel
 import com.example.exam.viewModels.Screen02ViewModel
 import com.example.exam.viewModels.Screen03ViewModel
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ExamTheme {
+                val navBarViewModel = NavBarViewModel()
                 val viewModel01 = Screen01ViewModel()
                 val viewModel02 = Screen02ViewModel()
                 val viewModel03 = Screen03ViewModel()
@@ -57,31 +59,35 @@ class MainActivity : ComponentActivity() {
                 ){
                     composable<Screen01> {
                         UITemplate(
-                            nav = nav,
+                            navController = nav,
                             navUIState = viewModel01.navUIState,
-                            screenComposable = { Screen01(viewModel01) }
+                            screenComposable = { Screen01(viewModel01) },
+                            navBarViewModel = navBarViewModel
                         )
                     }
                     composable<Screen02> {
                         UITemplate(
-                            nav = nav,
+                            navController = nav,
                             navUIState = viewModel02.navUIState,
-                            screenComposable = { Screen02(viewModel02) }
+                            screenComposable = { Screen02(viewModel02) },
+                            navBarViewModel = navBarViewModel
                         )
                    }
                     composable<Screen03> {
                         UITemplate(
-                            nav = nav,
+                            navController = nav,
                             viewModel03.navUIState,
-                            screenComposable = { Screen03(viewModel03) }
+                            screenComposable = { Screen03(viewModel03) },
+                            navBarViewModel = navBarViewModel
                         )
                     }
 
                     composable<Screen04> {
                         UITemplate(
-                            nav = nav,
+                            navController = nav,
                             navUIState = viewModel04.navUIState,
-                            screenComposable = { Screen04(viewModel04) }
+                            screenComposable = { Screen04(viewModel04) },
+                            navBarViewModel = navBarViewModel
                         )
                     }
                 }

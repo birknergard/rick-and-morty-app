@@ -33,6 +33,7 @@ import com.example.exam.Screen01
 import com.example.exam.Screen02
 import com.example.exam.Screen03
 import com.example.exam.Screen04
+import com.example.exam.viewModels.NavBarViewModel
 
 val colorPalette : List<Color> = listOf(
     Color(red = 68, green = 40, blue = 29),
@@ -44,9 +45,11 @@ val colorPalette : List<Color> = listOf(
 
 @Composable
 fun UITemplate(
-    nav: NavController,
+    navController : NavController,
     navUIState : List<Boolean>,
-    screenComposable: @Composable () -> Unit
+    navBarViewModel: NavBarViewModel,
+    screenComposable: @Composable () -> Unit,
+
 ){
     Column (modifier = Modifier
         .fillMaxHeight()
@@ -73,13 +76,15 @@ fun UITemplate(
             screenComposable()
         }
 
-        NavBar(navUIState, nav)
+        NavBar(navUIState, navController, navBarViewModel)
 
     }
 }
 
 @Composable
-fun NavBar(booleanList : List<Boolean>, nav: NavController) {
+fun NavBar(booleanList : List<Boolean>, navController : NavController, viewModel: NavBarViewModel) {
+
+
     Column (
         Modifier
             .background(colorPalette[3])
@@ -101,13 +106,7 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
                 icon = Icons.Rounded.FormatListNumbered,
                 isActive = booleanList[0],
                 onClick = {
-                    nav.navigate(Screen01){
-                        launchSingleTop = true
-                        popUpTo(nav.graph.startDestinationId){
-                            saveState = true
-                        }
-                        restoreState = true
-                    }
+                    viewModel.goToScreen01(navController)
                 }
             )
 
@@ -115,39 +114,21 @@ fun NavBar(booleanList : List<Boolean>, nav: NavController) {
                 icon = Icons.Rounded.PersonSearch,
                 isActive = booleanList[1],
                 onClick = {
-                    nav.navigate(Screen02){
-                        launchSingleTop = true
-                        popUpTo(nav.graph.startDestinationId){
-                            saveState = true
-                        }
-                        restoreState = true
-                    }
+                    viewModel.goToScreen02(navController)
                 }
             )
             NavItem(
                 icon = Icons.Rounded.PersonAdd,
                 isActive = booleanList[2],
                 onClick = {
-                    nav.navigate(Screen03){
-                        launchSingleTop = true
-                        popUpTo(nav.graph.startDestinationId){
-                            saveState = true
-                        }
-                        restoreState = true
-                    }
+                    viewModel.goToScreen03(navController)
                 }
             )
             NavItem(
                 icon = Icons.Rounded.Chair,
                 isActive = booleanList[3],
                 onClick = {
-                    nav.navigate(Screen04){
-                        launchSingleTop = true
-                        popUpTo(nav.graph.startDestinationId){
-                            saveState = true
-                        }
-                        restoreState = true
-                    }
+                    viewModel.goToScreen04(navController)
                 }
             )
 
