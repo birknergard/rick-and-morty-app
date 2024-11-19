@@ -1,4 +1,4 @@
-package com.example.exam.data
+package com.example.exam.backend
 
 import androidx.room.Dao
 import androidx.room.Database
@@ -12,6 +12,9 @@ import com.example.exam.dataClasses.location.Location
 @Dao
 interface RickAndMortyDao {
     // For created character database
+    @Query("DELETE FROM CreatedCharacter")
+    suspend fun deleteCreatedCharacters()
+
     @Query("SELECT * FROM CreatedCharacter")
     suspend fun getCreatedCharacters() : List<CreatedCharacter>
 

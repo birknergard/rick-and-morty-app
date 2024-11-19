@@ -1,4 +1,4 @@
-package com.example.exam.data
+package com.example.exam.backend
 
 import android.content.Context
 import android.util.Log
@@ -37,6 +37,9 @@ object Repository {
         return _appDatabase.rickAndMortyDao().getCreatedCharacters()
     }
 
+    suspend fun deleteCharacters(){
+        _appDatabase.rickAndMortyDao().deleteCreatedCharacters()
+    }
     private suspend fun loadLocations(locationsFromAPI : List<Location>){
         _appDatabase.rickAndMortyDao().insertLocationList(locationsFromAPI)
     }

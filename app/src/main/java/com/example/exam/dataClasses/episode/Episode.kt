@@ -1,7 +1,7 @@
 package com.example.exam.dataClasses.episode
 
 import android.util.Log
-import com.example.exam.data.Repository
+import com.example.exam.backend.Repository
 import com.example.exam.dataClasses.character.SimplifiedCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 

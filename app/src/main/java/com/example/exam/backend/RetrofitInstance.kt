@@ -1,4 +1,4 @@
-package com.example.exam.data
+package com.example.exam.backend
 
 import android.util.Log
 import com.example.exam.dataClasses.ApiOutput

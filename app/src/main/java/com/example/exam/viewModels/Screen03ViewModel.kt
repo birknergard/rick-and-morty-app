@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.exam.data.Repository
+import com.example.exam.backend.Repository
 import com.example.exam.dataClasses.character.CreatedCharacter
 import com.example.exam.dataClasses.location.Location
 import kotlinx.coroutines.flow.MutableStateFlow

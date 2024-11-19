@@ -9,7 +9,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.exam.data.Repository
+import com.example.exam.backend.Repository
 import com.example.exam.composables.*
 import com.example.exam.composables.UITemplate
 import com.example.exam.ui.theme.ExamTheme

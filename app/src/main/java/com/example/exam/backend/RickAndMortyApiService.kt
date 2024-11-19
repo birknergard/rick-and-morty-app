@@ -1,4 +1,4 @@
-package com.example.exam.data
+package com.example.exam.backend
 
 import com.example.exam.dataClasses.ApiResponse
 import com.example.exam.dataClasses.character.Character

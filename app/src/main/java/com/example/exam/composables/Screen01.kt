@@ -101,18 +101,22 @@ fun Screen01(viewModel: Screen01ViewModel){
                 Item(character)
             }
             item {
-                Surface(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = {
-                        viewModel.page.value++
-                        viewModel.updateCharacterList(viewModel.page.value)
+                if(!viewModel.reachedMaxPage()){
+                    Surface(
+                        modifier = Modifier.padding(10.dp),
+                        onClick = {
+                            viewModel.page.value++
+                            viewModel.updateCharacterList(viewModel.page.value)
+                        }
+                    ){
+                        Image(
+                            modifier = Modifier.size(50.dp).background(colorPalette[2]),
+                            painter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
+                            contentDescription = "Plus icon"
+                        )
                     }
-                ) {
-                    Image(
-                        modifier = Modifier.size(50.dp).background(colorPalette[2]),
-                        painter = rememberVectorPainter(Icons.Default.KeyboardArrowDown),
-                        contentDescription = "Plus icon"
-                    )
+                } else {
+                    Text("You've reached the end of the characterlist.")
                 }
             }
         }
