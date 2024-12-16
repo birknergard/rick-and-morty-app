@@ -31,7 +31,7 @@ Exam for android development program.
     the creation of a whole new database system. It would also sort of make screen01 obsolete.
 
 # Rapport
-1. Oversikt over funksjonalitet du har laget: Lag en oversikt over hvilken funksjonalitet du har laget. Dette kan eksempelvis lages med en tabell med to kolonner; navn på funksjonalitet, beskrivelse av funksjonalitet.
+1. 
 
     Navigation bar:
     On any of the screens the user can navigate to every screen like on for example instagram. When navigating around, the state of each screen is stored so that when
@@ -64,14 +64,8 @@ Exam for android development program.
     The episode items themselves are clickable, and doing so will display images and names of all the appearing characters for the given episode
     (Characterdata is fetched from the character api endpoint.) 
 
-2. Skjermdump av samtlige skjermer i appen: Skjermbilder av alle skjermer med en
-kommentar om grensesnittet og hva som skjer der/hva man kan gjøre der.
 
-3. Beskrivelser og skjermbilder av hovedteknikker brukt: Beskriv hovedteknikkene du
-har brukt i appen. Med beskrivelse menes minimum navn på teknikk og hva teknikken er for,
-og der hvor det passer seg, også hvorfor man bruker teknikken. Inkluder skjermbilder av
-kode og eventuelt modeller/diagrammer for å eksemplifisere teknikkene du omtaler.
-    Backend
+API Requests
     - Retrofit
         Allows communication with the required API. Used for GET requests to the various endpoints. 
 
@@ -117,11 +111,3 @@ kode og eventuelt modeller/diagrammer for å eksemplifisere teknikkene du omtale
     - MutableStateFlows and remember {}
         Used for managing changing state variables in the program. MutableStateFlow is used as standard, which the rememberSaveable being used sparingly in
         specific composables where state handling would be too impractical for integration in ViewModel.
-
-4. Kvalitet og struktur: Skriv hva du har gjort for å sørge for at prosjektstrukturen er
-god, hvordan og hvorfor du har navngitt variabler, funksjoner, klasser osv. slik du har gjort,
-og eventuelt andre ting som angår struktur og kodekvalitet. 
-    My naming conventions are to use camelCase for local variables, fields and functions, and PascalCase for classes, composables and objects(singletons).
-    I avoid abbreviations (Api is the exception, as it is the industry standard), while still attempting to keep names brief, concise and context dependent.
-    
-    In terms of project structure i split the structure into backend, frontend UI(composables), frontend logic(viewModels), and data classes. 
