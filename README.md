@@ -1,5 +1,5 @@
 # android-exam
-Exam for android development program.
+Exam for android development course.
     
     ## Completed so far:
     A lot of backend stuff
